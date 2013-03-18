@@ -1,6 +1,8 @@
 ;; init
 
-(add-to-list 'load-path "~/.emacs.d/emacs-color-theme-solarized/")
+(add-to-list 'load-path (expand-file-name "~/.emacsd/"))
+(add-to-list 'load-path (expand-file-name "~/.emacsd/emacs-color-theme-solarized/"))
+(require 'idomenu)
 (require 'color-theme-solarized)
 (color-theme-solarized-dark)
 
@@ -22,11 +24,9 @@
 (ido-mode 1)
 
 (global-set-key (kbd "M-j")
-				(lambda ()
+                (lambda ()
                   (interactive)
                   (join-line -1)))
-
-(require 'idomenu)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; mooo
@@ -38,12 +38,14 @@
   (newline)
   (forward-line -1)
   (indent-according-to-mode))
+(global-set-key (kbd "M-O") 'vi-open-line-above)
 
 (defun vi-open-line-below ()
   "Insert a newline below the current line and put point at beginning."
   (interactive)
   (end-of-line)
   (newline-and-indent))
+(global-set-key (kbd "M-o") 'vi-open-line-below)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; "borrowed" from emacs starter kit
@@ -93,7 +95,7 @@
  '(scroll-preserve-screen-position 1)
  '(show-paren-mode t)
  '(split-height-threshold nil)
- '(split-width-threshold 80)
+ '(split-width-threshold 140)
  '(tab-width 4)
  '(transient-mark-mode nil))
 (custom-set-faces
