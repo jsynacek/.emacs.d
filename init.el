@@ -83,6 +83,7 @@
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
+(auto-fill-mode 1)
 
 (prefer-coding-system 'utf-8)
 
@@ -91,6 +92,20 @@
 (ido-mode 1)
 
 (size-indication-mode t)
+
+(setq org-todo-keywords
+      '((sequence "TODO" "INPROGRESS" "|" "DONE" )))
+
+(setq org-todo-keyword-faces
+      '(("INPROGRESS" . (:foreground "#af8700" :weight bold))))
+
+;; todo set global auto revert buffer
+;; todo set save hook to delete trailing whitespace
+;; todo org mode dont export postamble
+;; todo auto-revert-non-file-buffers (dired?)
+;; todo ido-goto-symbol
+;; todo bind meta-tab to complete-tag?
+;; todo sudo-editb
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; keybindings
@@ -106,6 +121,13 @@
 (global-set-key (kbd "<f5>") 'recompile)
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "C-c SPC") 'ace-jump-mode)
+; org-mode
+(global-set-key (kbd "C-c l") 'org-store-link)
+(global-set-key (kbd "C-c c") 'org-capture)
+(global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c b") 'org-iswitchb)
+; ido-find-file
+(global-set-key (kbd "C-x C-f") 'ido-find-file)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; customized
@@ -118,7 +140,7 @@
  '(backup-directory-alist (quote (("." . "/home/jsynacek/emacsbackup"))))
  '(column-number-mode t)
  '(confirm-kill-emacs nil)
- '(electric-pair-mode t)
+ '(electric-pair-mode nil)
  '(fill-column 80)
  '(global-auto-revert-mode t)
  '(ido-case-fold nil)
@@ -126,6 +148,8 @@
  '(ido-enable-flex-matching t)
  '(ido-everywhere t)
  '(indent-tabs-mode nil)
+ '(org-enforce-todo-dependencies t)
+ '(org-tags-column -70)
  '(scroll-conservatively 10)
  '(scroll-margin 2)
  '(scroll-preserve-screen-position 1)
