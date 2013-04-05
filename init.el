@@ -99,8 +99,8 @@
 (setq org-todo-keyword-faces
       '(("INPROGRESS" . (:foreground "#af8700" :weight bold))))
 
+(add-hook 'after-save-hook 'whitespace-cleanup)
 ;; todo set global auto revert buffer
-;; todo set save hook to delete trailing whitespace
 ;; todo org mode dont export postamble
 ;; todo auto-revert-non-file-buffers (dired?)
 ;; todo ido-goto-symbol
