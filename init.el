@@ -12,7 +12,7 @@
 
 (require 'package)
 (add-to-list 'package-archives
-	     '("marmalade" . "http://marmalade-repo.org/packages/"))
+             '("marmalade" . "http://marmalade-repo.org/packages/"))
 (package-initialize)
 
 (require 'expand-region)
@@ -55,20 +55,20 @@
   (backward-kill-sexp)
   (condition-case nil
       (prin1 (eval (read (current-kill 0)))
-	     (current-buffer))
+             (current-buffer))
     (error (message "Invalid expression")
-	   (insert (current-kill 0)))))
+           (insert (current-kill 0)))))
 
 (defun lorem ()
   "Insert a lorem ipsum."
   (interactive)
   (insert "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do "
-	  "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim"
-	  "ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut "
-	  "aliquip ex ea commodo consequat. Duis aute irure dolor in "
-	  "reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla "
-	  "pariatur. Excepteur sint occaecat cupidatat non proident, sunt in "
-	  "culpa qui officia deserunt mollit anim id est laborum."))
+          "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim"
+          "ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut "
+          "aliquip ex ea commodo consequat. Duis aute irure dolor in "
+          "reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla "
+          "pariatur. Excepteur sint occaecat cupidatat non proident, sunt in "
+          "culpa qui officia deserunt mollit anim id est laborum."))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; settings
@@ -97,7 +97,7 @@
       '((sequence "TODO" "INPROGRESS" "|" "DONE" )))
 
 (setq org-todo-keyword-faces
-      '(("INPROGRESS" . (:foreground "#af8700" :weight bold))))
+     '(("INPROGRESS" . (:foreground "#af8700" :weight bold))))
 
 (add-hook 'after-save-hook 'whitespace-cleanup)
 ;; todo set global auto revert buffer
@@ -114,9 +114,9 @@
 (global-set-key (kbd "M-o") 'vi-open-line-below)
 (global-set-key (kbd "C-=") 'er/expand-region)
 (global-set-key (kbd "M-j")
-		(lambda ()
-		  (interactive)
-		  (join-line -1)))
+                (lambda ()
+                  (interactive)
+                  (join-line -1)))
 (global-set-key (kbd "C-c e") 'eval-and-replace)
 (global-set-key (kbd "<f5>") 'recompile)
 (global-set-key (kbd "M-x") 'smex)
