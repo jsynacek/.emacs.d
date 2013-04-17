@@ -46,6 +46,11 @@
                     (substring ts 19)
                     " Jan Synáček <jsynacek@redhat.com> - "))))
 
+(defun my-multi-occur-in-matching-buffers (regexp &optional allbufs)
+  "Show all lines matching REGEXP in all buffers."
+  (interactive (occur-read-primary-args))
+  (multi-occur-in-matching-buffers ".*" regexp))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; "borrowed" from emacs starter kit
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -99,6 +104,11 @@
 (setq org-todo-keyword-faces
      '(("INPROGRESS" . (:foreground "#af8700" :weight bold))))
 
+(add-hook 'rpm-spec-mode-hook
+          (lambda ()
+            (setq tab-width 4)
+            (setq indent-tabs-mode t)))
+
 (add-hook 'after-save-hook 'whitespace-cleanup)
 ;; todo set global auto revert buffer
 ;; todo org mode dont export postamble
@@ -128,6 +138,8 @@
 (global-set-key (kbd "C-c b") 'org-iswitchb)
 ; ido-find-file
 (global-set-key (kbd "C-x C-f") 'ido-find-file)
+; my multi-occur
+(global-set-key (kbd "M-s /") 'my-multi-occur-in-matching-buffers)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; customized
@@ -140,6 +152,7 @@
  '(backup-directory-alist (quote (("." . "/home/jsynacek/emacsbackup"))))
  '(column-number-mode t)
  '(confirm-kill-emacs nil)
+ '(ediff-diff-options "")
  '(electric-pair-mode nil)
  '(fill-column 80)
  '(global-auto-revert-mode t)
@@ -148,8 +161,10 @@
  '(ido-enable-flex-matching t)
  '(ido-everywhere t)
  '(indent-tabs-mode nil)
- '(org-enforce-todo-dependencies t)
- '(org-tags-column -70)
+ '(org-export-html-postamble-format (quote (("en" "<p class=\"author\">Author: %a (%e)</p>
+<p class=\"date\">Date: %d</p>"))))
+ '(org-export-html-style-include-default nil)
+ '(org-export-html-table-tag "<table border=\"2\">")
  '(scroll-conservatively 10)
  '(scroll-margin 2)
  '(scroll-preserve-screen-position 1)
@@ -159,7 +174,8 @@
  '(tab-width 4)
  '(tramp-default-method "ssh")
  '(transient-mark-mode nil)
- '(uniquify-buffer-name-style (quote forward) nil (uniquify)))
+ '(uniquify-buffer-name-style (quote forward) nil (uniquify))
+ '(whitespace-style (quote (face tabs spaces trailing lines newline empty space-after-tab space-mark tab-mark newline-mark))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
