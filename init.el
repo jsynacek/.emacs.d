@@ -1,6 +1,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; init
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq user-full-name "Jan Synáček")
+(setq user-mail-address "jsynacek@redhat.com")
+(setq user-nick "jsynacek")
 
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/emacs-color-theme-solarized/"))
@@ -13,6 +16,8 @@
 (require 'package)
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
 
 (require 'expand-region)
@@ -20,6 +25,17 @@
 (require 'uniquify)
 
 (require 'ace-jump-mode)
+
+(require 'auto-complete-config)
+
+(require 'browse-kill-ring)
+
+(require 'highlight-symbol)
+
+;; (defvar python-mode-home (expand-file-name "~/.emacs.d/python-mode.el-6.1.1/"))
+;; (add-to-list 'load-path python-mode-home)
+;; (setq py-install-directory python-mode-home)
+;; (require 'python-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; misc defuns
@@ -38,18 +54,22 @@
   (end-of-line)
   (newline-and-indent))
 
-(defun spec-changelog-entry ()
-  (interactive)
-  (let ((ts (current-time-string)))
-    (insert (concat "* "
-                    (substring ts 0 10)
-                    (substring ts 19)
-                    " Jan Synáček <jsynacek@redhat.com> - "))))
-
 (defun my-multi-occur-in-matching-buffers (regexp &optional allbufs)
   "Show all lines matching REGEXP in all buffers."
   (interactive (occur-read-primary-args))
   (multi-occur-in-matching-buffers ".*" regexp))
+
+(defun kill-all-dired-buffers()
+  "Kill all dired buffers."
+  (interactive)
+  (save-excursion
+    (let ((count 0))
+      (dolist (buffer (buffer-list))
+        (set-buffer buffer)
+        (when (equal major-mode 'dired-mode)
+          (setq count (1+ count))
+          (kill-buffer buffer)))
+      (message "Killed %i dired buffer(s)." count ))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; "borrowed" from emacs starter kit
@@ -81,7 +101,7 @@
 (setq inhibit-startup-message t
       inhibit-startup-echo-area t)
 
-;(blink-cursor-mode -1)
+(blink-cursor-mode -1)
 (ffap-bindings)
 
 (set-default-font "Terminus-12")
@@ -104,13 +124,24 @@
 (setq org-todo-keyword-faces
      '(("INPROGRESS" . (:foreground "#af8700" :weight bold))))
 
+;; fill column indicator
+(setq fci-rule-width 5)
+(setq fci-rule-color "#073642")
+
+; auto-complete-mode
+(setq ac-auto-show-menu nil)
+
 (add-hook 'rpm-spec-mode-hook
           (lambda ()
             (setq tab-width 4)
             (setq indent-tabs-mode t)))
 
-(add-hook 'after-save-hook 'whitespace-cleanup)
-;; todo set global auto revert buffer
+(add-hook 'c-mode-hook
+          (lambda ()
+            (setq c-default-style "linux"
+                  c-basic-offset 4)))
+
+;(add-hook 'after-save-hook 'whitespace-cleanup)
 ;; todo org mode dont export postamble
 ;; todo auto-revert-non-file-buffers (dired?)
 ;; todo ido-goto-symbol
@@ -136,10 +167,15 @@
 (global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c b") 'org-iswitchb)
-; ido-find-file
+; ido specific
 (global-set-key (kbd "C-x C-f") 'ido-find-file)
+(global-set-key (kbd "C-x d") 'ido-dired)
 ; my multi-occur
 (global-set-key (kbd "M-s /") 'my-multi-occur-in-matching-buffers)
+; highlight-symbol
+(global-set-key (kbd "C-x *") 'highlight-symbol-at-point)
+(global-set-key (kbd "C-*") 'highlight-symbol-next)
+(global-set-key (kbd "C-#") 'highlight-symbol-prev)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; customized
@@ -173,7 +209,6 @@
  '(split-width-threshold 140)
  '(tab-width 4)
  '(tramp-default-method "ssh")
- '(transient-mark-mode nil)
  '(uniquify-buffer-name-style (quote forward) nil (uniquify))
  '(whitespace-style (quote (face tabs spaces trailing lines newline empty space-after-tab space-mark tab-mark newline-mark))))
 (custom-set-faces
@@ -181,4 +216,4 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(ac-completion-face ((t (:foreground "#eee8d5" :underline t)))))
