@@ -7,6 +7,7 @@
 
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/emacs-color-theme-solarized/"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/gitsum"))
 
 (require 'idomenu)
 
@@ -31,6 +32,8 @@
 (require 'browse-kill-ring)
 
 (require 'highlight-symbol)
+
+(require 'gitsum)
 
 ;; (defvar python-mode-home (expand-file-name "~/.emacs.d/python-mode.el-6.1.1/"))
 ;; (add-to-list 'load-path python-mode-home)
