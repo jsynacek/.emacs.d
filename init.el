@@ -11,6 +11,8 @@
 
 (require 'idomenu)
 
+(require 'ido-hacks)
+
 (require 'color-theme-solarized)
 (color-theme-solarized-dark)
 
@@ -21,15 +23,38 @@
              '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
 
+(defun install-my-packages ()
+  (interactive)
+  (let ((pkg-list '(ace-jump-mode
+                    cl-lib expand-region
+                    fill-column-indicator
+                    magit
+                    yasnippet
+                    paredit
+                    highlight-symbol)))
+    (dolist (pkg pkg-list)
+      (if (package-installed-p pkg)
+          (message (concat (symbol-name pkg) " already installed."))
+        (package-install pkg)))))
+;; TODO run this every start up?
+;(instal-my-packages)
+
+
 (require 'expand-region)
 
 (require 'uniquify)
 
 (require 'ace-jump-mode)
 
-(require 'auto-complete-config)
+;(require 'auto-complete-config)
 
 (require 'browse-kill-ring)
+(browse-kill-ring-default-keybindings)
+(setq browse-kill-ring-quit-action 'save-and-restore)
+
+(setq edebug-trace t)
+;(define-key emacs-lisp-mode-map (kbd "C-c .") 'find-function-at-point)
+
 
 (require 'highlight-symbol)
 
@@ -103,46 +128,55 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq inhibit-startup-message t
       inhibit-startup-echo-area t)
-
-(blink-cursor-mode -1)
-(ffap-bindings)
-
-(set-default-font "Terminus-12")
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
-(auto-fill-mode 1)
+(size-indication-mode t)
+(set-default-font "Terminus-12")
+;(blink-cursor-mode -1)
+;(ffap-bindings)
 
+(auto-fill-mode 1)
+(setq fill-column 80)
 (prefer-coding-system 'utf-8)
 
-(setq case-fold-search nil)
-
 (ido-mode 1)
-
-(size-indication-mode t)
+(setq ido-case-fold nil
+      ido-create-new-buffer 'always
+      ido-enable-flex-matching t
+      ido-everywhere t)
+(ido-hacks-mode 1)
 
 (setq org-todo-keywords
-      '((sequence "TODO" "INPROGRESS" "|" "DONE" )))
-
-(setq org-todo-keyword-faces
-     '(("INPROGRESS" . (:foreground "#af8700" :weight bold))))
+      '((sequence "TODO" "INPROGRESS" "|" "DONE" ))
+      org-todo-keyword-faces
+      '(("INPROGRESS" . (:foreground "#af8700" :weight bold))))
 
 ;; fill column indicator
-(setq fci-rule-width 5)
-(setq fci-rule-color "#073642")
+(setq fci-rule-width 5
+      fci-rule-color "#073642")
+;(fci-mode t)
 
 ; auto-complete-mode
 (setq ac-auto-show-menu nil)
 
+(fset 'yes-or-no-p 'y-or-n-p)
+
 (add-hook 'rpm-spec-mode-hook
           (lambda ()
-            (setq tab-width 4)
-            (setq indent-tabs-mode t)))
-
+            (setq tab-width 4
+                  indent-tabs-mode t)))
 (add-hook 'c-mode-hook
           (lambda ()
             (setq c-default-style "linux"
-                  c-basic-offset 4)))
+                  c-basic-offset 4
+                  indent-tabs-mode t
+                  subword-mode t)))
+
+; TODO this does not work at startup with the scratch buffer
+;(add-hook 'emacs-lisp-mode-hook
+;         (lambda ()
+;           eldoc-mode))
 
 ;(add-hook 'after-save-hook 'whitespace-cleanup)
 ;; todo org mode dont export postamble
@@ -163,7 +197,6 @@
                   (join-line -1)))
 (global-set-key (kbd "C-c e") 'eval-and-replace)
 (global-set-key (kbd "<f5>") 'recompile)
-(global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "C-c SPC") 'ace-jump-mode)
 ; org-mode
 (global-set-key (kbd "C-c l") 'org-store-link)
@@ -171,8 +204,8 @@
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c b") 'org-iswitchb)
 ; ido specific
-(global-set-key (kbd "C-x C-f") 'ido-find-file)
-(global-set-key (kbd "C-x d") 'ido-dired)
+;(global-set-key (kbd "C-x C-f") 'ido-find-file)
+;(global-set-key (kbd "C-x d") 'ido-dired)
 ; my multi-occur
 (global-set-key (kbd "M-s /") 'my-multi-occur-in-matching-buffers)
 ; highlight-symbol
@@ -193,12 +226,7 @@
  '(confirm-kill-emacs nil)
  '(ediff-diff-options "")
  '(electric-pair-mode nil)
- '(fill-column 80)
  '(global-auto-revert-mode t)
- '(ido-case-fold nil)
- '(ido-create-new-buffer (quote always))
- '(ido-enable-flex-matching t)
- '(ido-everywhere t)
  '(indent-tabs-mode nil)
  '(org-export-html-postamble-format (quote (("en" "<p class=\"author\">Author: %a (%e)</p>
 <p class=\"date\">Date: %d</p>"))))
@@ -219,4 +247,5 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ac-completion-face ((t (:foreground "#eee8d5" :underline t)))))
+ )
+ 
