@@ -7,6 +7,7 @@
 
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/emacs-color-theme-solarized/"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/ido-hacks"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/gitsum"))
 
 (require 'idomenu)
@@ -162,16 +163,19 @@
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
-(add-hook 'rpm-spec-mode-hook
-          (lambda ()
-            (setq tab-width 4
-                  indent-tabs-mode t)))
-(add-hook 'c-mode-hook
-          (lambda ()
-            (setq c-default-style "linux"
-                  c-basic-offset 4
-                  indent-tabs-mode t
-                  subword-mode t)))
+
+(defun my-rpm-hook-defaults ()
+  (setq tab-width 4
+        indent-tabs-mode t))
+(add-hook 'rpm-spec-mode-hook 'my-rpm-hook-defaults)
+
+(defun my-c-mode-hook-defaults ()
+  (setq c-default-style "linux"
+        c-basic-offset 4
+        indent-tabs-mode t
+        subword-mode t))
+(add-hook 'c-mode-hook 'my-c-mode-hook-defaults)
+
 
 ; TODO this does not work at startup with the scratch buffer
 ;(add-hook 'emacs-lisp-mode-hook
@@ -191,10 +195,10 @@
 (global-set-key (kbd "M-O") 'vi-open-line-above)
 (global-set-key (kbd "M-o") 'vi-open-line-below)
 (global-set-key (kbd "C-=") 'er/expand-region)
-(global-set-key (kbd "M-j")
-                (lambda ()
-                  (interactive)
-                  (join-line -1)))
+;; (global-set-key (kbd "M-j")
+;;                 (lambda ()
+;;                   (interactive)
+;;                   (join-line -1)))
 (global-set-key (kbd "C-c e") 'eval-and-replace)
 (global-set-key (kbd "<f5>") 'recompile)
 (global-set-key (kbd "C-c SPC") 'ace-jump-mode)
@@ -203,15 +207,21 @@
 (global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c b") 'org-iswitchb)
-; ido specific
-;(global-set-key (kbd "C-x C-f") 'ido-find-file)
-;(global-set-key (kbd "C-x d") 'ido-dired)
 ; my multi-occur
 (global-set-key (kbd "M-s /") 'my-multi-occur-in-matching-buffers)
 ; highlight-symbol
 (global-set-key (kbd "C-x *") 'highlight-symbol-at-point)
 (global-set-key (kbd "C-*") 'highlight-symbol-next)
 (global-set-key (kbd "C-#") 'highlight-symbol-prev)
+; other
+(global-set-key (kbd "C-x \\") 'align-regexp)
+(global-set-key (kbd "C-x m") 'eshell)
+(global-set-key (kbd "M-\\") 'hippie-expand)
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+(global-set-key (kbd "C-x g") 'magit-status)
+(require 'python)
+(define-key python-mode-map (kbd "M-e") 'python-next-statement)
+(define-key python-mode-map (kbd "M-a") 'python-previous-statement)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; customized
