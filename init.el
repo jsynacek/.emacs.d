@@ -56,6 +56,15 @@
 (setq edebug-trace t)
 ;(define-key emacs-lisp-mode-map (kbd "C-c .") 'find-function-at-point)
 
+(setq display-time-day-and-date t
+      display-time-24hr-format t
+      display-time-default-load-average nil)
+(display-time-mode t)
+
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+(setq ediff-split-window-function (if (> (frame-width) 140)
+                                      'split-window-horizontally
+                                    'split-window-vertically))
 
 (require 'highlight-symbol)
 
@@ -195,10 +204,10 @@
 (global-set-key (kbd "M-O") 'vi-open-line-above)
 (global-set-key (kbd "M-o") 'vi-open-line-below)
 (global-set-key (kbd "C-=") 'er/expand-region)
-;; (global-set-key (kbd "M-j")
-;;                 (lambda ()
-;;                   (interactive)
-;;                   (join-line -1)))
+(global-set-key (kbd "C-c j")
+                (lambda ()
+                  (interactive)
+                  (join-line -1)))
 (global-set-key (kbd "C-c e") 'eval-and-replace)
 (global-set-key (kbd "<f5>") 'recompile)
 (global-set-key (kbd "C-c SPC") 'ace-jump-mode)
@@ -217,7 +226,7 @@
 (global-set-key (kbd "C-x \\") 'align-regexp)
 (global-set-key (kbd "C-x m") 'eshell)
 (global-set-key (kbd "M-\\") 'hippie-expand)
-(global-set-key (kbd "C-x C-b") 'ibuffer)
+(global-set-key (kbd "C-x C-b") 'ibuffer-other-window)
 (global-set-key (kbd "C-x g") 'magit-status)
 (require 'python)
 (define-key python-mode-map (kbd "M-e") 'python-next-statement)
@@ -258,4 +267,4 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
- 
+(put 'narrow-to-region 'disabled nil)
