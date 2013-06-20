@@ -66,6 +66,19 @@
                                       'split-window-horizontally
                                     'split-window-vertically))
 
+(setq diff-switches "-u")
+
+;;; server
+(setenv "EDITOR" "emacsclient")
+(require 'server)
+(unless (server-running-p)
+  (server-start))
+
+(setq frame-title-format
+      '((:eval (concat "e: " (if (buffer-file-name)
+                                 (abbreviate-file-name (buffer-file-name))
+                               "%b")))))
+
 (require 'highlight-symbol)
 
 (require 'gitsum)
@@ -211,6 +224,7 @@
 (global-set-key (kbd "C-c e") 'eval-and-replace)
 (global-set-key (kbd "<f5>") 'recompile)
 (global-set-key (kbd "C-c SPC") 'ace-jump-mode)
+(global-set-key (kbd "C-x w") 'write-region)
 ; org-mode
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c c") 'org-capture)
