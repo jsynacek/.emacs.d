@@ -90,6 +90,7 @@
 ;; (setq py-install-directory python-mode-home)
 ;; (require 'python-mode)
 
+(require 'buffer-move)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; misc defuns
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -269,6 +270,11 @@
 (global-set-key (kbd "S-<left>") 'windmove-left)
 (global-set-key (kbd "S-<down>") 'windmove-down)
 (global-set-key (kbd "S-<up>") 'windmove-up)
+; buffer-move
+(global-set-key (kbd "<C-S-up>")    'buf-move-up)
+(global-set-key (kbd "<C-S-down>")  'buf-move-down)
+(global-set-key (kbd "<C-S-left>")  'buf-move-left)
+(global-set-key (kbd "<C-S-right>") 'buf-move-right)
 
 
 
