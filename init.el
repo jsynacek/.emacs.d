@@ -251,8 +251,8 @@
 (global-set-key (kbd "M-s /") 'my-multi-occur-in-matching-buffers)
 ; highlight-symbol
 (global-set-key (kbd "C-x *") 'highlight-symbol-at-point)
-(global-set-key (kbd "C-*") 'highlight-symbol-next)
-(global-set-key (kbd "C-#") 'highlight-symbol-prev)
+(global-set-key (kbd "M-n") 'highlight-symbol-next)
+(global-set-key (kbd "M-p") 'highlight-symbol-prev)
 ; other
 (global-set-key (kbd "C-x \\") 'align-regexp)
 (global-set-key (kbd "C-x m") 'eshell)
