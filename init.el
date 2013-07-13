@@ -27,14 +27,15 @@
 (defun install-my-packages ()
   (interactive)
   (let ((pkg-list '(ace-jump-mode
+                    buffer-move
                     cl-lib
                     expand-region
                     fill-column-indicator
-                    magit
-                    yasnippet
-                    paredit
                     highlight-symbol
-                    undo-tree)))
+                    magit
+                    paredit
+                    undo-tree
+                    yasnippet)))
     (dolist (pkg pkg-list)
       (if (package-installed-p pkg)
           (message (concat (symbol-name pkg) " already installed."))
