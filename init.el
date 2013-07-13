@@ -279,7 +279,7 @@
 (global-set-key (kbd "<C-S-left>")  'buf-move-left)
 (global-set-key (kbd "<C-S-right>") 'buf-move-right)
 
-
+(global-set-key (kbd "M-i") 'idomenu)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; customized
