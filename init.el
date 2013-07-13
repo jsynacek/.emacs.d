@@ -189,6 +189,8 @@
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
+;;; Shut up compile saves
+(setq compilation-ask-about-save nil)
 
 (defun my-rpm-hook-defaults ()
   (setq tab-width 4
