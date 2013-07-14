@@ -185,6 +185,9 @@
       ido-everywhere t)
 (ido-hacks-mode 1)
 
+(winner-mode t)
+;;(which-function-mode t)
+
 (setq org-todo-keywords
       '((sequence "TODO" "INPROGRESS" "|" "DONE" ))
       org-todo-keyword-faces
