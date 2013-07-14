@@ -131,6 +131,12 @@
   (setq font-lock-mode-major-mode nil)
   (font-lock-fontify-buffer))
 
+(defun hippie-expand-line ()
+  (interactive)
+  (let ((hippie-expand-try-functions-list '(try-expand-line
+                                            try-expand-line-all-buffers)))
+    (hippie-expand nil)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; "borrowed" from emacs starter kit
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -285,6 +291,7 @@
 (global-set-key (kbd "<C-S-right>") 'buf-move-right)
 
 (global-set-key (kbd "M-i") 'idomenu)
+(global-set-key (kbd "C-M-/") 'hippie-expand-line)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; customized
