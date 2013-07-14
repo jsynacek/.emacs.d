@@ -126,6 +126,11 @@
           (kill-buffer buffer)))
       (message "Killed %i dired buffer(s)." count ))))
 
+(defun font-lock-restart ()
+  (interactive)
+  (setq font-lock-mode-major-mode nil)
+  (font-lock-fontify-buffer))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; "borrowed" from emacs starter kit
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
