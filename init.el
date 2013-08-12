@@ -224,6 +224,11 @@
         subword-mode t))
 (add-hook 'c-mode-hook 'my-c-mode-hook-defaults)
 
+;;; highlight code annotations
+(add-hook 'prog-mode-hook
+          (lambda ()
+            (font-lock-add-keywords nil
+                                    '(("\\<\\(FIXME\\|TODO\\|BUG\\|XXX\\)" 1 font-lock-warning-face t)))))
 
 ; TODO this does not work at startup with the scratch buffer
 ;(add-hook 'emacs-lisp-mode-hook
