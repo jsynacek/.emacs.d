@@ -293,6 +293,7 @@
 (global-set-key (kbd "<f5>") 'recompile)
 (global-set-key (kbd "C-c SPC") 'ace-jump-mode)
 (global-set-key (kbd "C-x w") 'write-region)
+(global-set-key (kbd "C-M-<backspace>") 'backward-kill-sexp)
 ; org-mode
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c c") 'org-capture)
