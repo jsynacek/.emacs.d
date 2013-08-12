@@ -174,7 +174,7 @@
 (menu-bar-mode -1)
 (size-indication-mode t)
 (set-default-font "Terminus-12")
-;(blink-cursor-mode -1)
+(blink-cursor-mode -1)
 ;(ffap-bindings)
 
 (auto-fill-mode 1)
