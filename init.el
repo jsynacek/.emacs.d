@@ -209,6 +209,9 @@
 ;;; Shut up compile saves
 (setq compilation-ask-about-save nil)
 
+;;; don't allow region commands when mark is inactive
+(setq mark-even-if-inactive nil)
+
 (defun my-rpm-hook-defaults ()
   (setq tab-width 4
         indent-tabs-mode t))
