@@ -350,13 +350,17 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(backup-directory-alist (quote (("." . "/home/jsynacek/emacsbackup"))))
+ '(bookmark-save-flag 1)
  '(column-number-mode t)
  '(confirm-kill-emacs nil)
  '(custom-enabled-themes (quote (solarized-dark)))
  '(custom-safe-themes (quote ("d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "e16a771a13a202ee6e276d06098bc77f008b73bbac4d526f160faa2d76c1dd0e" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
+ '(delete-selection-mode t)
  '(ediff-diff-options "")
  '(electric-pair-mode nil)
  '(global-auto-revert-mode t)
+ '(ibuffer-saved-filter-groups (quote (("openlmi" ("openlmi-storage" (filename . "openlmi-storage")) ("openlmi-providers" (filename . "openlmi-providers"))))))
+ '(ibuffer-saved-filters (quote (("gnus" ((or (mode . message-mode) (mode . mail-mode) (mode . gnus-group-mode) (mode . gnus-summary-mode) (mode . gnus-article-mode)))) ("programming" ((or (mode . emacs-lisp-mode) (mode . cperl-mode) (mode . c-mode) (mode . java-mode) (mode . idl-mode) (mode . lisp-mode)))))))
  '(indent-tabs-mode nil)
  '(org-export-html-postamble-format (quote (("en" "<p class=\"author\">Author: %a (%e)</p>
 <p class=\"date\">Date: %d</p>"))))
