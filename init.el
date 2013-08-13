@@ -1,25 +1,88 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; init
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; init
 (setq user-full-name "Jan Synáček")
 (setq user-mail-address "jsynacek@redhat.com")
 (setq user-nick "jsynacek")
 
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/"))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/ido-hacks"))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/gitsum"))
 
-(require 'idomenu)
-
-(require 'ido-hacks)
-
-(require 'package)
-(add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/"))
+;;; requires
 (package-initialize)
+(require 'ace-jump-mode)
+(require 'browse-kill-ring)
+(require 'buffer-move)
+(require 'expand-region)
+(require 'highlight-symbol)
+(require 'ido-hacks)
+(require 'idomenu)
+(require 'magit)
+(require 'package)
+(require 'python)
+(require 'saveplace)
+(require 'server)
+(require 'uniquify)
 
+;;; settings
+(setq inhibit-startup-message t
+      inhibit-startup-echo-area t)
+;; modes
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(blink-cursor-mode -1)
+(ido-mode 1)
+(ido-hacks-mode 1)
+(size-indication-mode t)
+(auto-fill-mode 1)
+(winner-mode t)
+(display-time-mode t)
+
+(set-default-font "Terminus-12")
+(prefer-coding-system 'utf-8)
+(setenv "EDITOR" "emacsclient")
+(setq fill-column 80)
+(fset 'yes-or-no-p 'y-or-n-p)
+
+(setq frame-title-format
+      '((:eval (concat "e: " (if (buffer-file-name)
+                                 (abbreviate-file-name (buffer-file-name))
+                               "%b")))))
+
+;;; package settings
+;; browse-kill-ring
+(browse-kill-ring-default-keybindings)
+(setq browse-kill-ring-quit-action 'save-and-restore)
+
+;; ido
+(setq ido-case-fold nil
+      ido-create-new-buffer 'always
+      ido-enable-flex-matching t
+      ido-everywhere t)
+
+;; org
+(setq org-todo-keywords
+      '((sequence "TODO" "INPROGRESS" "|" "DONE" ))
+      org-todo-keyword-faces
+      '(("INPROGRESS" . (:foreground "#af8700" :weight bold))))
+
+;; server
+(unless (server-running-p)
+  (server-start))
+
+;; edebug
+(setq edebug-trace t)
+
+;; ediff
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+(setq ediff-split-window-function (if (> (frame-width) 140)
+                                      'split-window-horizontally
+                                    'split-window-vertically))
+
+;; display time mode
+(setq display-time-day-and-date t
+      display-time-24hr-format t
+      display-time-default-load-average nil)
+
+;;; defuns
 (defun install-my-packages ()
   (interactive)
   (let ((pkg-list '(ace-jump-mode
@@ -30,6 +93,7 @@
                     highlight-symbol
                     magit
                     paredit
+                    saveplace
                     solarized-theme
                     undo-tree
                     yasnippet)))
@@ -37,61 +101,7 @@
       (if (package-installed-p pkg)
           (message (concat (symbol-name pkg) " already installed."))
         (package-install pkg)))))
-;; TODO run this every start up?
-;(instal-my-packages)
 
-
-(require 'expand-region)
-
-(require 'uniquify)
-
-(require 'ace-jump-mode)
-
-;(require 'auto-complete-config)
-
-(require 'browse-kill-ring)
-(browse-kill-ring-default-keybindings)
-(setq browse-kill-ring-quit-action 'save-and-restore)
-
-(setq edebug-trace t)
-;(define-key emacs-lisp-mode-map (kbd "C-c .") 'find-function-at-point)
-
-(setq display-time-day-and-date t
-      display-time-24hr-format t
-      display-time-default-load-average nil)
-(display-time-mode t)
-
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
-(setq ediff-split-window-function (if (> (frame-width) 140)
-                                      'split-window-horizontally
-                                    'split-window-vertically))
-
-(setq diff-switches "-u")
-
-;;; server
-(setenv "EDITOR" "emacsclient")
-(require 'server)
-(unless (server-running-p)
-  (server-start))
-
-(setq frame-title-format
-      '((:eval (concat "e: " (if (buffer-file-name)
-                                 (abbreviate-file-name (buffer-file-name))
-                               "%b")))))
-
-(require 'highlight-symbol)
-
-(require 'gitsum)
-
-;; (defvar python-mode-home (expand-file-name "~/.emacs.d/python-mode.el-6.1.1/"))
-;; (add-to-list 'load-path python-mode-home)
-;; (setq py-install-directory python-mode-home)
-;; (require 'python-mode)
-
-(require 'buffer-move)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; misc defuns
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun vi-open-line-above ()
   "Insert a newline above the current line and put point at beginning."
   (interactive)
@@ -140,9 +150,6 @@
       (kill-ring-save (region-beginning) (region-end))
     (copy-line arg)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; "borrowed" from emacs starter kit
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun eval-and-replace ()
   "Replace the preceding sexp with its value."
   (interactive)
@@ -152,95 +159,6 @@
              (current-buffer))
     (error (message "Invalid expression")
            (insert (current-kill 0)))))
-
-(defun lorem ()
-  "Insert a lorem ipsum."
-  (interactive)
-  (insert "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do "
-          "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim"
-          "ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut "
-          "aliquip ex ea commodo consequat. Duis aute irure dolor in "
-          "reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla "
-          "pariatur. Excepteur sint occaecat cupidatat non proident, sunt in "
-          "culpa qui officia deserunt mollit anim id est laborum."))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; settings
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(setq inhibit-startup-message t
-      inhibit-startup-echo-area t)
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-(size-indication-mode t)
-(set-default-font "Terminus-12")
-(blink-cursor-mode -1)
-;(ffap-bindings)
-
-(auto-fill-mode 1)
-(setq fill-column 80)
-(prefer-coding-system 'utf-8)
-
-(ido-mode 1)
-(setq ido-case-fold nil
-      ido-create-new-buffer 'always
-      ido-enable-flex-matching t
-      ido-everywhere t)
-(ido-hacks-mode 1)
-
-(winner-mode t)
-;;(which-function-mode t)
-
-(setq org-todo-keywords
-      '((sequence "TODO" "INPROGRESS" "|" "DONE" ))
-      org-todo-keyword-faces
-      '(("INPROGRESS" . (:foreground "#af8700" :weight bold))))
-
-;; fill column indicator
-(setq fci-rule-width 5
-      fci-rule-color "#073642")
-;(fci-mode t)
-
-; auto-complete-mode
-(setq ac-auto-show-menu nil)
-
-(fset 'yes-or-no-p 'y-or-n-p)
-
-;;; Shut up compile saves
-(setq compilation-ask-about-save nil)
-
-;;; don't allow region commands when mark is inactive
-(setq mark-even-if-inactive nil)
-
-(defun my-rpm-hook-defaults ()
-  (setq tab-width 4
-        indent-tabs-mode t))
-(add-hook 'rpm-spec-mode-hook 'my-rpm-hook-defaults)
-
-(defun my-c-mode-hook-defaults ()
-  (setq c-default-style "linux"
-        c-basic-offset 4
-        indent-tabs-mode t
-        subword-mode t))
-(add-hook 'c-mode-hook 'my-c-mode-hook-defaults)
-
-;;; highlight code annotations
-(add-hook 'prog-mode-hook
-          (lambda ()
-            (font-lock-add-keywords nil
-                                    '(("\\<\\(FIXME\\|TODO\\|BUG\\|XXX\\)" 1 font-lock-warning-face t)))))
-
-; TODO this does not work at startup with the scratch buffer
-;(add-hook 'emacs-lisp-mode-hook
-;         (lambda ()
-;           eldoc-mode))
-
-;(add-hook 'after-save-hook 'whitespace-cleanup)
-;; todo org mode dont export postamble
-;; todo auto-revert-non-file-buffers (dired?)
-;; todo ido-goto-symbol
-;; todo bind meta-tab to complete-tag?
-;; todo sudo-editb
 
 (defun increment-number-at-point ()
   (interactive)
@@ -263,10 +181,10 @@
    (delete-other-windows))
 
 (defun magit-quit-session ()
-   "Restores the previous window configuration and kills the magit buffer"
-   (interactive)
-   (kill-buffer)
-   (jump-to-register :magit-fullscreen))
+  "Restores the previous window configuration and kills the magit buffer"
+  (interactive)
+  (kill-buffer)
+  (jump-to-register :magit-fullscreen))
 
 (defun magit-toggle-whitespace ()
   (interactive)
@@ -284,9 +202,32 @@
   (setq magit-diff-options (remove "-w" magit-diff-options))
   (magit-refresh))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; keybindings
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; hooks
+(defun my-rpm-hook-defaults ()
+  (setq tab-width 4
+        indent-tabs-mode t))
+(add-hook 'rpm-spec-mode-hook 'my-rpm-hook-defaults)
+
+(defun my-c-mode-hook-defaults ()
+  (setq c-default-style "linux"
+        c-basic-offset 4
+        indent-tabs-mode t
+        subword-mode t))
+(add-hook 'c-mode-hook 'my-c-mode-hook-defaults)
+
+;; highlight code annotations
+(add-hook 'prog-mode-hook
+          (lambda ()
+            (font-lock-add-keywords nil
+                                    '(("\\<\\(FIXME\\|TODO\\|BUG\\|XXX\\)" 1 font-lock-warning-face t)))))
+
+;;; keybindings
+; swap default search keybindings
+(global-set-key (kbd "C-s") 'isearch-forward-regexp)
+(global-set-key (kbd "C-r") 'isearch-backward-regexp)
+(global-set-key (kbd "C-M-s") 'isearch-forward)
+(global-set-key (kbd "C-M-r") 'isearch-backward)
+
 (global-set-key (kbd "M-O") 'vi-open-line-above)
 (global-set-key (kbd "M-o") 'vi-open-line-below)
 (global-set-key (kbd "C-=") 'er/expand-region)
@@ -313,13 +254,12 @@
 ; other
 (global-set-key (kbd "C-x \\") 'align-regexp)
 (global-set-key (kbd "C-x m") 'eshell)
-(global-set-key (kbd "M-\\") 'hippie-expand)
+(global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key (kbd "C-x C-b") 'ibuffer-other-window)
 (global-set-key (kbd "C-x g") 'magit-status)
 ; numbers
 (global-set-key (kbd "C-c +") 'increment-number-at-point)
 (global-set-key (kbd "C-c -") 'decrement-number-at-point)
-(require 'python)
 (define-key python-mode-map (kbd "M-e") 'python-next-statement)
 (define-key python-mode-map (kbd "M-a") 'python-previous-statement)
 ; windmove-default-keybindings
@@ -337,13 +277,10 @@
 (global-set-key (kbd "C-M-/") 'hippie-expand-line)
 (global-set-key (kbd "M-w") 'save-region-or-current-line)
 
-(require 'magit)
 (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)
 (define-key magit-status-mode-map (kbd "W") 'magit-toggle-whitespace)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; customized
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; customized
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -352,20 +289,26 @@
  '(backup-directory-alist (quote (("." . "/home/jsynacek/emacsbackup"))))
  '(bookmark-save-flag 1)
  '(column-number-mode t)
+ '(compilation-ask-about-save nil)
  '(confirm-kill-emacs nil)
  '(custom-enabled-themes (quote (solarized-dark)))
- '(custom-safe-themes (quote ("d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "e16a771a13a202ee6e276d06098bc77f008b73bbac4d526f160faa2d76c1dd0e" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
- '(delete-selection-mode t)
+ '(custom-safe-themes (quote ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
+ '(diff-switches "-u")
  '(ediff-diff-options "")
  '(electric-pair-mode nil)
  '(global-auto-revert-mode t)
  '(ibuffer-saved-filter-groups (quote (("openlmi" ("openlmi-storage" (filename . "openlmi-storage")) ("openlmi-providers" (filename . "openlmi-providers"))))))
  '(ibuffer-saved-filters (quote (("gnus" ((or (mode . message-mode) (mode . mail-mode) (mode . gnus-group-mode) (mode . gnus-summary-mode) (mode . gnus-article-mode)))) ("programming" ((or (mode . emacs-lisp-mode) (mode . cperl-mode) (mode . c-mode) (mode . java-mode) (mode . idl-mode) (mode . lisp-mode)))))))
  '(indent-tabs-mode nil)
+ '(kill-ring-max 1024)
+ '(mark-even-if-inactive t)
  '(org-export-html-postamble-format (quote (("en" "<p class=\"author\">Author: %a (%e)</p>
 <p class=\"date\">Date: %d</p>"))))
  '(org-export-html-style-include-default nil)
  '(org-export-html-table-tag "<table border=\"2\">")
+ '(package-archives (quote (("gnu" . "http://elpa.gnu.org/packages/") ("marmalade" . "http://marmalade-repo.org/packages/") ("melpa" . "http://melpa.milkbox.net/packages/"))))
+ '(save-place t nil (saveplace))
+ '(save-place-file "~/.emacs.d/places")
  '(scroll-conservatively 10)
  '(scroll-margin 2)
  '(scroll-preserve-screen-position 1)
@@ -382,4 +325,16 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-(put 'narrow-to-region 'disabled nil)
+
+;;; TODO this does not work at startup with the scratch buffer
+;(add-hook 'emacs-lisp-mode-hook
+;         (lambda ()
+;           eldoc-mode))
+;(add-hook 'after-save-hook 'whitespace-cleanup)
+;; todo org mode dont export postamble
+;; todo auto-revert-non-file-buffers (dired?)
+;; todo ido-goto-symbol
+;; todo bind meta-tab to complete-tag?
+;; todo sudo-editb
+
+
