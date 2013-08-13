@@ -92,8 +92,8 @@
                     fill-column-indicator
                     highlight-symbol
                     magit
-                    paredit
                     saveplace
+                    smartparens
                     solarized-theme
                     undo-tree
                     yasnippet)))
