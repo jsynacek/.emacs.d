@@ -202,6 +202,16 @@
   (setq magit-diff-options (remove "-w" magit-diff-options))
   (magit-refresh))
 
+(defun google-search ()
+  (interactive)
+  (browse-url
+   (concat
+    "http://www.google.com/search?ie=utf-8&oe=utf-8&q="
+    (url-hexify-string
+     (if mark-active
+         (buffer-substring (region-beginning) (region-end))
+       (read-string "Google:"))))))
+
 ;;; hooks
 (defun my-rpm-hook-defaults ()
   (setq tab-width 4
