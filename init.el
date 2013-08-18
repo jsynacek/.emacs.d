@@ -312,6 +312,8 @@
  '(indent-tabs-mode nil)
  '(kill-ring-max 1024)
  '(mark-even-if-inactive t)
+ '(max-lisp-eval-depth 6000)
+ '(max-specpdl-size 13000)
  '(org-export-html-postamble-format (quote (("en" "<p class=\"author\">Author: %a (%e)</p>
 <p class=\"date\">Date: %d</p>"))))
  '(org-export-html-style-include-default nil)
