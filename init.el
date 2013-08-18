@@ -18,6 +18,7 @@
 (require 'package)
 (require 'python)
 (require 'saveplace)
+(require 'smartparens)
 (require 'server)
 (require 'uniquify)
 
@@ -289,7 +290,10 @@
 
 (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)
 (define-key magit-status-mode-map (kbd "W") 'magit-toggle-whitespace)
-
+; smartparens
+(define-key smartparens-mode-map (kbd "C-M-w") 'sp-copy-sexp)
+(define-key smartparens-mode-map (kbd "<C-left>") 'sp-forward-barf-sexp)
+(define-key smartparens-mode-map (kbd "<C-right>") 'sp-forward-slurp-sexp)
 ;;; customized
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
