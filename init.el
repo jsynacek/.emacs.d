@@ -213,6 +213,22 @@
          (buffer-substring (region-beginning) (region-end))
        (read-string "Google:"))))))
 
+; stolen from python-mode and modified
+; TODO fix
+(defun pydoc (w)
+  "Launch PyDOC on the Word at Point"
+  (interactive
+   (list (let* ((word (thing-at-point 'word))
+                (input (read-string
+                        (format "pydoc entry%s: "
+                                (if (not word) "" (format " (default %s)" word))))))
+           (if (string= input "")
+               (if (not word) (error "No pydoc args given")
+                 word) ;sinon word
+             input)))) ;sinon input
+  (shell-command (concat python-shell-interpreter " -c \"from pydoc import help;help(\'" w "\')\"") "*PYDOCS*")
+  (view-buffer-other-window "*PYDOCS*" t 'kill-buffer-and-window))
+
 ;;; hooks
 (defun my-rpm-hook-defaults ()
   (setq tab-width 4
@@ -271,8 +287,6 @@
 ; numbers
 (global-set-key (kbd "C-c +") 'increment-number-at-point)
 (global-set-key (kbd "C-c -") 'decrement-number-at-point)
-(define-key python-mode-map (kbd "M-e") 'python-next-statement)
-(define-key python-mode-map (kbd "M-a") 'python-previous-statement)
 ; windmove-default-keybindings
 (global-set-key (kbd "S-<right>") 'windmove-right)
 (global-set-key (kbd "S-<left>") 'windmove-left)
@@ -294,6 +308,11 @@
 (define-key smartparens-mode-map (kbd "C-M-w") 'sp-copy-sexp)
 (define-key smartparens-mode-map (kbd "<C-left>") 'sp-forward-barf-sexp)
 (define-key smartparens-mode-map (kbd "<C-right>") 'sp-forward-slurp-sexp)
+; python-mode
+(define-key python-mode-map (kbd "C-c d") 'pydoc)
+;; (define-key python-mode-map (kbd "M-e") 'python-next-statement)
+;; (define-key python-mode-map (kbd "M-a") 'python-previous-statement)
+
 ;;; customized
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
