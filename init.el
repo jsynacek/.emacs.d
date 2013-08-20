@@ -19,6 +19,7 @@
 (require 'python)
 (require 'saveplace)
 (require 'smartparens)
+(require 'smartparens-config)
 (require 'server)
 (require 'uniquify)
 
@@ -82,6 +83,11 @@
 (setq display-time-day-and-date t
       display-time-24hr-format t
       display-time-default-load-average nil)
+
+;; smartparens
+(sp-with-modes sp--lisp-modes
+  (sp-local-pair "`" "'")
+  (sp-local-pair "'" nil :actions nil))
 
 ;;; defuns
 (defun install-my-packages ()
@@ -305,9 +311,18 @@
 (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)
 (define-key magit-status-mode-map (kbd "W") 'magit-toggle-whitespace)
 ; smartparens
-(define-key smartparens-mode-map (kbd "C-M-w") 'sp-copy-sexp)
-(define-key smartparens-mode-map (kbd "<C-left>") 'sp-forward-barf-sexp)
-(define-key smartparens-mode-map (kbd "<C-right>") 'sp-forward-slurp-sexp)
+(define-key sp-keymap (kbd "C-M-w") 'sp-copy-sexp)
+(define-key sp-keymap (kbd "C-M-k") 'sp-kill-sexp)
+(define-key sp-keymap (kbd "<C-left>") 'sp-forward-barf-sexp)
+(define-key sp-keymap (kbd "<C-right>") 'sp-forward-slurp-sexp)
+(define-key sp-keymap (kbd "C-M-<left>") 'sp-backward-slurp-sexp)
+(define-key sp-keymap (kbd "C-M-<right>") 'sp-backward-barf-sexp)
+(define-key sp-keymap (kbd "M-F") 'sp-forward-symbol)
+(define-key sp-keymap (kbd "M-B") 'sp-backward-symbol)
+(define-key sp-keymap (kbd "C-}") 'sp-select-next-thing-exchange)
+(define-key sp-keymap (kbd "C-{") 'sp-select-previous-thing)
+(define-key sp-keymap (kbd "C-M-}") 'sp-select-next-thing)
+
 ; python-mode
 (define-key python-mode-map (kbd "C-c d") 'pydoc)
 ;; (define-key python-mode-map (kbd "M-e") 'python-next-statement)
