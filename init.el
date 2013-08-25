@@ -268,11 +268,12 @@
                 (lambda ()
                   (interactive)
                   (join-line -1)))
-(global-set-key (kbd "C-c e") 'eval-and-replace)
+(global-set-key (kbd "C-x e") 'eval-and-replace)
 (global-set-key (kbd "<f5>") 'recompile)
 (global-set-key (kbd "C-c SPC") 'ace-jump-mode)
 (global-set-key (kbd "C-x w") 'write-region)
 (global-set-key (kbd "C-M-<backspace>") 'backward-kill-sexp)
+(global-set-key (kbd "C-x C-k") 'kill-buffer-and-window)
 ; org-mode
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c c") 'org-capture)
@@ -388,3 +389,5 @@
 ;; todo sudo-editb
 
 
+
+(put 'narrow-to-region 'disabled nil)
