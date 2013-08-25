@@ -155,7 +155,7 @@
   (interactive "P")
   (if (region-active-p)
       (kill-ring-save (region-beginning) (region-end))
-    (copy-line arg)))
+    (kill-ring-save (line-beginning-position) (line-end-position))))
 
 (defun eval-and-replace ()
   "Replace the preceding sexp with its value."
