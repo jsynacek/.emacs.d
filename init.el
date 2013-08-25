@@ -13,7 +13,6 @@
 (require 'expand-region)
 (require 'highlight-symbol)
 (require 'ido-hacks)
-(require 'idomenu)
 (require 'magit)
 (require 'package)
 (require 'python)
@@ -26,6 +25,15 @@
 ;;; settings
 (setq inhibit-startup-message t
       inhibit-startup-echo-area t)
+(set-default-font "Terminus-12")
+(prefer-coding-system 'utf-8)
+(setenv "EDITOR" "emacsclient")
+(setq fill-column 80)
+(fset 'yes-or-no-p 'y-or-n-p)
+(setq frame-title-format
+      '((:eval (concat "e: " (if (buffer-file-name)
+                                 (abbreviate-file-name (buffer-file-name))
+                               "%b")))))
 ;; modes
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
@@ -33,33 +41,10 @@
 (blink-cursor-mode -1)
 (ido-mode 1)
 (ido-hacks-mode 1)
-(size-indication-mode t)
 (auto-fill-mode 1)
 (winner-mode t)
-(display-time-mode t)
-
-(set-default-font "Terminus-12")
-(prefer-coding-system 'utf-8)
-(setenv "EDITOR" "emacsclient")
-(setq fill-column 80)
-(fset 'yes-or-no-p 'y-or-n-p)
-
-(setq frame-title-format
-      '((:eval (concat "e: " (if (buffer-file-name)
-                                 (abbreviate-file-name (buffer-file-name))
-                               "%b")))))
 
 ;;; package settings
-;; browse-kill-ring
-(browse-kill-ring-default-keybindings)
-(setq browse-kill-ring-quit-action 'save-and-restore)
-
-;; ido
-(setq ido-case-fold nil
-      ido-create-new-buffer 'always
-      ido-enable-flex-matching t
-      ido-everywhere t)
-
 ;; org
 (setq org-todo-keywords
       '((sequence "TODO" "INPROGRESS" "|" "DONE" ))
@@ -79,11 +64,6 @@
                                       'split-window-horizontally
                                     'split-window-vertically))
 
-;; display time mode
-(setq display-time-day-and-date t
-      display-time-24hr-format t
-      display-time-default-load-average nil)
-
 ;; smartparens
 (sp-with-modes sp--lisp-modes
   (sp-local-pair "`" "'")
@@ -98,6 +78,7 @@
                     expand-region
                     fill-column-indicator
                     highlight-symbol
+                    ido-hacks
                     magit
                     saveplace
                     smartparens
@@ -255,16 +236,14 @@
                                     '(("\\<\\(FIXME\\|TODO\\|BUG\\|XXX\\)" 1 font-lock-warning-face t)))))
 
 ;;; keybindings
-; swap default search keybindings
+; general
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
 (global-set-key (kbd "C-M-s") 'isearch-forward)
 (global-set-key (kbd "C-M-r") 'isearch-backward)
-
 (global-set-key (kbd "M-O") 'vi-open-line-above)
 (global-set-key (kbd "M-o") 'vi-open-line-below)
-(global-set-key (kbd "C-=") 'er/expand-region)
-(global-set-key (kbd "C-c j")
+(global-set-key (kbd "M-j")
                 (lambda ()
                   (interactive)
                   (join-line -1)))
@@ -274,23 +253,29 @@
 (global-set-key (kbd "C-x w") 'write-region)
 (global-set-key (kbd "C-M-<backspace>") 'backward-kill-sexp)
 (global-set-key (kbd "C-x C-k") 'kill-buffer-and-window)
-; org-mode
-(global-set-key (kbd "C-c l") 'org-store-link)
-(global-set-key (kbd "C-c c") 'org-capture)
-(global-set-key (kbd "C-c a") 'org-agenda)
-(global-set-key (kbd "C-c b") 'org-iswitchb)
-; my multi-occur
-(global-set-key (kbd "M-s /") 'my-multi-occur-in-matching-buffers)
-; highlight-symbol
-(global-set-key (kbd "C-x *") 'highlight-symbol-at-point)
-(global-set-key (kbd "M-n") 'highlight-symbol-next)
-(global-set-key (kbd "M-p") 'highlight-symbol-prev)
-; other
 (global-set-key (kbd "C-x \\") 'align-regexp)
 (global-set-key (kbd "C-x m") 'eshell)
 (global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key (kbd "C-x C-b") 'ibuffer-other-window)
-(global-set-key (kbd "C-x g") 'magit-status)
+(global-set-key (kbd "M-i") 'imenu)
+(global-set-key (kbd "C-M-/") 'hippie-expand-line)
+(global-set-key (kbd "M-w") 'save-region-or-current-line)
+(global-set-key (kbd "M-8") 'er/expand-region)
+(global-set-key (kbd "M-9")
+                (lambda ()
+                  (interactive)
+                  (er/expand-region -1)))
+(global-set-key (kbd "M-0") 'delete-window)
+(global-set-key (kbd "M-1") 'delete-other-windows)
+(define-prefix-command 'menukey-prefix-map)
+; custom prefix
+(global-set-key (kbd "<menu>") 'menukey-prefix-map)
+(define-key menukey-prefix-map (kbd "r") 'rgrep)
+; my multi-occur
+(global-set-key (kbd "M-s /") 'my-multi-occur-in-matching-buffers)
+; highlight-symbol
+(global-set-key (kbd "M-n") 'highlight-symbol-next)
+(global-set-key (kbd "M-p") 'highlight-symbol-prev)
 ; numbers
 (global-set-key (kbd "C-c +") 'increment-number-at-point)
 (global-set-key (kbd "C-c -") 'decrement-number-at-point)
@@ -304,11 +289,8 @@
 (global-set-key (kbd "<C-S-down>")  'buf-move-down)
 (global-set-key (kbd "<C-S-left>")  'buf-move-left)
 (global-set-key (kbd "<C-S-right>") 'buf-move-right)
-
-(global-set-key (kbd "M-i") 'idomenu)
-(global-set-key (kbd "C-M-/") 'hippie-expand-line)
-(global-set-key (kbd "M-w") 'save-region-or-current-line)
-
+; magit
+(global-set-key (kbd "C-x g") 'magit-status)
 (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)
 (define-key magit-status-mode-map (kbd "W") 'magit-toggle-whitespace)
 ; smartparens
@@ -323,11 +305,10 @@
 (define-key sp-keymap (kbd "C-}") 'sp-select-next-thing-exchange)
 (define-key sp-keymap (kbd "C-{") 'sp-select-previous-thing)
 (define-key sp-keymap (kbd "C-M-}") 'sp-select-next-thing)
-
 ; python-mode
 (define-key python-mode-map (kbd "C-c d") 'pydoc)
-;; (define-key python-mode-map (kbd "M-e") 'python-next-statement)
-;; (define-key python-mode-map (kbd "M-a") 'python-previous-statement)
+(define-key python-mode-map (kbd "M-e") 'python-next-statement)
+(define-key python-mode-map (kbd "M-a") 'python-previous-statement)
 
 ;;; customized
 (custom-set-variables
@@ -348,20 +329,18 @@
  '(global-auto-revert-mode t)
  '(ibuffer-saved-filter-groups (quote (("openlmi" ("openlmi-storage" (filename . "openlmi-storage")) ("openlmi-providers" (filename . "openlmi-providers"))))))
  '(ibuffer-saved-filters (quote (("gnus" ((or (mode . message-mode) (mode . mail-mode) (mode . gnus-group-mode) (mode . gnus-summary-mode) (mode . gnus-article-mode)))) ("programming" ((or (mode . emacs-lisp-mode) (mode . cperl-mode) (mode . c-mode) (mode . java-mode) (mode . idl-mode) (mode . lisp-mode)))))))
+ '(ido-case-fold nil)
+ '(ido-create-new-buffer (quote always))
+ '(ido-enable-flex-matching t)
+ '(ido-everywhere t)
  '(indent-tabs-mode nil)
  '(kill-ring-max 1024)
  '(mark-even-if-inactive t)
  '(max-lisp-eval-depth 6000)
  '(max-specpdl-size 13000)
- '(org-export-html-postamble-format (quote (("en" "<p class=\"author\">Author: %a (%e)</p>
-<p class=\"date\">Date: %d</p>"))))
- '(org-export-html-style-include-default nil)
- '(org-export-html-table-tag "<table border=\"2\">")
  '(package-archives (quote (("gnu" . "http://elpa.gnu.org/packages/") ("marmalade" . "http://marmalade-repo.org/packages/") ("melpa" . "http://melpa.milkbox.net/packages/"))))
  '(save-place t nil (saveplace))
  '(save-place-file "~/.emacs.d/places")
- '(scroll-conservatively 10)
- '(scroll-margin 2)
  '(scroll-preserve-screen-position 1)
  '(show-paren-mode t)
  '(split-height-threshold nil)
@@ -387,7 +366,3 @@
 ;; todo ido-goto-symbol
 ;; todo bind meta-tab to complete-tag?
 ;; todo sudo-editb
-
-
-
-(put 'narrow-to-region 'disabled nil)
