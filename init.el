@@ -104,6 +104,14 @@
   (end-of-line)
   (newline-and-indent))
 
+(defun describe-thing-at-point ()
+  (interactive)
+  (let ((function (function-called-at-point))
+        (variable (variable-at-point)))
+    (cond
+     ((/= variable 0) (describe-variable variable))
+     (function (describe-function function)))))
+
 (defun my-multi-occur-in-matching-buffers (regexp &optional allbufs)
   "Show all lines matching REGEXP in all buffers."
   (interactive (occur-read-primary-args))
@@ -258,6 +266,7 @@
 (global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key (kbd "C-x C-b") 'ibuffer-other-window)
 (global-set-key (kbd "M-i") 'imenu)
+(global-set-key (kbd "C-.") 'describe-thing-at-point)
 (global-set-key (kbd "C-M-/") 'hippie-expand-line)
 (global-set-key (kbd "M-w") 'save-region-or-current-line)
 (global-set-key (kbd "M-8") 'er/expand-region)
