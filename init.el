@@ -269,6 +269,9 @@
             (font-lock-add-keywords nil
                                     '(("\\<\\(FIXME\\|TODO\\|BUG\\|XXX\\)" 1 font-lock-warning-face t)))))
 
+;; whitespace-cleanup
+(add-hook 'before-save-hook 'whitespace-cleanup)
+
 ;;; keybindings
 ; general
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
