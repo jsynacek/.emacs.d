@@ -172,9 +172,9 @@
 
 ;; full screen magit-status
 (defadvice magit-status (around magit-fullscreen activate)
-   (window-configuration-to-register :magit-fullscreen)
-   ad-do-it
-   (delete-other-windows))
+  (window-configuration-to-register :magit-fullscreen)
+  ad-do-it
+  (delete-other-windows))
 
 (defun magit-quit-session ()
   "Restores the previous window configuration and kills the magit buffer"
@@ -223,6 +223,32 @@
              input)))) ;sinon input
   (shell-command (concat python-shell-interpreter " -c \"from pydoc import help;help(\'" w "\')\"") "*PYDOCS*")
   (view-buffer-other-window "*PYDOCS*" t 'kill-buffer-and-window))
+
+; indent buffer
+(defun indent-buffer ()
+  (interactive)
+  (indent-region (point-min) (point-max)))
+
+; lmi-specific
+(defun lmi-debug-associators ()
+  (interactive)
+  (let ((params '(assocClass resultClass role resultRole))
+        (debug-str "printf(\"DEBUG: %s: %%s\\n\", %s);\n")
+        (opoint (point)))
+    (insert " /* TODO: DEBUG */\n"
+            (format debug-str
+                    "cop"
+                    "CMGetCharsPtr(cop->ft->toString(cop, NULL), NULL)"))
+    (dolist (param params)
+      (insert (format debug-str param param)))
+    (indent-region opoint (point))))
+
+(defun insert-debug-statement ()
+  (interactive)
+  (insert "printf(\"DEBUG: \\n\");")
+  (goto-char (- (point) 5))
+  (c-indent-line-or-region))
+
 
 ;;; hooks
 (defun my-rpm-hook-defaults ()
