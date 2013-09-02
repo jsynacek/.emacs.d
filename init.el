@@ -249,6 +249,35 @@
   (goto-char (- (point) 5))
   (c-indent-line-or-region))
 
+; unscroll
+(defvar unscroll-point (make-marker))
+(defvar unscroll-window-start (make-marker))
+(defvar unscroll-hscroll)
+
+(put 'scroll-up   'unscrollable t)
+(put 'scroll-down 'unscrollable t)
+
+(defadvice scroll-up (before remember-for-unscroll
+                             activate compile)
+  (unscroll-maybe-remember))
+
+(defadvice scroll-down (before remember-for-unscroll
+                             activate compile)
+  (unscroll-maybe-remember))
+
+
+(defun unscroll-maybe-remember ()
+  (if (not (get last-command 'unscrollable))
+      (progn
+        (set-marker unscroll-point (point))
+        (set-marker unscroll-window-start (window-start))
+        (setq unscroll-hscroll))))
+
+(defun unscroll ()
+  (interactive)
+  (goto-char unscroll-point)
+  (set-window-start nil unscroll-window-start)
+  (set-window-hscroll nil unscroll-hscroll))
 
 ;;; hooks
 (defun my-rpm-hook-defaults ()
