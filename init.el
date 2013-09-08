@@ -3,13 +3,14 @@
 (setq user-mail-address "jsynacek@redhat.com")
 (setq user-nick "jsynacek")
 
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/elisp/"))
 
 ;;; requires
 (package-initialize)
 (require 'ace-jump-mode)
 (require 'browse-kill-ring)
 (require 'buffer-move)
+(require 'dired-x)
 (require 'expand-region)
 (require 'highlight-symbol)
 (require 'ido-hacks)
@@ -21,6 +22,7 @@
 (require 'smartparens-config)
 (require 'server)
 (require 'uniquify)
+(require 'keybindings)
 
 ;;; settings
 (setq inhibit-startup-message t
@@ -43,6 +45,7 @@
 (ido-hacks-mode 1)
 (auto-fill-mode 1)
 (winner-mode t)
+(smartparens-global-mode 1)
 
 ;;; package settings
 ;; org
@@ -249,6 +252,26 @@
   (goto-char (- (point) 5))
   (c-indent-line-or-region))
 
+(defun sudo-edit (file)
+  (interactive "fSudo edit: ")
+  (let ((sudo-prefix "/sudo:root@localhost:"))
+    (find-file (concat sudo-prefix file))))
+
+(defun zap-up-to-char (arg char)
+  "Kill up to ARGth occurrence of CHAR.
+Case is ignored if `case-fold-search' is non-nil in the current buffer.
+Goes backward if ARG is negative; error if CHAR not found."
+  (interactive (list (prefix-numeric-value current-prefix-arg)
+             (read-char "Zap to char: " t)))
+  ;; Avoid "obsolete" warnings for translation-table-for-input.
+  (with-no-warnings
+    (if (char-table-p translation-table-for-input)
+	(setq char (or (aref translation-table-for-input char) char))))
+  (kill-region (point) (progn
+             (search-forward (char-to-string char) nil nil arg)
+             (goto-char (1- (point)))
+             (point))))
+
 ; unscroll
 (defvar unscroll-point (make-marker))
 (defvar unscroll-window-start (make-marker))
@@ -301,83 +324,6 @@
 ;; whitespace-cleanup
 (add-hook 'before-save-hook 'whitespace-cleanup)
 
-;;; keybindings
-; general
-(global-set-key (kbd "C-s") 'isearch-forward-regexp)
-(global-set-key (kbd "C-r") 'isearch-backward-regexp)
-(global-set-key (kbd "C-M-s") 'isearch-forward)
-(global-set-key (kbd "C-M-r") 'isearch-backward)
-(global-set-key (kbd "M-O") 'vi-open-line-above)
-(global-set-key (kbd "M-o") 'vi-open-line-below)
-(global-set-key (kbd "M-j")
-                (lambda ()
-                  (interactive)
-                  (join-line -1)))
-(global-set-key (kbd "C-x e") 'eval-and-replace)
-(global-set-key (kbd "<f5>") 'recompile)
-(global-set-key (kbd "<f6>") 'compile)
-(global-set-key (kbd "<f7>") 'whitespace-cleanup)
-(global-set-key (kbd "C-c SPC") 'ace-jump-mode)
-(global-set-key (kbd "C-x w") 'write-region)
-(global-set-key (kbd "C-M-<backspace>") 'backward-kill-sexp)
-(global-set-key (kbd "C-x C-k") 'kill-buffer-and-window)
-(global-set-key (kbd "C-x \\") 'align-regexp)
-(global-set-key (kbd "C-x m") 'eshell)
-(global-set-key (kbd "M-/") 'hippie-expand)
-(global-set-key (kbd "C-x C-b") 'ibuffer-other-window)
-(global-set-key (kbd "M-i") 'imenu)
-(global-set-key (kbd "C-.") 'describe-thing-at-point)
-(global-set-key (kbd "C-M-/") 'hippie-expand-line)
-(global-set-key (kbd "M-w") 'save-region-or-current-line)
-(global-set-key (kbd "M-8") 'er/expand-region)
-(global-set-key (kbd "M-9")
-                (lambda ()
-                  (interactive)
-                  (er/expand-region -1)))
-(global-set-key (kbd "M-0") 'delete-window)
-(global-set-key (kbd "M-1") 'delete-other-windows)
-(define-prefix-command 'menukey-prefix-map)
-; custom prefix
-(global-set-key (kbd "<menu>") 'menukey-prefix-map)
-(define-key menukey-prefix-map (kbd "r") 'rgrep)
-; my multi-occur
-(global-set-key (kbd "M-s /") 'my-multi-occur-in-matching-buffers)
-; highlight-symbol
-(global-set-key (kbd "M-n") 'highlight-symbol-next)
-(global-set-key (kbd "M-p") 'highlight-symbol-prev)
-; numbers
-(global-set-key (kbd "C-c +") 'increment-number-at-point)
-(global-set-key (kbd "C-c -") 'decrement-number-at-point)
-; windmove-default-keybindings
-(global-set-key (kbd "S-<right>") 'windmove-right)
-(global-set-key (kbd "S-<left>") 'windmove-left)
-(global-set-key (kbd "S-<down>") 'windmove-down)
-(global-set-key (kbd "S-<up>") 'windmove-up)
-; buffer-move
-(global-set-key (kbd "<C-S-up>")    'buf-move-up)
-(global-set-key (kbd "<C-S-down>")  'buf-move-down)
-(global-set-key (kbd "<C-S-left>")  'buf-move-left)
-(global-set-key (kbd "<C-S-right>") 'buf-move-right)
-; magit
-(global-set-key (kbd "C-x g") 'magit-status)
-(define-key magit-status-mode-map (kbd "q") 'magit-quit-session)
-(define-key magit-status-mode-map (kbd "W") 'magit-toggle-whitespace)
-; smartparens
-(define-key sp-keymap (kbd "C-M-w") 'sp-copy-sexp)
-(define-key sp-keymap (kbd "C-M-k") 'sp-kill-sexp)
-(define-key sp-keymap (kbd "<C-left>") 'sp-forward-barf-sexp)
-(define-key sp-keymap (kbd "<C-right>") 'sp-forward-slurp-sexp)
-(define-key sp-keymap (kbd "C-M-<left>") 'sp-backward-slurp-sexp)
-(define-key sp-keymap (kbd "C-M-<right>") 'sp-backward-barf-sexp)
-(define-key sp-keymap (kbd "M-F") 'sp-forward-symbol)
-(define-key sp-keymap (kbd "M-B") 'sp-backward-symbol)
-(define-key sp-keymap (kbd "C-}") 'sp-select-next-thing-exchange)
-(define-key sp-keymap (kbd "C-{") 'sp-select-previous-thing)
-(define-key sp-keymap (kbd "C-M-}") 'sp-select-next-thing)
-; python-mode
-(define-key python-mode-map (kbd "C-c d") 'pydoc)
-(define-key python-mode-map (kbd "M-e") 'python-next-statement)
-(define-key python-mode-map (kbd "M-a") 'python-previous-statement)
 
 ;;; customized
 (custom-set-variables
@@ -385,6 +331,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(auto-save-file-name-transforms (quote (("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" "/tmp/\\2" t) ("\\(.*\\)" "/home/jsynacek/.emacs.d/autosave/\\2" t))))
  '(backup-directory-alist (quote (("." . "/home/jsynacek/emacsbackup"))))
  '(bookmark-save-flag 1)
  '(column-number-mode t)
