@@ -18,6 +18,7 @@
 (require 'package)
 (require 'python)
 (require 'saveplace)
+(require 'shell-pop)
 (require 'smartparens)
 (require 'smartparens-config)
 (require 'server)
@@ -28,6 +29,7 @@
 (setq inhibit-startup-message t
       inhibit-startup-echo-area t)
 (set-default-font "Terminus-12")
+(setq default-frame-alist '((font . "Terminus-12")))
 (prefer-coding-system 'utf-8)
 (setenv "EDITOR" "emacsclient")
 (setq fill-column 80)
@@ -321,8 +323,15 @@ Goes backward if ARG is negative; error if CHAR not found."
             (font-lock-add-keywords nil
                                     '(("\\<\\(FIXME\\|TODO\\|BUG\\|XXX\\)" 1 font-lock-warning-face t)))))
 
-;; whitespace-cleanup
-(add-hook 'before-save-hook 'whitespace-cleanup)
+(global-set-key [remap goto-line] 'goto-line-with-feedback)
+(defun goto-line-with-feedback ()
+  "Show line numbers temporarily, while prompting for the line number input"
+  (interactive)
+  (unwind-protect
+      (progn
+        (linum-mode 1)
+        (goto-line (read-number "Goto line: ")))
+    (linum-mode -1)))
 
 
 ;;; customized
@@ -334,16 +343,24 @@ Goes backward if ARG is negative; error if CHAR not found."
  '(auto-save-file-name-transforms (quote (("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" "/tmp/\\2" t) ("\\(.*\\)" "/home/jsynacek/.emacs.d/autosave/\\2" t))))
  '(backup-directory-alist (quote (("." . "/home/jsynacek/emacsbackup"))))
  '(bookmark-save-flag 1)
+ '(c-backslash-column 78)
+ '(c-backslash-max-column 78)
+ '(c-macro-prompt-flag t)
  '(column-number-mode t)
  '(compilation-ask-about-save nil)
  '(confirm-kill-emacs nil)
  '(custom-enabled-themes (quote (solarized-dark)))
  '(custom-safe-themes (quote ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
  '(diff-switches "-u")
+ '(ediff-custom-diff-options "-up")
  '(ediff-diff-options "")
+ '(ediff-split-window-function (quote split-window-horizontally))
+ '(ediff-window-setup-function (quote ediff-setup-windows-plain))
  '(electric-pair-mode nil)
+ '(eshell-buffer-maximum-lines 10240)
+ '(fill-column 80)
  '(global-auto-revert-mode t)
- '(ibuffer-saved-filter-groups (quote (("openlmi" ("openlmi-storage" (filename . "openlmi-storage")) ("openlmi-providers" (filename . "openlmi-providers"))))))
+ '(ibuffer-saved-filter-groups (quote (("openlmi" ("openlmi-scripts" (filename . "openlmi-scripts")) ("openlmi-storage" (filename . "openlmi-storage")) ("openlmi-providers" (filename . "openlmi-providers"))))))
  '(ibuffer-saved-filters (quote (("gnus" ((or (mode . message-mode) (mode . mail-mode) (mode . gnus-group-mode) (mode . gnus-summary-mode) (mode . gnus-article-mode)))) ("programming" ((or (mode . emacs-lisp-mode) (mode . cperl-mode) (mode . c-mode) (mode . java-mode) (mode . idl-mode) (mode . lisp-mode)))))))
  '(ido-case-fold nil)
  '(ido-create-new-buffer (quote always))
@@ -354,10 +371,15 @@ Goes backward if ARG is negative; error if CHAR not found."
  '(mark-even-if-inactive t)
  '(max-lisp-eval-depth 6000)
  '(max-specpdl-size 13000)
+ '(mouse-yank-at-point t)
+ '(next-screen-context-lines 4)
  '(package-archives (quote (("gnu" . "http://elpa.gnu.org/packages/") ("marmalade" . "http://marmalade-repo.org/packages/") ("melpa" . "http://melpa.milkbox.net/packages/"))))
  '(save-place t nil (saveplace))
  '(save-place-file "~/.emacs.d/places")
  '(scroll-preserve-screen-position 1)
+ '(shell-pop-shell-type (quote ("eshell" "*eshell*" (lambda nil (eshell)))))
+ '(shell-pop-universal-key "C-x C-m")
+ '(shell-pop-window-height 60)
  '(show-paren-mode t)
  '(split-height-threshold nil)
  '(split-width-threshold 140)
@@ -382,3 +404,4 @@ Goes backward if ARG is negative; error if CHAR not found."
 ;; todo ido-goto-symbol
 ;; todo bind meta-tab to complete-tag?
 ;; todo sudo-editb
+(put 'narrow-to-region 'disabled nil)
