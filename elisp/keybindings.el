@@ -34,6 +34,8 @@
 ;; ; origin: backward-sentence
 ;; (global-set-key (kbd "M-a") 'eshell)
 ;; (global-set-key (kbd "M-A") 'shell-command)
+(global-set-key (kbd "M-.") 'gtags-find-tag)
+(global-set-key (kbd "M-*") 'gtags-pop-stack)
 ;; (global-set-key (kbd "M-<SPC>") 'set-mark-command)
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
