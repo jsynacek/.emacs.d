@@ -13,7 +13,6 @@
 (require 'dired-x)
 (require 'expand-region)
 (require 'highlight-symbol)
-(require 'ido-hacks)
 (require 'magit)
 (require 'package)
 (require 'python)
@@ -43,8 +42,6 @@
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (blink-cursor-mode -1)
-(ido-mode 1)
-(ido-hacks-mode 1)
 (auto-fill-mode 1)
 (winner-mode t)
 (smartparens-global-mode 1)
@@ -83,7 +80,6 @@
                     expand-region
                     fill-column-indicator
                     highlight-symbol
-                    ido-hacks
                     magit
                     saveplace
                     smartparens
