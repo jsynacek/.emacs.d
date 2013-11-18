@@ -34,8 +34,22 @@
 ;; ; origin: backward-sentence
 ;; (global-set-key (kbd "M-a") 'eshell)
 ;; (global-set-key (kbd "M-A") 'shell-command)
-(global-set-key (kbd "M-.") 'gtags-find-tag)
-(global-set-key (kbd "M-*") 'gtags-pop-stack)
+
+;; do not kill emacs that easily
+(global-set-key (kbd "C-x r q") 'save-buffers-kill-terminal)
+(global-set-key (kbd "C-x C-c") nil)
+
+;; transpose stuff with M-t (stolen from Magnar Sveen)
+(global-unset-key (kbd "M-t")) ;; which used to be transpose-words
+(global-set-key (kbd "M-t l") 'transpose-lines)
+(global-set-key (kbd "M-t w") 'transpose-words)
+(global-set-key (kbd "M-t s") 'transpose-sexps)
+
+;; View occurrence in occur mode
+(define-key occur-mode-map (kbd "v") 'occur-mode-display-occurrence)
+(define-key occur-mode-map (kbd "n") 'next-line)
+(define-key occur-mode-map (kbd "p") 'previous-line)
+
 ;; (global-set-key (kbd "M-<SPC>") 'set-mark-command)
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
@@ -113,5 +127,13 @@
 (define-key python-mode-map (kbd "C-c d") 'pydoc)
 (define-key python-mode-map (kbd "M-e") 'python-next-statement)
 (define-key python-mode-map (kbd "M-a") 'python-previous-statement)
-
+; gtags-select-mode
+(require 'gtags)
+(global-set-key (kbd "M-.") 'gtags-find-tag)
+(global-set-key (kbd "M-*") 'gtags-pop-stack)
+(define-key gtags-select-mode-map (kbd "RET") 'gtags-select-tag)
+(define-key gtags-select-mode-map (kbd "SPC") 'gtags-select-tag-other-window)
+(define-key gtags-select-mode-map (kbd "n") 'forward-line)
+(define-key gtags-select-mode-map (kbd "p") 'previous-line)
+(define-key gtags-select-mode-map (kbd "q") 'bury-buffer)
 (provide 'keybindings)
