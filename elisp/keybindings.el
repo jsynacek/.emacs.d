@@ -129,8 +129,10 @@
 (define-key python-mode-map (kbd "M-a") 'python-previous-statement)
 ; gtags-select-mode
 (require 'gtags)
-(global-set-key (kbd "M-.") 'gtags-find-tag)
-(global-set-key (kbd "M-*") 'gtags-pop-stack)
+ (defun use-gtags-in-c-mode ()
+   (define-key c-mode-map (kbd "M-.") 'gtags-find-tag)
+   (define-key c-mode-map (kbd "M-*") 'gtags-pop-stack))
+(add-hook 'c-initialization-hook 'use-gtags-in-c-mode)
 (define-key gtags-select-mode-map (kbd "RET") 'gtags-select-tag)
 (define-key gtags-select-mode-map (kbd "SPC") 'gtags-select-tag-other-window)
 (define-key gtags-select-mode-map (kbd "n") 'forward-line)
