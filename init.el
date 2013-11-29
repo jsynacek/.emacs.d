@@ -80,6 +80,7 @@
                     expand-region
                     fill-column-indicator
                     highlight-symbol
+                    ido-vertical-mode
                     magit
                     saveplace
                     smartparens
