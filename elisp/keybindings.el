@@ -39,6 +39,8 @@
 (global-set-key (kbd "C-x r q") 'save-buffers-kill-terminal)
 (global-set-key (kbd "C-x C-c") nil)
 
+(global-set-key (kbd "M-x") 'smex)
+
 ;; transpose stuff with M-t (stolen from Magnar Sveen)
 (global-unset-key (kbd "M-t")) ;; which used to be transpose-words
 (global-set-key (kbd "M-t l") 'transpose-lines)
