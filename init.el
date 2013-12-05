@@ -77,6 +77,7 @@
 (defun install-my-packages ()
   (interactive)
   (let ((pkg-list '(ace-jump-mode
+                    browse-kill-ring
                     buffer-move
                     cl-lib
                     expand-region
@@ -85,7 +86,9 @@
                     ido-vertical-mode
                     magit
                     saveplace
+                    shell-pop
                     smartparens
+                    smex
                     solarized-theme
                     undo-tree
                     yasnippet)))
