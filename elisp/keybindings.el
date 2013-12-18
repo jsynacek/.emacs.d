@@ -130,4 +130,11 @@
 (define-key python-mode-map (kbd "C-c d") 'pydoc)
 (define-key python-mode-map (kbd "M-e") 'python-next-statement)
 (define-key python-mode-map (kbd "M-a") 'python-previous-statement)
+; etags-select
+; TODO this breaks ggtags' M-. ?
+(if (fboundp 'etags-select-find-tag)
+    (global-set-key (kbd "M-.") 'etags-select-find-tag))
+; erc
+(define-key erc-mode-map (kbd "RET") nil)
+(define-key erc-mode-map (kbd "C-<return>") 'erc-send-current-line)
 (provide 'keybindings)

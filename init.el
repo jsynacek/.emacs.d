@@ -1,8 +1,4 @@
 ;;; init
-(setq user-full-name "Jan Synáček")
-(setq user-mail-address "jsynacek@redhat.com")
-(setq user-nick "jsynacek")
-
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/elisp/"))
 
 ;;; requires
@@ -11,6 +7,7 @@
 (require 'browse-kill-ring)
 (require 'buffer-move)
 (require 'dired-x)
+(require 'erc)
 (require 'expand-region)
 (require 'highlight-symbol)
 (require 'magit)
@@ -68,11 +65,34 @@
                                       'split-window-horizontally
                                     'split-window-vertically))
 
+;; dired
+(defun rename-dired-buffer ()
+  (rename-buffer (concat (buffer-name) " (dired)")))
+(add-hook 'dired-mode-hook 'rename-dired-buffer)
+
 ;; smartparens
 (sp-with-modes sp--lisp-modes
   (sp-local-pair "`" "'")
   (sp-local-pair "'" nil :actions nil))
 
+;; erc
+(add-to-list 'erc-modules 'notifications)
+
+(setq erc-log-insert-log-on-open nil)
+(setq erc-log-channels t)
+(setq erc-log-channels-directory "~/.irclogs/")
+(setq erc-save-buffer-on-part t)
+(setq erc-hide-timestamps nil)
+
+(defadvice save-buffers-kill-emacs (before save-logs (arg) activate)
+  (save-some-buffers t (lambda () (when (and (eq major-mode 'erc-mode)
+                                             (not (null buffer-file-name)))))))
+
+(add-hook 'erc-insert-post-hook 'erc-save-buffer-in-logs)
+(add-hook 'erc-mode-hook '(lambda () (when (not (featurep 'xemacs))
+                                       (set (make-variable-buffer-local
+                                             'coding-system-for-write)
+                                            'emacs-mule))))
 ;;; defuns
 (defun install-my-packages ()
   (interactive)
@@ -335,6 +355,8 @@ Goes backward if ARG is negative; error if CHAR not found."
         (goto-line (read-number "Goto line: ")))
     (linum-mode -1)))
 
+;;; private
+(require 'private)
 
 ;;; customized
 (custom-set-variables
@@ -357,12 +379,13 @@ Goes backward if ARG is negative; error if CHAR not found."
  '(dired-dwim-target t)
  '(ediff-custom-diff-options "-up")
  '(ediff-diff-options "")
- '(ediff-split-window-function (quote split-window-horizontally) t)
- '(ediff-window-setup-function (quote ediff-setup-windows-plain) t)
+ '(ediff-split-window-function (quote split-window-horizontally))
+ '(ediff-window-setup-function (quote ediff-setup-windows-plain))
  '(electric-pair-mode nil)
  '(eshell-buffer-maximum-lines 10240)
  '(fill-column 80)
  '(global-auto-revert-mode t)
+ '(global-subword-mode t)
  '(helm-always-two-windows nil)
  '(helm-boring-file-regexp-list (quote ("\\.git$" "\\.hg$" "\\.svn$" "\\.CVS$" "\\._darcs$" "\\.la$" "\\.o$" "~$" "\\.pyc" "\\.o")))
  '(ibuffer-saved-filter-groups (quote (("openlmi" ("openlmi-scripts" (filename . "openlmi-scripts")) ("openlmi-storage" (filename . "openlmi-storage")) ("openlmi-providers" (filename . "openlmi-providers"))))))
@@ -382,6 +405,7 @@ Goes backward if ARG is negative; error if CHAR not found."
  '(next-screen-context-lines 4)
  '(package-archives (quote (("gnu" . "http://elpa.gnu.org/packages/") ("marmalade" . "http://marmalade-repo.org/packages/") ("melpa" . "http://melpa.milkbox.net/packages/"))))
  '(projectile-global-mode t)
+ '(safe-local-variable-values (quote ((c-backslash-max-column . 78))))
  '(save-place t nil (saveplace))
  '(save-place-file "~/.emacs.d/places")
  '(scroll-preserve-screen-position 1)
