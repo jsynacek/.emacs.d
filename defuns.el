@@ -243,4 +243,8 @@ Goes backward if ARG is negative; error if CHAR not found."
    (concat "https://bugzilla.redhat.com/show_bug.cgi?id="
            (number-to-string (thing-at-point 'number)))))
 
+(defun edit-init-el ()
+  (interactive)
+  (find-file (expand-file-name "init.el" user-emacs-directory)))
+
 (provide 'defuns)
