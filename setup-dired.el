@@ -18,14 +18,8 @@
   (end-of-buffer)
   (dired-next-line -1))
 
-;; TODO improve so it works for directories with the same name (use uniquify?)
-(defun rename-dired-buffer ()
-  (rename-buffer (concat (buffer-name) " (dired)")))
-
 (define-key dired-mode-map (kbd "C-a") 'dired-back-to-start-of-files)
 (define-key dired-mode-map [remap beginning-of-buffer] 'dired-back-to-top)
 (define-key dired-mode-map [remap end-of-buffer] 'dired-jump-to-bottom)
-
-(add-hook 'dired-mode-hook 'rename-dired-buffer)
 
 (provide 'setup-dired)
