@@ -215,10 +215,13 @@ Goes backward if ARG is negative; error if CHAR not found."
 
 (defun my-c-mode-hook-defaults ()
   (setq c-default-style "linux"
-        c-basic-offset 4
         indent-tabs-mode t
         subword-mode t))
 (add-hook 'c-mode-hook 'my-c-mode-hook-defaults)
+
+(defun my-sh-mode-hook-defaults ()
+  (setq sh-indentation 2))
+(add-hook 'sh-mode-hook 'my-sh-mode-hook-defaults)
 
 ;; highlight code annotations
 (add-hook 'prog-mode-hook
