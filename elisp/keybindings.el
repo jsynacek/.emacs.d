@@ -70,6 +70,7 @@
 (global-set-key (kbd "<f5>") 'recompile)
 (global-set-key (kbd "<f6>") 'compile)
 (global-set-key (kbd "<f7>") 'whitespace-cleanup)
+(global-set-key (kbd "<f8>") 'eval-buffer)
 (global-set-key (kbd "C-c SPC") 'ace-jump-mode)
 (global-set-key (kbd "C-x w") 'write-region)
 (global-set-key (kbd "C-M-<backspace>") 'backward-kill-sexp)
