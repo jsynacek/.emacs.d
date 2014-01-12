@@ -36,8 +36,8 @@
 (auto-fill-mode 1)
 (winner-mode t)
 (smartparens-global-mode 1)
-(ido-mode)
-(ido-vertical-mode)
+(ido-mode 1)
+(ido-vertical-mode 1)
 
 ;;; package settings
 ;; org
