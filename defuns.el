@@ -229,6 +229,11 @@ Goes backward if ARG is negative; error if CHAR not found."
             (font-lock-add-keywords nil
                                     '(("\\<\\(FIXME\\|TODO\\|BUG\\|XXX\\)" 1 font-lock-warning-face t)))))
 
+(defun highlight-trailing-whitespace ()
+  (highlight-regexp "\\s-+$" 'hi-pink))
+;; highlight trailing whitespace with ugly pink
+(add-hook 'prog-mode-hook 'highlight-trailing-whitespace)
+
 (global-set-key [remap goto-line] 'goto-line-with-feedback)
 (defun goto-line-with-feedback ()
   "Show line numbers temporarily, while prompting for the line number input"
