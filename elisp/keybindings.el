@@ -78,7 +78,7 @@
 (global-set-key (kbd "C-x \\") 'align-regexp)
 (global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
-(global-set-key (kbd "C-c i") 'helm-imenu)
+(global-set-key (kbd "C-c i") 'imenu)
 (global-set-key (kbd "C-.") 'describe-thing-at-point)
 (global-set-key (kbd "C-M-/") 'hippie-expand-line)
 (global-set-key (kbd "M-w") 'save-region-or-current-line)
