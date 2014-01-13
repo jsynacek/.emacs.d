@@ -139,4 +139,6 @@
 ; erc
 (define-key erc-mode-map (kbd "RET") nil)
 (define-key erc-mode-map (kbd "C-<return>") 'erc-send-current-line)
+; elisp
+(define-key emacs-lisp-mode-map (kbd "M-.") 'find-function-at-point)
 (provide 'keybindings)
