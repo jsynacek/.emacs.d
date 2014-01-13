@@ -66,7 +66,6 @@
                     ido-vertical-mode
                     magit
                     saveplace
-                    shell-pop
                     smartparens
                     smex
                     solarized-theme
@@ -137,9 +136,6 @@
  '(save-place t nil (saveplace))
  '(save-place-file "~/.emacs.d/places")
  '(scroll-preserve-screen-position 1)
- '(shell-pop-shell-type (quote ("eshell" "*eshell*" (lambda nil (eshell)))))
- '(shell-pop-universal-key "C-x C-m")
- '(shell-pop-window-height 60)
  '(show-paren-mode t)
  '(split-height-threshold nil)
  '(split-width-threshold 160)
