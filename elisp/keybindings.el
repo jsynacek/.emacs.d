@@ -42,6 +42,7 @@
 (if (fboundp 'smex)
     (global-set-key (kbd "M-x") 'smex))
 
+(global-set-key (kbd "C-x C-m") 'eshell)
 ;; transpose stuff with M-t (stolen from Magnar Sveen)
 (global-unset-key (kbd "M-t")) ;; which used to be transpose-words
 (global-set-key (kbd "M-t l") 'transpose-lines)
