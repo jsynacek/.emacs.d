@@ -75,14 +75,14 @@
           (message (concat (symbol-name pkg) " already installed."))
         (package-install pkg)))))
 
+(require 'private)
 (require 'defuns)
 (require 'setup-dired)
 (require 'setup-ediff)
 (require 'setup-erc)
 (require 'setup-smartparens)
-
+(require 'setup-org)
 (require 'keybindings)
-(require 'private)
 
 ;;; customized
 (custom-set-variables
