@@ -39,12 +39,6 @@
 (ido-vertical-mode 1)
 
 ;;; package settings
-;; org
-(setq org-todo-keywords
-      '((sequence "TODO" "INPROGRESS" "|" "DONE" ))
-      org-todo-keyword-faces
-      '(("INPROGRESS" . (:foreground "#af8700" :weight bold))))
-
 ;; server
 (unless (server-running-p)
   (server-start))
