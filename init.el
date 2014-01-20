@@ -14,7 +14,6 @@
 (require 'package)
 (require 'python)
 (require 'saveplace)
-(require 'shell-pop)
 (require 'server)
 (require 'uniquify)
 
