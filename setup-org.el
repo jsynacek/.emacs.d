@@ -47,6 +47,7 @@ Use favorite font instead. Default is `jsynacek/font', if bound, otherwise
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c l") 'org-store-link)
+(global-set-key (kbd "C-c b") 'org-iswitchb)
 
 ;; (add-hook 'org-mode-hook 'org-indent-mode)
 
