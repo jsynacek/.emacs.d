@@ -41,7 +41,8 @@ Use favorite font instead. Default is `jsynacek/font', if bound, otherwise
 
 (setq org-agenda-files `(,org-default-notes-file)
       org-capture-templates '(("t" "New TODO item into Inbox" entry (file+headline org-agenda-files "Inbox") "** TODO %?\nadded:%U"))
-      org-todo-keywords '((sequence "TODO" "STARTED" "WAITING" "|" "DONE" "CANCELLED" ))
+      org-todo-keywords '((sequence "TODO(t)" "NEXT(w)" "|" "DONE")
+                          (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))
       org-todo-keyword-faces '(("STARTED" . (:foreground "#af8700" :weight bold))))
 
 (global-set-key (kbd "C-c a") 'org-agenda)
