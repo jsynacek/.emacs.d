@@ -1,6 +1,6 @@
 (require 'notmuch)
 
-;; add 'archived' tag when archiving
-(setq notmuch-archive-tags '("-inbox" "+archived"))
+;; add 'archive' tag when archiving
+(setq notmuch-archive-tags '("-inbox" "+archive"))
 
 (provide 'setup-notmuch)
