@@ -19,4 +19,15 @@
                                              'coding-system-for-write)
                                             'emacs-mule))))
 
+; add channels to the mode-line (in the corresponding face) only when
+; the current nickname or any of your keywords are mentioned.
+; http://www.emacswiki.org/emacs/ErcChannelTracking
+(setq erc-current-nick-highlight-type 'nick)
+; (setq erc-keywords '("\\berc[-a-z]*\\b" "\\bemms[-a-z]*\\b"))
+
+(setq erc-track-exclude-types '("JOIN" "PART" "QUIT" "NICK" "MODE"))
+(setq erc-track-faces-priority-list
+      '(erc-current-nick-face erc-keyword-face))
+(setq erc-track-priority-faces-only 'all)
+
 (provide 'setup-erc)
