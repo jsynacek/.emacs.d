@@ -76,7 +76,7 @@
 (require 'setup-erc)
 (require 'setup-smartparens)
 (require 'setup-org)
-(require 'setup-notmuch)
+;(require 'setup-notmuch)
 (require 'keybindings)
 
 ;;; customized
