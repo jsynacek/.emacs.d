@@ -72,6 +72,7 @@
 
 (require 'private)
 (require 'defuns)
+(require 'setup-bbdb)
 (require 'setup-dired)
 (require 'setup-ediff)
 (require 'setup-erc)
