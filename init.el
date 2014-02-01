@@ -19,7 +19,8 @@
 
 ;;; settings
 (setq inhibit-startup-message t
-      inhibit-startup-echo-area t)
+      inhibit-startup-echo-area t
+      initial-scratch-message nil)
 (prefer-coding-system 'utf-8)
 (setenv "EDITOR" "emacsclient")
 (fset 'yes-or-no-p 'y-or-n-p)
