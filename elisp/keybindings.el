@@ -90,6 +90,7 @@
                   (er/expand-region -1)))
 (global-set-key (kbd "M-0") 'delete-window)
 (global-set-key (kbd "M-1") 'delete-other-windows)
+(global-set-key (kbd "<XF86Mail>") 'gnus)
 (define-prefix-command 'menukey-prefix-map)
 ; custom prefix
 (global-set-key (kbd "<menu>") 'menukey-prefix-map)
@@ -141,4 +142,6 @@
 (define-key erc-mode-map (kbd "C-<return>") 'erc-send-current-line)
 ; elisp
 (define-key emacs-lisp-mode-map (kbd "M-.") 'find-function-at-point)
+; ibuffer
+(define-key ibuffer-mode-map (kbd "P") nil)
 (provide 'keybindings)
