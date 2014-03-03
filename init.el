@@ -59,6 +59,7 @@
                     highlight-symbol
                     ido-vertical-mode
                     magit
+                    pydoc-info
                     saveplace
                     smartparens
                     smex
