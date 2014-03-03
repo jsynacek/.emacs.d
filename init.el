@@ -38,6 +38,7 @@
 (smartparens-global-mode 1)
 (ido-mode 1)
 (ido-vertical-mode 1)
+(setq ring-bell-function 'ignore)
 
 ;;; package settings
 ;; server
