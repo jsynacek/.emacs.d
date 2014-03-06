@@ -79,7 +79,7 @@
 (require 'setup-ediff)
 (require 'setup-erc)
 (require 'setup-smartparens)
-(require 'setup-recent
+(require 'setup-recentf)
 (require 'setup-org)
 ;(require 'setup-notmuch)
 (require 'keybindings)
