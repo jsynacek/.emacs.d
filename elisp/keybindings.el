@@ -50,6 +50,7 @@
 (global-set-key (kbd "M-t s") 'transpose-sexps)
 
 (global-set-key (kbd "M-o") 'other-window)
+(global-set-key (kbd "C-x o") 'nil)
 
 ;; View occurrence in occur mode
 (define-key occur-mode-map (kbd "v") 'occur-mode-display-occurrence)
