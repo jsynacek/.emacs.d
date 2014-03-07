@@ -10,6 +10,7 @@
 (require 'buffer-move)
 (require 'expand-region)
 (require 'highlight-symbol)
+(require 'ibuffer)
 (require 'magit)
 (require 'package)
 (require 'python)
