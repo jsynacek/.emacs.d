@@ -1,6 +1,10 @@
 (require 'erc)
+(require 'erc-autoaway)
 
-(add-to-list 'erc-modules 'notifications)
+(setq erc-nick "jsynacek")
+(setq erc-away-nickname "jsynacek|away")
+
+(add-to-list 'erc-modules 'notifications 'autoaway)
 
 (setq erc-log-insert-log-on-open nil)
 (setq erc-log-channels t)
@@ -29,5 +33,13 @@
 (setq erc-track-faces-priority-list
       '(erc-current-nick-face erc-keyword-face))
 (setq erc-track-priority-faces-only 'all)
+
+;; autoaway stuff
+; automatically remove away status when sending something to the server
+(setq erc-auto-discard-away t)
+
+(setq erc-autoaway-idle-seconds 1200)
+;(setq erc-autoaway-message)
+(setq erc-auto-set-away t)
 
 (provide 'setup-erc)
