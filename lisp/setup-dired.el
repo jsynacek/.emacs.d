@@ -7,7 +7,6 @@
   (interactive)
   (backward-char (- (current-column) 2)))
 
-
 (defun dired-back-to-top ()
   (interactive)
   (beginning-of-buffer)
