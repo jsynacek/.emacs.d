@@ -1,40 +1,3 @@
-;; ;;; general - inspired by ergoemacs
-;; (global-unset-key (kbd "C-b"))
-;; (global-set-key (kbd "M-j") 'backward-char)
-;; (global-unset-key (kbd "C-f"))
-;; (global-set-key (kbd "M-l") 'forward-char)
-;; (global-unset-key (kbd "C-p"))
-;; (global-set-key (kbd "M-i") 'previous-line)
-;; (global-unset-key (kbd "C-n"))
-;; (global-set-key (kbd "M-k") 'next-line)
-;; (global-set-key (kbd "M-J") 'backward-open-bracket)
-;; (global-set-key (kbd "M-L") 'forward-open-bracket)
-;; (global-set-key (kbd "M-I") 'scroll-down)
-;; (global-set-key (kbd "M-K") 'scroll-up)
-;; ; origin: upcase-word
-;; (global-set-key (kbd "M-u") 'backward-word)
-;; ; origin: facemenu-keymap
-;; (global-set-key (kbd "M-o") 'forward-word)
-;; (global-set-key (kbd "M-U") 'backward-paragraph)
-;; (global-set-key (kbd "M-O") 'forward-paragraph)
-;; ; origin: kill-word
-;; (global-set-key (kbd "M-d") 'delete-backward-char)
-;; ; origin: forward-word
-;; (global-set-key (kbd "M-f") 'delete-char)
-;; ; origin: forward-sentence
-;; (global-set-key (kbd "M-e") 'backward-kill-word)
-;; ; origin: move-to-window-line-top-bottom
-;; (global-set-key (kbd "M-r") 'kill-word)
-
-;; ; origin: prefix for occur and hi-lock commands
-;; (global-set-key (kbd "M-s") 'other-window)
-;; (global-set-key (kbd "M-S") (lambda ()
-;;                               (interactive)
-;;                               (other-window -1)))
-;; ; origin: backward-sentence
-;; (global-set-key (kbd "M-a") 'eshell)
-;; (global-set-key (kbd "M-A") 'shell-command)
-
 ;; do not kill emacs that easily
 (global-set-key (kbd "C-x r q") 'save-buffers-kill-terminal)
 (global-set-key (kbd "C-x C-c") nil)
@@ -50,7 +13,6 @@
 (global-set-key (kbd "M-t s") 'transpose-sexps)
 
 (global-set-key (kbd "M-o") 'other-window)
-(global-set-key (kbd "C-x o") 'nil)
 
 ;; View occurrence in occur mode
 (define-key occur-mode-map (kbd "v") 'occur-mode-display-occurrence)
