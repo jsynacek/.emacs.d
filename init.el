@@ -35,7 +35,10 @@
 ;; packages
 ;; TODO use Cask??
 (package-initialize)
-(require 'ace-jump-mode)
+
+(require 'use-package)
+(use-package ace-jump-mode
+  :bind ("C-c SPC" . ace-jump-mode))
 (require 'highlight-symbol)
 (require 'ibuffer)
 (require 'magit)
