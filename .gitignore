@@ -1,5 +1,6 @@
 *.elc
 .ido.last
+.recentf
 .smex-items
 elpa/
 lisp/private.el
