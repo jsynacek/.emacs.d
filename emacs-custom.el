@@ -21,7 +21,6 @@
  '(fill-column 80)
  '(git-commit-summary-max-length 72)
  '(global-auto-revert-mode t)
- '(global-subword-mode t)
  '(ido-case-fold nil)
  '(ido-create-new-buffer (quote always))
  '(ido-enable-flex-matching t)
