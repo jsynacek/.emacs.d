@@ -31,7 +31,6 @@
 (auto-fill-mode 1)
 (winner-mode t)
 (ido-mode 1)
-(ido-vertical-mode 1)
 
 ;; packages
 ;; TODO use Cask??
@@ -43,6 +42,10 @@
 
 (require 'highlight-symbol)
 (require 'ibuffer)
+
+(use-package ido-vertical-mode
+  :init (ido-vertical-mode 1))
+
 (require 'magit)
 (require 'package)
 (require 'python)
