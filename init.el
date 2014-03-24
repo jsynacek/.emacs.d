@@ -39,6 +39,7 @@
 (require 'use-package)
 (use-package ace-jump-mode
   :bind ("C-c SPC" . ace-jump-mode))
+
 (require 'highlight-symbol)
 (require 'ibuffer)
 (require 'magit)
@@ -46,6 +47,13 @@
 (require 'python)
 (require 'saveplace)
 (require 'server)
+
+(use-package smex
+  :init (smex-initialize)
+  :bind (("M-x"         . smex)
+         ("M-X"         . smex-major-mode-commands)
+         ("C-c C-c M-x" . execute-extended-command)))
+
 (require 'uniquify)
 
 ;; TODO
