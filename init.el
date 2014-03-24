@@ -16,6 +16,7 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;; start the server
+(require 'server)
 (unless (server-running-p)
   (server-start))
 
@@ -46,7 +47,6 @@
 (require 'package)
 (require 'python)
 (require 'saveplace)
-(require 'server)
 
 (use-package smex
   :init (smex-initialize)
