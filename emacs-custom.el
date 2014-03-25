@@ -30,6 +30,7 @@
  '(ido-work-directory-list-ignore-regexps (quote (".*")))
  '(indent-tabs-mode nil)
  '(kill-ring-max 1024)
+ '(magit-diff-refine-hunk (quote all))
  '(mark-even-if-inactive t)
  '(max-lisp-eval-depth 6000)
  '(max-specpdl-size 13000)
