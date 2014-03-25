@@ -43,6 +43,7 @@
      ("marmalade" . "http://marmalade-repo.org/packages/")
      ("melpa" . "http://melpa.milkbox.net/packages/"))))
  '(recentf-max-saved-items 200)
+ '(recentf-exclude (quote ("/tmp/")))
  '(recentf-save-file "/home/jsynacek/.emacs.d/.recentf")
  '(save-place-file "~/.emacs.d/places")
  '(scroll-preserve-screen-position 1)
