@@ -27,6 +27,7 @@
  '(ido-everywhere t)
  '(ido-save-directory-list-file "/home/jsynacek/.emacs.d/.ido.last")
  '(ido-use-filename-at-point (quote guess))
+ '(ido-use-virtual-buffers t)
  '(ido-work-directory-list-ignore-regexps (quote (".*")))
  '(indent-tabs-mode nil)
  '(kill-ring-max 1024)
