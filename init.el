@@ -41,7 +41,22 @@
   :bind ("C-c SPC" . ace-jump-mode))
 
 (require 'highlight-symbol)
-(require 'ibuffer)
+
+(use-package ibuffer
+  :config
+  (progn
+    (setq ibuffer-formats
+          '((mark modified read-only " "
+                  (name 32 32 :left :elide)
+                  " "
+                  (mode 16 16 :left :elide)
+                  " "
+                  filename-and-process)
+            (mark " " (name))))
+
+    (bind-key "C-x C-b" 'ibuffer)
+    (bind-key "P" nil ibuffer-mode-map) ; prevent accidentaly printing buffers
+))
 
 (use-package ido-vertical-mode
   :init (ido-vertical-mode 1))

@@ -40,7 +40,6 @@
 (global-set-key (kbd "C-x C-k") 'kill-buffer-and-window)
 (global-set-key (kbd "C-x \\") 'align-regexp)
 (global-set-key (kbd "M-/") 'hippie-expand)
-(global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-c i") 'imenu)
 (global-set-key (kbd "C-.") 'describe-thing-at-point)
 (global-set-key (kbd "C-M-/") 'hippie-expand-line)
@@ -104,6 +103,4 @@
 (define-key erc-mode-map (kbd "C-<return>") 'erc-send-current-line)
 ; elisp
 (define-key emacs-lisp-mode-map (kbd "M-.") 'find-function-at-point)
-; ibuffer
-(define-key ibuffer-mode-map (kbd "P") nil)
 (provide 'keybindings)
