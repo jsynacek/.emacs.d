@@ -55,7 +55,8 @@
             (mark " " (name))))
 
     (bind-key "C-x C-b" 'ibuffer)
-    (bind-key "P" nil ibuffer-mode-map) ; prevent accidentaly printing buffers
+    (bind-key "P" nil ibuffer-mode-map)   ; prevent accidentaly printing buffers
+    (bind-key "M-o" nil ibuffer-mode-map) ; make global M-o work
 ))
 
 (use-package ido-vertical-mode
@@ -73,6 +74,9 @@
          ("C-c C-c M-x" . execute-extended-command)))
 
 (require 'uniquify)
+
+(bind-key "M-o" 'other-window)
+
 
 ;; TODO
 ;; (defun install-my-packages ()
