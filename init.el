@@ -40,6 +40,28 @@
 (use-package ace-jump-mode
   :bind ("C-c SPC" . ace-jump-mode))
 
+(use-package calendar
+  :config
+  (setq holiday-local-holidays
+        '((holiday-fixed 1 1 "Nový rok")
+          (holiday-easter-etc +1 "Velikonoční pondělí")
+          (holiday-fixed 5 1 "Svátek práce")
+          (holiday-fixed 5 8 "Den vítězství")
+          (holiday-fixed 7 5 "Den slovanských věrozvěstů Cyrila a Metoděje")
+          (holiday-fixed 7 6 "Den upálení mistra Jana Husa")
+          (holiday-fixed 9 28 "Den české státnosti")
+          (holiday-fixed 10 28 "Den vzniku samostatného československého státu")
+          (holiday-fixed 11 17 "Den boje za svobodu a demokracii")
+          (holiday-fixed 12 24 "Štědrý den")
+          (holiday-fixed 12 25 "1. svátek vánoční")
+          (holiday-fixed 12 26 "2. svátek vánoční"))
+        holiday-christian-holidays nil
+        holiday-general-holidays nil
+        holiday-hebrew-holidays nil
+        holiday-islamic-holidays nil
+        holiday-oriental-holidays nil
+        holiday-bahai-holidays nil))
+
 (require 'highlight-symbol)
 
 (use-package ibuffer
