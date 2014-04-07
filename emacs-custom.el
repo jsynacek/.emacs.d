@@ -40,7 +40,6 @@
  '(package-archives
    (quote
     (("gnu" . "http://elpa.gnu.org/packages/")
-     ("marmalade" . "http://marmalade-repo.org/packages/")
      ("melpa" . "http://melpa.milkbox.net/packages/"))))
  '(recentf-exclude (quote ("/tmp/")))
  '(recentf-save-file "/home/jsynacek/.emacs.d/.recentf")
