@@ -45,6 +45,28 @@ Use favorite font instead. Default is `jsynacek/font', if bound, otherwise
                           (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))
       org-todo-keyword-faces '(("STARTED" . (:foreground "#af8700" :weight bold))))
 
+;; confirm plantuml source evaluation by default
+(defun jsynacek/org-confirm-plantuml-link-function (lang body)
+  (not (string= lang "plantuml")))
+(setq org-confirm-babel-evaluate 'jsynacek/org-confirm-plantuml-link-function)
+
+;; do not export the validation link
+(setq org-html-validation-link nil)
+
+;; allow #+BIND
+(setq org-export-allow-bind-keywords t)
+
+;; allow source color highlighting in org buffers
+(setq org-src-fontify-natively t)
+
+;; active Org-babel languages
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '(;; other Babel languages
+   (plantuml . t)))
+
+(setq org-plantuml-jar-path "/usr/share/java/plantuml.jar")
+
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c l") 'org-store-link)

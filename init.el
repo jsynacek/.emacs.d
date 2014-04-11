@@ -62,6 +62,14 @@
         holiday-oriental-holidays nil
         holiday-bahai-holidays nil))
 
+(use-package diminish
+  :config
+  (progn
+    (diminish 'auto-fill-function)
+;    (diminish 'hi-lock-mode)
+;    (diminish 'magit-auto-revert-mode)))
+    ))
+
 (require 'highlight-symbol)
 
 (use-package ibuffer
@@ -98,6 +106,8 @@
 (require 'uniquify)
 
 (bind-key "M-o" 'other-window)
+(bind-key "M-o" nil diff-mode-map)
+(bind-key "C-c M-o" 'diff-goto-source diff-mode-map)
 
 
 ;; TODO
