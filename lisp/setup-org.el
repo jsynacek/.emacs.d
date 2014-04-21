@@ -7,6 +7,9 @@
 
 (setq calendar-week-start-day 1)
 
+;; catch invisible edits
+(setq org-catch-invisible-edits 'error)
+
 ;; TODO figure this out
 ;; (defmacro org-level-set-face-font (level font)
 ;;   (let ((org-level-variable (make-symbol  (concat "org-level-" (number-to-string level)))))
