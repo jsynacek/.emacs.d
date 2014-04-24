@@ -1,4 +1,6 @@
 (require 'org)
+;; uncomment to export source syntax highlighting
+;(require 'htmlize)
 
 ;(setq org-agenda-include-diary t)
 ;(setq org-agenda-include-all-todo t)
@@ -52,6 +54,13 @@ Use favorite font instead. Default is `jsynacek/font', if bound, otherwise
 (defun jsynacek/org-confirm-plantuml-link-function (lang body)
   (not (string= lang "plantuml")))
 (setq org-confirm-babel-evaluate 'jsynacek/org-confirm-plantuml-link-function)
+
+;; allow additional languages
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (plantuml . t)
+   (python . t)))
 
 ;; do not export the validation link
 (setq org-html-validation-link nil)
