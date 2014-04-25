@@ -71,11 +71,21 @@ Use favorite font instead. Default is `jsynacek/font', if bound, otherwise
 ;; allow source color highlighting in org buffers
 (setq org-src-fontify-natively t)
 
-;; active Org-babel languages
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '(;; other Babel languages
-   (plantuml . t)))
+(setq org-publish-project-alist
+      '(("selinux-org"
+         :base-directory "~/work/openlmi/selinux/"
+         :base-extension "org"
+         :publishing-directory "~/public_html/openlmi/selinux"
+         :publishing-function org-html-publish-to-html)
+
+        ("selinux-static"
+         :base-directory "~/work/openlmi/selinux/"
+         :base-extensions "any"
+         :publishing-directory "~/public_html/openlmi/selinux"
+         :publishing-function org-publish-attachment)
+
+        ("selinux-website"
+         :components ("selinux-org" "selinux-static"))))
 
 (setq org-plantuml-jar-path "/usr/share/java/plantuml.jar")
 
