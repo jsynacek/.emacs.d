@@ -47,8 +47,8 @@
                 (lambda ()
                   (interactive)
                   (er/expand-region -1)))
-(global-set-key (kbd "M-0") 'delete-window)
-(global-set-key (kbd "M-1") 'delete-other-windows)
+(global-set-key (kbd "M-2") 'delete-window)
+(global-set-key (kbd "M-3") 'delete-other-windows)
 (global-set-key (kbd "<XF86Mail>") 'gnus)
 (define-prefix-command 'menukey-prefix-map)
 ; custom prefix
