@@ -1,17 +1,3 @@
-(defun vi-open-line-above ()
-  "Insert a newline above the current line and put point at beginning."
-  (interactive)
-  (beginning-of-line)
-  (newline)
-  (forward-line -1)
-  (indent-according-to-mode))
-
-(defun vi-open-line-below ()
-  "Insert a newline below the current line and put point at beginning."
-  (interactive)
-  (end-of-line)
-  (newline-and-indent))
-
 (defun describe-thing-at-point ()
   (interactive)
   (let ((function (function-called-at-point))
@@ -35,12 +21,6 @@
   (let ((hippie-expand-try-functions-list '(try-expand-line
                                             try-expand-line-all-buffers)))
     (hippie-expand nil)))
-
-(defun save-region-or-current-line (arg)
-  (interactive "P")
-  (if (region-active-p)
-      (kill-ring-save (region-beginning) (region-end))
-    (kill-ring-save (line-beginning-position) (line-end-position))))
 
 (defun eval-and-replace ()
   "Replace the preceding sexp with its value."
@@ -79,16 +59,6 @@
   (interactive)
   (setq magit-diff-options (remove "-w" magit-diff-options))
   (magit-refresh))
-
-(defun google-search ()
-  (interactive)
-  (browse-url
-   (concat
-    "http://www.google.com/search?ie=utf-8&oe=utf-8&q="
-    (url-hexify-string
-     (if mark-active
-         (buffer-substring (region-beginning) (region-end))
-       (read-string "Google:"))))))
 
 (defun sudo-edit (file)
   (interactive "fSudo edit: ")
