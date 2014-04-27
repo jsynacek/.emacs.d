@@ -28,25 +28,14 @@
 ;                  (interactive)
 ;                  (join-line -1)))
 (global-set-key (kbd "C-x e") 'eval-and-replace)
-(global-set-key (kbd "<f5>") 'recompile)
-(global-set-key (kbd "<f6>") 'compile)
-(global-set-key (kbd "<f7>") 'whitespace-cleanup)
-(global-set-key (kbd "<f8>") 'eval-buffer)
-;(global-set-key (kbd "C-c SPC") 'ace-jump-mode)
-(global-set-key (kbd "C-x w") 'write-region)
-(global-set-key (kbd "C-M-<backspace>") 'backward-kill-sexp)
-(global-set-key (kbd "C-x C-k") 'kill-buffer-and-window)
-(global-set-key (kbd "C-x \\") 'align-regexp)
+(global-set-key (kbd "<f5>") 'compile)
+(global-set-key (kbd "<f6>") 'recompile)
 (global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key (kbd "C-c i") 'imenu)
 (global-set-key (kbd "C-.") 'describe-thing-at-point)
 (global-set-key (kbd "C-M-/") 'hippie-expand-line)
 (global-set-key (kbd "M-w") 'save-region-or-current-line)
-(global-set-key (kbd "M-8") 'er/expand-region)
-(global-set-key (kbd "M-9")
-                (lambda ()
-                  (interactive)
-                  (er/expand-region -1)))
+
 (global-set-key (kbd "M-2") 'delete-window)
 (global-set-key (kbd "M-3") 'delete-other-windows)
 (global-set-key (kbd "<XF86Mail>") 'gnus)
@@ -57,12 +46,11 @@
 ; my multi-occur
 ;(global-set-key (kbd "M-s /") 'my-multi-occur-in-matching-buffers)
 ; highlight-symbol
-(global-set-key (kbd "M-n") 'highlight-symbol-next)
-(global-set-key (kbd "M-p") 'highlight-symbol-prev)
-; numbers
-(global-set-key (kbd "C-c +") 'increment-number-at-point)
-(global-set-key (kbd "C-c -") 'decrement-number-at-point)
-; windmove-default-keybindings
+;; (global-set-key (kbd "M-n") 'highlight-symbol-next)
+;; (global-set-key (kbd "M-p") 'highlight-symbol-prev)
+
+                                        ;
+;; windmove-default-keybindings
 (global-set-key (kbd "S-<right>") 'windmove-right)
 (global-set-key (kbd "S-<left>") 'windmove-left)
 (global-set-key (kbd "S-<down>") 'windmove-down)
@@ -72,33 +60,6 @@
 (global-set-key (kbd "<C-S-down>")  'buf-move-down)
 (global-set-key (kbd "<C-S-left>")  'buf-move-left)
 (global-set-key (kbd "<C-S-right>") 'buf-move-right)
-; magit
-(global-set-key (kbd "C-x g") 'magit-status)
-(define-key magit-status-mode-map (kbd "q") 'magit-quit-session)
-(define-key magit-status-mode-map (kbd "W") 'magit-toggle-whitespace)
-; smartparens
-(define-key sp-keymap (kbd "C-M-w") 'sp-copy-sexp)
-(define-key sp-keymap (kbd "C-M-k") 'sp-kill-sexp)
-(define-key sp-keymap (kbd "<C-left>") 'sp-forward-barf-sexp)
-(define-key sp-keymap (kbd "<C-right>") 'sp-forward-slurp-sexp)
-(define-key sp-keymap (kbd "C-M-<left>") 'sp-backward-slurp-sexp)
-(define-key sp-keymap (kbd "C-M-<right>") 'sp-backward-barf-sexp)
-(define-key sp-keymap (kbd "M-F") 'sp-forward-symbol)
-(define-key sp-keymap (kbd "M-B") 'sp-backward-symbol)
-(define-key sp-keymap (kbd "C-}") 'sp-select-next-thing-exchange)
-(define-key sp-keymap (kbd "C-{") 'sp-select-previous-thing)
-(define-key sp-keymap (kbd "C-M-}") 'sp-select-next-thing)
-; python-mode
-(define-key python-mode-map (kbd "C-c d") 'pydoc)
-(define-key python-mode-map (kbd "M-e") 'python-next-statement)
-(define-key python-mode-map (kbd "M-a") 'python-previous-statement)
-; etags-select
-; TODO this breaks ggtags' M-. ?
-(if (fboundp 'etags-select-find-tag)
-    (global-set-key (kbd "M-.") 'etags-select-find-tag))
-; erc
-(define-key erc-mode-map (kbd "RET") nil)
-(define-key erc-mode-map (kbd "C-<return>") 'erc-send-current-line)
 ; elisp
 (define-key emacs-lisp-mode-map (kbd "M-.") 'find-function-at-point)
 (provide 'keybindings)

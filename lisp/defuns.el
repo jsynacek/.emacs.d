@@ -25,18 +25,6 @@
   (interactive (occur-read-primary-args))
   (multi-occur-in-matching-buffers ".*" regexp))
 
-(defun kill-all-dired-buffers()
-  "Kill all dired buffers."
-  (interactive)
-  (save-excursion
-    (let ((count 0))
-      (dolist (buffer (buffer-list))
-        (set-buffer buffer)
-        (when (equal major-mode 'dired-mode)
-          (setq count (1+ count))
-          (kill-buffer buffer)))
-      (message "Killed %i dired buffer(s)." count ))))
-
 (defun font-lock-restart ()
   (interactive)
   (setq font-lock-mode-major-mode nil)
@@ -63,20 +51,6 @@
              (current-buffer))
     (error (message "Invalid expression")
            (insert (current-kill 0)))))
-
-(defun increment-number-at-point ()
-  (interactive)
-  (skip-chars-backward "0123456789")
-  (or (looking-at "[0123456789]+")
-      (error "No number at point"))
-  (replace-match (number-to-string (1+ (string-to-number (match-string 0))))))
-
-(defun decrement-number-at-point ()
-  (interactive)
-  (skip-chars-backward "0123456789")
-  (or (looking-at "[0123456789]+")
-      (error "No number at point"))
-  (replace-match (number-to-string (1- (string-to-number (match-string 0))))))
 
 ;; full screen magit-status
 (defadvice magit-status (around magit-fullscreen activate)
@@ -116,47 +90,6 @@
          (buffer-substring (region-beginning) (region-end))
        (read-string "Google:"))))))
 
-; stolen from python-mode and modified
-; TODO fix
-(defun pydoc (w)
-  "Launch PyDOC on the Word at Point"
-  (interactive
-   (list (let* ((word (thing-at-point 'word))
-                (input (read-string
-                        (format "pydoc entry%s: "
-                                (if (not word) "" (format " (default %s)" word))))))
-           (if (string= input "")
-               (if (not word) (error "No pydoc args given")
-                 word) ;sinon word
-             input)))) ;sinon input
-  (shell-command (concat python-shell-interpreter " -c \"from pydoc import help;help(\'" w "\')\"") "*PYDOCS*")
-  (view-buffer-other-window "*PYDOCS*" t 'kill-buffer-and-window))
-
-; indent buffer
-(defun indent-buffer ()
-  (interactive)
-  (indent-region (point-min) (point-max)))
-
-; lmi-specific
-(defun lmi-debug-associators ()
-  (interactive)
-  (let ((params '(assocClass resultClass role resultRole))
-        (debug-str "printf(\"DEBUG: %s: %%s\\n\", %s);\n")
-        (opoint (point)))
-    (insert " /* TODO: DEBUG */\n"
-            (format debug-str
-                    "cop"
-                    "CMGetCharsPtr(cop->ft->toString(cop, NULL), NULL)"))
-    (dolist (param params)
-      (insert (format debug-str param param)))
-    (indent-region opoint (point))))
-
-(defun insert-debug-statement ()
-  (interactive)
-  (insert "printf(\"DEBUG: \\n\");")
-  (goto-char (- (point) 5))
-  (c-indent-line-or-region))
-
 (defun sudo-edit (file)
   (interactive "fSudo edit: ")
   (let ((sudo-prefix "/sudo:root@localhost:"))
@@ -176,36 +109,6 @@ Goes backward if ARG is negative; error if CHAR not found."
              (search-forward (char-to-string char) nil nil arg)
              (goto-char (1- (point)))
              (point))))
-
-; unscroll
-(defvar unscroll-point (make-marker))
-(defvar unscroll-window-start (make-marker))
-(defvar unscroll-hscroll)
-
-(put 'scroll-up   'unscrollable t)
-(put 'scroll-down 'unscrollable t)
-
-(defadvice scroll-up (before remember-for-unscroll
-                             activate compile)
-  (unscroll-maybe-remember))
-
-(defadvice scroll-down (before remember-for-unscroll
-                             activate compile)
-  (unscroll-maybe-remember))
-
-
-(defun unscroll-maybe-remember ()
-  (if (not (get last-command 'unscrollable))
-      (progn
-        (set-marker unscroll-point (point))
-        (set-marker unscroll-window-start (window-start))
-        (setq unscroll-hscroll))))
-
-(defun unscroll ()
-  (interactive)
-  (goto-char unscroll-point)
-  (set-window-start nil unscroll-window-start)
-  (set-window-hscroll nil unscroll-hscroll))
 
 ;;; hooks
 (defun my-rpm-hook-defaults ()
@@ -250,9 +153,5 @@ Goes backward if ARG is negative; error if CHAR not found."
   (browse-url-generic
    (concat "https://bugzilla.redhat.com/show_bug.cgi?id="
            (number-to-string (thing-at-point 'number)))))
-
-(defun edit-init-el ()
-  (interactive)
-  (find-file (expand-file-name "init.el" user-emacs-directory)))
 
 (provide 'defuns)

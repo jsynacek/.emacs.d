@@ -15,14 +15,6 @@
 (setenv "EDITOR" "emacsclient")
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;; start the server
-(require 'server)
-(unless (server-running-p)
-  (server-start))
-
-;; edebug
-(setq edebug-trace t)
-
 ;; modes
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
@@ -33,12 +25,30 @@
 (ido-mode 1)
 
 ;; packages
-;; TODO use Cask??
+(require 'package)
 (package-initialize)
-
 (require 'use-package)
-(use-package ace-jump-mode
-  :bind ("C-c SPC" . ace-jump-mode))
+
+(let ((pkg-list '(buffer-move
+                  cl-lib
+                  diminish
+                  expand-region
+                  ido-vertical-mode
+                  magit
+                  pydoc-info
+                  smartparens
+                  smex
+                  solarized-theme
+                  undo-tree
+                  yasnippet)))
+  (dolist (pkg pkg-list)
+    (unless (package-installed-p pkg)
+      (package-install pkg))))
+
+(use-package server
+  :init
+  (unless (server-running-p)
+    (server-start)))
 
 (use-package calendar
   :config
@@ -66,11 +76,19 @@
   :config
   (progn
     (diminish 'auto-fill-function)
-;    (diminish 'hi-lock-mode)
-;    (diminish 'magit-auto-revert-mode)))
+    ;; (diminish 'hi-lock-mode)
+    ;; (diminish 'magit-auto-revert-mode)))
     ))
 
-(require 'highlight-symbol)
+(use-package expand-region
+  :init
+  (defun jsynacek/unexpand-region ()
+    (interactive)
+    (er/expand-region -1))
+  :config
+  (progn
+    (global-set-key (kbd "M-8") 'er/expand-region)
+    (global-set-key (kbd "M-9") 'jsynacek/unexpand-region)))
 
 (use-package ibuffer
   :config
@@ -92,10 +110,12 @@
 (use-package ido-vertical-mode
   :init (ido-vertical-mode 1))
 
-(require 'magit)
-(require 'package)
-(require 'python)
-(require 'saveplace)
+(use-package magit
+  :config
+  (progn
+    (bind-key "C-x g" 'magit-status)
+    (bind-key "q" 'magit-quit-session magit-status-mode-map)
+    (bind-key "W" 'magit-toggle-whitespace magit-status-mode-map)))
 
 (use-package smex
   :init (smex-initialize)
@@ -103,36 +123,21 @@
          ("M-X"         . smex-major-mode-commands)
          ("C-c C-c M-x" . execute-extended-command)))
 
-(require 'uniquify)
+(use-package undo-tree
+  :init (undo-tree-mode))
+
+(use-package uniquify)
 
 (bind-key "M-o" 'other-window)
 (bind-key "M-o" nil diff-mode-map)
 (bind-key "C-c M-o" 'diff-goto-source diff-mode-map)
 
-
-;; TODO
-;; (defun install-my-packages ()
-;;   (interactive)
-;;   (let ((pkg-list '(ace-jump-mode
-;;                     browse-kill-ring
-;;                     buffer-move
-;;                     cl-lib
-;;                     expand-region
-;;                     fill-column-indicator
-;;                     highlight-symbol
-;;                     ido-vertical-mode
-;;                     magit
-;;                     pydoc-info
-;;                     saveplace
-;;                     smartparens
-;;                     smex
-;;                     solarized-theme
-;;                     undo-tree
-;;                     yasnippet)))
-;;     (dolist (pkg pkg-list)
-;;       (if (package-installed-p pkg)
-;;           (message (concat (symbol-name pkg) " already installed."))
-;;         (package-install pkg)))))
+(defalias 'ar 'align-regexp)
+(defalias 'dtw 'delete-trailing-whitespace)
+(defalias 'eb 'eval-buffer)
+(defalias 'eis 'elisp-index-search)
+(defalias 'er 'eval-region)
+(defalias 'plp 'package-list-packages)
 
 (require 'private)
 (require 'defuns)
