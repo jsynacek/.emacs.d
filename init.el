@@ -80,15 +80,15 @@
     ;; (diminish 'magit-auto-revert-mode)))
     ))
 
-(use-package expand-region
-  :init
-  (defun jsynacek/unexpand-region ()
-    (interactive)
-    (er/expand-region -1))
-  :config
-  (progn
-    (global-set-key (kbd "M-8") 'er/expand-region)
-    (global-set-key (kbd "M-9") 'jsynacek/unexpand-region)))
+(use-package expand-region)
+  ;; :init
+  ;; (defun jsynacek/unexpand-region ()
+  ;;   (interactive)
+  ;;   (er/expand-region -1))
+  ;; :config
+  ;; (progn
+  ;;   (global-set-key (kbd "M-8") 'er/expand-region)
+  ;;   (global-set-key (kbd "M-9") 'jsynacek/unexpand-region)))
 
 (use-package ibuffer
   :config
