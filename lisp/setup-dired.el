@@ -17,7 +17,7 @@
   (end-of-buffer)
   (dired-next-line -1))
 
-(define-key dired-mode-map (kbd "C-a") 'dired-back-to-start-of-files)
+;; (define-key dired-mode-map (kbd "C-a") 'dired-back-to-start-of-files)
 (define-key dired-mode-map [remap beginning-of-buffer] 'dired-back-to-top)
 (define-key dired-mode-map [remap end-of-buffer] 'dired-jump-to-bottom)
 

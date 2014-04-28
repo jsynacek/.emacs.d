@@ -5,7 +5,6 @@
 
 ;; get rid of `find-file-read-only' and replace it with something
 ;; more useful.
-(global-set-key (kbd "C-x C-r") 'ido-recentf-open)
 
 ;; enable recent files mode.
 (recentf-mode t)
@@ -19,5 +18,7 @@
   (if (find-file (ido-completing-read "Find recent file: " recentf-list))
       (message "Opening file...")
     (message "Aborting")))
+
+;; (global-set-key (kbd "C-x C-r") 'ido-recentf-open)
 
 (provide 'setup-recentf)

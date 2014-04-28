@@ -102,7 +102,7 @@
                   filename-and-process)
             (mark " " (name))))
 
-    (bind-key "C-x C-b" 'ibuffer)
+    ;; (bind-key "C-x C-b" 'ibuffer)
     (bind-key "P" nil ibuffer-mode-map)   ; prevent accidentaly printing buffers
     (bind-key "M-o" nil ibuffer-mode-map) ; make global M-o work
 ))
@@ -113,7 +113,7 @@
 (use-package magit
   :config
   (progn
-    (bind-key "C-x g" 'magit-status)
+    ;; (bind-key "C-x g" 'magit-status)
     (bind-key "q" 'magit-quit-session magit-status-mode-map)
     (bind-key "W" 'magit-toggle-whitespace magit-status-mode-map)))
 
@@ -148,5 +148,12 @@
 (require 'setup-smartparens)
 (require 'setup-recentf)
 (require 'setup-org)
-(require 'keybindings)
+;; (require 'keybindings)
+
+(setq ergoemacs-theme nil)
+(setq ergoemacs-keyboard-layout "us")
+(require 'ergoemacs-mode)
+(ergoemacs-mode 1)
+
+
 (load custom-file)
