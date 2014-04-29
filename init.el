@@ -23,20 +23,24 @@
 (auto-fill-mode 1)
 (winner-mode t)
 (ido-mode 1)
+(desktop-save-mode 1)
 
 ;; packages
 (require 'package)
 (package-initialize)
 (require 'use-package)
 
+(setq ergoemacs-theme nil)
+(setq ergoemacs-keyboard-layout "us")
+(require 'ergoemacs-mode)
+(ergoemacs-mode 1)
+
 (let ((pkg-list '(buffer-move
                   cl-lib
                   diminish
-                  expand-region
                   ido-vertical-mode
                   magit
                   pydoc-info
-                  smartparens
                   smex
                   solarized-theme
                   undo-tree
@@ -76,19 +80,10 @@
   :config
   (progn
     (diminish 'auto-fill-function)
+    ;; TODO fix
     ;; (diminish 'hi-lock-mode)
     ;; (diminish 'magit-auto-revert-mode)))
     ))
-
-(use-package expand-region)
-  ;; :init
-  ;; (defun jsynacek/unexpand-region ()
-  ;;   (interactive)
-  ;;   (er/expand-region -1))
-  ;; :config
-  ;; (progn
-  ;;   (global-set-key (kbd "M-8") 'er/expand-region)
-  ;;   (global-set-key (kbd "M-9") 'jsynacek/unexpand-region)))
 
 (use-package ibuffer
   :config
@@ -102,7 +97,6 @@
                   filename-and-process)
             (mark " " (name))))
 
-    ;; (bind-key "C-x C-b" 'ibuffer)
     (bind-key "P" nil ibuffer-mode-map)   ; prevent accidentaly printing buffers
     (bind-key "M-o" nil ibuffer-mode-map) ; make global M-o work
 ))
@@ -113,15 +107,20 @@
 (use-package magit
   :config
   (progn
-    ;; (bind-key "C-x g" 'magit-status)
+    (defadvice magit-insert-untracked-files (after magit-insert-untracked-files-advice activate)
+      (save-excursion
+        (search-backward "Untracked files")
+        (magit-toggle-section)))
+
+    (bind-key "C-x C-g" 'magit-status)
     (bind-key "q" 'magit-quit-session magit-status-mode-map)
     (bind-key "W" 'magit-toggle-whitespace magit-status-mode-map)))
 
 (use-package smex
   :init (smex-initialize)
-  :bind (("M-x"         . smex)
-         ("M-X"         . smex-major-mode-commands)
-         ("C-c C-c M-x" . execute-extended-command)))
+  :config
+  (progn
+    (global-set-key [remap execute-extended-command] 'smex)))
 
 (use-package undo-tree
   :init (undo-tree-mode))
@@ -145,15 +144,7 @@
 (require 'setup-dired)
 (require 'setup-ediff)
 (require 'setup-erc)
-(require 'setup-smartparens)
 (require 'setup-recentf)
 (require 'setup-org)
-;; (require 'keybindings)
-
-(setq ergoemacs-theme nil)
-(setq ergoemacs-keyboard-layout "us")
-(require 'ergoemacs-mode)
-(ergoemacs-mode 1)
-
 
 (load custom-file)
