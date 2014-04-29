@@ -32,12 +32,14 @@
 
 (setq ergoemacs-theme nil)
 (setq ergoemacs-keyboard-layout "us")
-(require 'ergoemacs-mode)
-(ergoemacs-mode 1)
+(use-package ergoemacs-mode
+  :config
+  (ergoemacs-mode 1))
 
 (let ((pkg-list '(buffer-move
                   cl-lib
                   diminish
+                  helm
                   ido-vertical-mode
                   magit
                   pydoc-info
@@ -98,7 +100,6 @@
             (mark " " (name))))
 
     (bind-key "P" nil ibuffer-mode-map)   ; prevent accidentaly printing buffers
-    (bind-key "M-o" nil ibuffer-mode-map) ; make global M-o work
 ))
 
 (use-package ido-vertical-mode
@@ -126,10 +127,6 @@
   :init (undo-tree-mode))
 
 (use-package uniquify)
-
-(bind-key "M-o" 'other-window)
-(bind-key "M-o" nil diff-mode-map)
-(bind-key "C-c M-o" 'diff-goto-source diff-mode-map)
 
 (defalias 'ar 'align-regexp)
 (defalias 'dtw 'delete-trailing-whitespace)
