@@ -22,7 +22,6 @@
 (blink-cursor-mode -1)
 (auto-fill-mode 1)
 (winner-mode t)
-(ido-mode 1)
 (desktop-save-mode 1)
 
 ;; packages
@@ -43,7 +42,6 @@
                   ido-vertical-mode
                   magit
                   pydoc-info
-                  smex
                   solarized-theme
                   undo-tree
                   yasnippet)))
@@ -102,46 +100,47 @@
     (bind-key "P" nil ibuffer-mode-map)   ; prevent accidentaly printing buffers
 ))
 
-(use-package ido-vertical-mode
-  :init (ido-vertical-mode 1))
+;; (use-package ido-vertical-mode
+;;   :init (ido-vertical-mode 1))
 
-(use-package magit
-  :config
-  (progn
-    (defadvice magit-insert-untracked-files (after magit-insert-untracked-files-advice activate)
-      (save-excursion
-        (search-backward "Untracked files")
-        (magit-toggle-section)))
+;; (use-package magit
+;;   :config
+;;   (progn
+;;     ;; FIXME doesn't work well (or at all if there's no Untracked files section).
+;;     ;; (defadvice magit-insert-untracked-files (after magit-insert-untracked-files-advice activate)
+;;     ;;   (save-excursion
+;;     ;;     (search-backward "Untracked files")
+;;     ;;     (magit-toggle-section)))
 
-    (bind-key "C-x C-g" 'magit-status)
-    (bind-key "q" 'magit-quit-session magit-status-mode-map)
-    (bind-key "W" 'magit-toggle-whitespace magit-status-mode-map)))
+;;     (bind-key "C-x C-g" 'magit-status)
+;;     (bind-key "q" 'magit-quit-session magit-status-mode-map)
+;;     (bind-key "W" 'magit-toggle-whitespace magit-status-mode-map)))
 
-(use-package smex
-  :init (smex-initialize)
-  :config
-  (progn
-    (global-set-key [remap execute-extended-command] 'smex)))
+;; ;; (use-package smex
+;; ;;   :init (smex-initialize))
+;;   ;; :config
+;;   ;; (progn
+;;   ;;   (global-set-key [remap execute-extended-command] 'smex)))
 
-(use-package undo-tree
-  :init (undo-tree-mode))
+;; (use-package undo-tree
+;;   :init (undo-tree-mode))
 
-(use-package uniquify)
+;; (use-package uniquify)
 
-(defalias 'ar 'align-regexp)
-(defalias 'dtw 'delete-trailing-whitespace)
-(defalias 'eb 'eval-buffer)
-(defalias 'eis 'elisp-index-search)
-(defalias 'er 'eval-region)
-(defalias 'plp 'package-list-packages)
+;; (defalias 'ar 'align-regexp)
+;; (defalias 'dtw 'delete-trailing-whitespace)
+;; (defalias 'eb 'eval-buffer)
+;; (defalias 'eis 'elisp-index-search)
+;; (defalias 'er 'eval-region)
+;; (defalias 'plp 'package-list-packages)
 
-(require 'private)
-(require 'defuns)
-(require 'setup-bbdb)
-(require 'setup-dired)
-(require 'setup-ediff)
-(require 'setup-erc)
-(require 'setup-recentf)
-(require 'setup-org)
+;; (require 'private)
+;; (require 'defuns)
+;; (require 'setup-bbdb)
+;; (require 'setup-dired)
+;; (require 'setup-ediff)
+;; (require 'setup-erc)
+;; (require 'setup-recentf)
+;; (require 'setup-org)
 
 (load custom-file)
