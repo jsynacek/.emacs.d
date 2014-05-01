@@ -1,4 +1,5 @@
-;; init
+;;; init
+
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 (setq custom-file (expand-file-name "emacs-custom.el" user-emacs-directory))
 
@@ -13,7 +14,6 @@
 (setq ring-bell-function 'ignore)
 (prefer-coding-system 'utf-8)
 (setenv "EDITOR" "emacsclient")
-(fset 'yes-or-no-p 'y-or-n-p)
 
 ;; modes
 (scroll-bar-mode -1)
@@ -22,32 +22,47 @@
 (blink-cursor-mode -1)
 (auto-fill-mode 1)
 (winner-mode t)
-(desktop-save-mode 1)
 
-;; packages
+;; common aliases
+(defalias 'ar 'align-regexp)
+(defalias 'dtw 'delete-trailing-whitespace)
+(defalias 'eb 'eval-buffer)
+(defalias 'eis 'elisp-index-search)
+(defalias 'er 'eval-region)
+(defalias 'plp 'package-list-packages)
+(defalias 'yes-or-no-p 'y-or-n-p)
+
+;;; packages
+
 (require 'package)
 (package-initialize)
 (require 'use-package)
+
+(let ((pkg-list '(buffer-move
+                  diminish
+                  helm
+                  magit
+                  projectile
+                  pydoc-info
+                  smex
+                  solarized-theme
+                  undo-tree
+                  visual-regexp
+                  yasnippet)))
+  (dolist (pkg pkg-list)
+    (unless (package-installed-p pkg)
+      (package-install pkg))))
 
 (setq ergoemacs-theme nil)
 (setq ergoemacs-keyboard-layout "us")
 (use-package ergoemacs-mode
   :config
-  (ergoemacs-mode 1))
-
-(let ((pkg-list '(buffer-move
-                  cl-lib
-                  diminish
-                  helm
-                  ido-vertical-mode
-                  magit
-                  pydoc-info
-                  solarized-theme
-                  undo-tree
-                  yasnippet)))
-  (dolist (pkg pkg-list)
-    (unless (package-installed-p pkg)
-      (package-install pkg))))
+  (progn
+    (bind-key "M-;" 'comment-dwim)
+    ;; TODO rebind M-e/M-r to backward-kill-sexp/kill-sexp ?
+    (bind-key "M-D" 'backward-kill-sexp)
+    (bind-key "M-F" 'kill-sexp)
+    (ergoemacs-mode 1)))
 
 (use-package server
   :init
@@ -76,13 +91,19 @@
         holiday-oriental-holidays nil
         holiday-bahai-holidays nil))
 
+
+
 (use-package diminish
   :config
   (progn
     (diminish 'auto-fill-function)
     ;; TODO fix
     ;; (diminish 'hi-lock-mode)
-    ;; (diminish 'magit-auto-revert-mode)))
+    ))
+
+(use-package helm
+  :config
+  (progn
     ))
 
 (use-package ibuffer
@@ -97,44 +118,95 @@
                   filename-and-process)
             (mark " " (name))))
 
-    (bind-key "P" nil ibuffer-mode-map)   ; prevent accidentaly printing buffers
+    ;; prevent accidentaly printing buffers
+    (bind-key "P" nil ibuffer-mode-map)
 ))
 
-;; (use-package ido-vertical-mode
-;;   :init (ido-vertical-mode 1))
+(use-package magit
+  :config
+  (progn
+    ;; don't show "MRev" in the modeline
+    (setq magit-auto-revert-mode-lighter 'nil)
+    (setq magit-restore-window-configuration t)
 
-;; (use-package magit
-;;   :config
-;;   (progn
-;;     ;; FIXME doesn't work well (or at all if there's no Untracked files section).
-;;     ;; (defadvice magit-insert-untracked-files (after magit-insert-untracked-files-advice activate)
-;;     ;;   (save-excursion
-;;     ;;     (search-backward "Untracked files")
-;;     ;;     (magit-toggle-section)))
+    ;; FIXME doesn't work for the first time magit status is started
+    (defun jsynacek-magit-hide-untracked ()
+      "Hide \"Untracked files\" section in magit status buffer."
+      (and (search-forward "Untracked files" nil t nil)
+           (magit-hide-section)))
+    (add-hook 'magit-status-mode-hook 'jsynacek-magit-hide-untracked)
 
-;;     (bind-key "C-x C-g" 'magit-status)
-;;     (bind-key "q" 'magit-quit-session magit-status-mode-map)
-;;     (bind-key "W" 'magit-toggle-whitespace magit-status-mode-map)))
+    (defun magit-toggle-whitespace ()
+      (interactive)
+      (if (member "-w" magit-diff-options)
+          (magit-dont-ignore-whitespace)
+        (magit-ignore-whitespace)))
 
-;; ;; (use-package smex
-;; ;;   :init (smex-initialize))
-;;   ;; :config
-;;   ;; (progn
-;;   ;;   (global-set-key [remap execute-extended-command] 'smex)))
+    (defun magit-ignore-whitespace ()
+      (interactive)
+      (add-to-list 'magit-diff-options "-w")
+      (magit-refresh))
 
-;; (use-package undo-tree
-;;   :init (undo-tree-mode))
+    (defun magit-dont-ignore-whitespace ()
+      (interactive)
+      (setq magit-diff-options (remove "-w" magit-diff-options))
+      (magit-refresh))
 
-;; (use-package uniquify)
+    (bind-key "C-x C-g" 'magit-status)
+    (bind-key "q" 'magit-mode-quit-window magit-status-mode-map)
+    (bind-key "W" 'magit-toggle-whitespace magit-status-mode-map)))
 
-;; (defalias 'ar 'align-regexp)
-;; (defalias 'dtw 'delete-trailing-whitespace)
-;; (defalias 'eb 'eval-buffer)
-;; (defalias 'eis 'elisp-index-search)
-;; (defalias 'er 'eval-region)
-;; (defalias 'plp 'package-list-packages)
+(use-package projectile
+  :config
+  (progn
+    (projectile-global-mode 1)))
 
-;; (require 'private)
+(use-package smex
+  :init (smex-initialize))
+
+(use-package undo-tree
+  :init (undo-tree-mode))
+
+(use-package uniquify)
+
+;;; hooks
+
+(defun jsynacek-c-mode-hook-defaults ()
+  (setq c-default-style "linux"
+        indent-tabs-mode t
+        subword-mode t))
+(add-hook 'c-mode-hook 'jsynacek-c-mode-hook-defaults)
+
+(defun jsynacek-sh-mode-hook-defaults ()
+  (setq sh-indentation 2))
+(add-hook 'sh-mode-hook 'jsynacek-sh-mode-hook-defaults)
+
+;; highlight code annotations
+(defun jsynacek-highlight-code-annotations ()
+  (font-lock-add-keywords nil
+			  '(("\\<\\(FIXME\\|TODO\\|BUG\\|XXX\\)" 1 font-lock-warning-face t))))
+(add-hook 'prog-mode-hook 'jsynacek-highlight-code-annotations)
+
+;; highlight trailing whitespace with ugly pink
+(defun jsynacek-highlight-trailing-whitespace ()
+  (highlight-regexp "\\s-+$" 'hi-pink))
+(add-hook 'find-file-hook 'jsynacek-highlight-trailing-whitespace)
+
+;;; remappings
+
+(defun goto-line-with-feedback ()
+  "Show line numbers temporarily, while prompting for the line number input"
+  (interactive)
+  (unwind-protect
+      (progn
+        (linum-mode 1)
+        (goto-line (read-number "Goto line: ")))
+    (linum-mode -1)))
+(global-set-key [remap goto-line] 'goto-line-with-feedback)
+
+(global-set-key [remap list-buffers] 'ibuffer)
+
+(require 'private)
 ;; (require 'defuns)
 ;; (require 'setup-bbdb)
 ;; (require 'setup-dired)

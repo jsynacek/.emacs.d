@@ -32,33 +32,6 @@
     (error (message "Invalid expression")
            (insert (current-kill 0)))))
 
-;; full screen magit-status
-(defadvice magit-status (around magit-fullscreen activate)
-  (window-configuration-to-register :magit-fullscreen)
-  ad-do-it
-  (delete-other-windows))
-
-(defun magit-quit-session ()
-  "Restores the previous window configuration and kills the magit buffer"
-  (interactive)
-  (kill-buffer)
-  (jump-to-register :magit-fullscreen))
-
-(defun magit-toggle-whitespace ()
-  (interactive)
-  (if (member "-w" magit-diff-options)
-      (magit-dont-ignore-whitespace)
-    (magit-ignore-whitespace)))
-
-(defun magit-ignore-whitespace ()
-  (interactive)
-  (add-to-list 'magit-diff-options "-w")
-  (magit-refresh))
-
-(defun magit-dont-ignore-whitespace ()
-  (interactive)
-  (setq magit-diff-options (remove "-w" magit-diff-options))
-  (magit-refresh))
 
 (defun sudo-edit (file)
   (interactive "fSudo edit: ")
@@ -79,43 +52,6 @@ Goes backward if ARG is negative; error if CHAR not found."
              (search-forward (char-to-string char) nil nil arg)
              (goto-char (1- (point)))
              (point))))
-
-;;; hooks
-(defun my-rpm-hook-defaults ()
-  (setq tab-width 4
-        indent-tabs-mode t))
-(add-hook 'rpm-spec-mode-hook 'my-rpm-hook-defaults)
-
-(defun my-c-mode-hook-defaults ()
-  (setq c-default-style "linux"
-        indent-tabs-mode t
-        subword-mode t))
-(add-hook 'c-mode-hook 'my-c-mode-hook-defaults)
-
-(defun my-sh-mode-hook-defaults ()
-  (setq sh-indentation 2))
-(add-hook 'sh-mode-hook 'my-sh-mode-hook-defaults)
-
-;; highlight code annotations
-(add-hook 'prog-mode-hook
-          (lambda ()
-            (font-lock-add-keywords nil
-                                    '(("\\<\\(FIXME\\|TODO\\|BUG\\|XXX\\)" 1 font-lock-warning-face t)))))
-
-(defun highlight-trailing-whitespace ()
-  (highlight-regexp "\\s-+$" 'hi-pink))
-;; highlight trailing whitespace with ugly pink
-(add-hook 'prog-mode-hook 'highlight-trailing-whitespace)
-
-(global-set-key [remap goto-line] 'goto-line-with-feedback)
-(defun goto-line-with-feedback ()
-  "Show line numbers temporarily, while prompting for the line number input"
-  (interactive)
-  (unwind-protect
-      (progn
-        (linum-mode 1)
-        (goto-line (read-number "Goto line: ")))
-    (linum-mode -1)))
 
 
 (defun browse-rhbz-at-point ()
