@@ -22,6 +22,16 @@
  '(fill-column 80)
  '(git-commit-summary-max-length 79)
  '(global-auto-revert-mode t)
+ '(helm-completing-read-handlers-alist
+   (quote
+    ((describe-function . helm-completing-read-symbols)
+     (describe-variable . helm-completing-read-symbols)
+     (debug-on-entry . helm-completing-read-symbols)
+     (find-function . helm-completing-read-symbols)
+     (find-tag . helm-completing-read-with-cands-in-buffer)
+     (ffap-alternate-file)
+     (tmm-menubar)
+     (find-file))))
  '(ido-case-fold nil)
  '(ido-create-new-buffer (quote always))
  '(ido-enable-flex-matching t)
@@ -42,7 +52,7 @@
    (quote
     (("gnu" . "http://elpa.gnu.org/packages/")
      ("melpa" . "http://melpa.milkbox.net/packages/"))))
- '(recentf-exclude (quote ("/tmp/")))
+ '(recentf-exclude (quote ("/tmp/")) t)
  '(recentf-save-file "/home/jsynacek/.emacs.d/.recentf")
  '(save-place-file "~/.emacs.d/places")
  '(scroll-preserve-screen-position 1)
