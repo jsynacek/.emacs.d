@@ -161,6 +161,24 @@
   (progn
     (projectile-global-mode 1)))
 
+(use-package recentf
+  :config
+  (progn
+
+    ;; 200 files ought to be enough.
+    (setq recentf-max-saved-items 200)
+
+    (defun ido-recentf-open ()
+      "Use `ido-completing-read' to \\[find-file] a recent file"
+      (interactive)
+      (if (find-file (ido-completing-read "Find recent file: " recentf-list))
+          (message "Opening file...")
+        (message "Aborting")))
+
+    (recentf-mode t)
+
+    (bind-key "C-x C-r" 'ido-recentf-open)))
+
 (use-package smex
   :init (smex-initialize))
 
@@ -215,13 +233,14 @@
 
 (global-set-key [remap list-buffers] 'ibuffer)
 
+;;; requires
+
 (require 'private)
 ;; (require 'defuns)
 ;; (require 'setup-bbdb)
 ;; (require 'setup-dired)
 ;; (require 'setup-ediff)
-;; (require 'setup-erc)
-;; (require 'setup-recentf)
+(require 'setup-erc)
 ;; (require 'setup-org)
 
 (load custom-file)
