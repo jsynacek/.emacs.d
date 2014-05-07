@@ -2,6 +2,7 @@
 
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 (setq custom-file (expand-file-name "emacs-custom.el" user-emacs-directory))
+(load custom-file)
 
 ;; basic settings
 (setq inhibit-startup-message t
@@ -20,7 +21,9 @@
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (blink-cursor-mode -1)
+(electric-indent-mode -1)
 (auto-fill-mode 1)
+(delete-selection-mode t)
 (winner-mode t)
 
 ;; common aliases
@@ -91,8 +94,6 @@
         holiday-oriental-holidays nil
         holiday-bahai-holidays nil))
 
-
-
 (use-package diminish
   :config
   (progn
@@ -100,6 +101,12 @@
     ;; TODO fix
     ;; (diminish 'hi-lock-mode)
     ))
+
+(use-package dired
+  :config
+  (progn
+    (require 'dired-x)
+    (setq dired-dwim-target t)))
 
 (use-package helm
   :config
@@ -152,7 +159,6 @@
       (setq magit-diff-options (remove "-w" magit-diff-options))
       (magit-refresh))
 
-    (bind-key "C-x C-g" 'magit-status)
     (bind-key "q" 'magit-mode-quit-window magit-status-mode-map)
     (bind-key "W" 'magit-toggle-whitespace magit-status-mode-map)))
 
@@ -164,7 +170,6 @@
 (use-package recentf
   :config
   (progn
-
     ;; 200 files ought to be enough.
     (setq recentf-max-saved-items 200)
 
@@ -230,8 +235,22 @@
         (goto-line (read-number "Goto line: ")))
     (linum-mode -1)))
 (global-set-key [remap goto-line] 'goto-line-with-feedback)
-
 (global-set-key [remap list-buffers] 'ibuffer)
+(defun dired-back-to-start-of-files ()
+  (interactive)
+  (backward-char (- (current-column) 2)))
+(define-key dired-mode-map [remap beginning-of-line] 'dired-back-to-start-of-files)
+(defun dired-back-to-top ()
+  (interactive)
+  (beginning-of-buffer)
+  (dired-next-line 4))
+(define-key dired-mode-map [remap beginning-of-buffer] 'dired-back-to-top)
+(defun dired-jump-to-bottom ()
+  (interactive)
+  (end-of-buffer)
+  (dired-next-line -1))
+(define-key dired-mode-map [remap end-of-buffer] 'dired-jump-to-bottom)
+
 
 ;;; requires
 
@@ -241,13 +260,13 @@
 ;; (require 'setup-dired)
 ;; (require 'setup-ediff)
 (require 'setup-erc)
-;; (require 'setup-org)
+(require 'setup-org)
 
 ;;; keybindings
+
 (global-set-key (kbd "M-a") 'helm-M-x)
-(global-set-key (kbd "C-F") 'helm-occur)
-(global-set-key (kbd "C-o") 'find-file) ; TODO make it switch buffers with
-                                        ; universal argument?
+(global-set-key (kbd "C-f") 'helm-occur)
+(global-set-key (kbd "C-o") 'find-file)
 (global-set-key (kbd "M-z") 'undo-tree-undo)
 (global-set-key (kbd "M-Z") 'undo-tree-redo)
 (global-set-key (kbd "M-SPC") 'set-mark-command)
@@ -275,16 +294,42 @@
 (global-set-key (kbd "M-e") 'backward-kill-word)
 (global-set-key (kbd "M-r") 'kill-word)
 (global-set-key (kbd "M-E") 'backward-kill-sexp)
-(global-set-key (kbd "M-R") 'backward-kill-word)
-(global-set-key (kbd "M-x") 'kill-region)    ; TODO cut region or line
-(global-set-key (kbd "M-c") 'kill-ring-save) ; TODO copy region or line
+(global-set-key (kbd "M-R") 'kill-sexp)
+(defun jsynacek-kill-line-or-region ()
+  "Kill region if it is active. Otherwise kill current line."
+  (interactive)
+  (if (region-active-p)
+      (kill-region (region-beginning) (region-end))
+    (let ((column (current-column)))
+      (kill-whole-line)
+      (move-to-column column))))
+(global-set-key (kbd "M-x") 'jsynacek-kill-line-or-region)
+(defun jsynacek-copy-line-or-region ()
+  "Copy region if it is active. Otherwise copy current line."
+  (interactive)
+  (if (region-active-p)
+      (kill-ring-save (region-beginning) (region-end))
+    (kill-ring-save (line-beginning-position) (line-beginning-position 2))))
+(global-set-key (kbd "M-c") 'jsynacek-copy-line-or-region)
 (global-set-key (kbd "M-v") 'yank)
 (global-set-key (kbd "M-V") 'yank-pop)
+
 (defun jsynacek-kill-line-backward ()
+  "Kill the line backward."
   (interactive)
   (kill-line 0))
 (global-set-key (kbd "M-g") 'kill-line)
 (global-set-key (kbd "M-G") 'jsynacek-kill-line-backward)
+
+;; selection
+(defun jsynacek-mark-line ()
+  (interactive)
+  (end-of-line)
+  (set-mark (line-beginning-position)))
+(global-set-key (kbd "C-a") 'mark-whole-buffer)
+(global-set-key (kbd "M-7") 'jsynacek-mark-line)
+(global-set-key (kbd "M-8") 'er/expand-region)
+(global-set-key (kbd "M-9") 'er/contract-region)
 
 ;; search and replace
 (global-set-key (kbd "M-y") 'isearch-forward)
@@ -295,6 +340,7 @@
 ;; buffers, windows and frames
 (global-set-key (kbd "C-b") 'switch-to-buffer)
 (global-set-key (kbd "C-s") 'save-buffer)
+;; (global-set-key (kbd "C-S") 'write-file)
 (global-set-key (kbd "C-w") 'kill-buffer)
 
 (global-set-key (kbd "M-2") 'delete-window)
@@ -302,26 +348,71 @@
 (global-set-key (kbd "M-s") 'other-window)
 
 ;; info and help
+(global-set-key (kbd "C-/") 'info)
+(global-set-key (kbd "C-h 1") 'describe-function)
+(global-set-key (kbd "C-h 2") 'describe-variable)
+(global-set-key (kbd "C-h 3") 'describe-key)
+(global-set-key (kbd "C-h 5") 'man)
+(global-set-key (kbd "C-h `") 'elisp-index-search)
+(defun describe-thing-at-point ()
+  (interactive)
+  (let ((function (function-called-at-point))
+        (variable (variable-at-point)))
+    (cond
+     ((/= variable 0) (describe-variable variable))
+     (function (describe-function function)))))
+(global-set-key (kbd "C-h .") 'describe-thing-at-point)
 
 ;;; mode-specific keybindings
+
 (progn
   (define-key minibuffer-local-map (kbd "M-i") 'previous-history-element)
   (define-key minibuffer-local-map (kbd "M-k") 'next-history-element)
   (define-key minibuffer-local-map (kbd "M-j") 'previous-line)
   (define-key minibuffer-local-map (kbd "M-l") 'next-line)
 
+  (define-key prog-mode-map (kbd "M-J") 'backward-sexp)
+  (define-key prog-mode-map (kbd "M-L") 'forward-sexp)
+  (define-key prog-mode-map (kbd "M-[") 'backward-up-list)
+  (define-key prog-mode-map (kbd "M-]") 'down-list)
+
   (define-key isearch-mode-map (kbd "M-y") 'isearch-repeat-forward)
   (define-key isearch-mode-map (kbd "M-Y") 'isearch-repeat-backward)
 
   (define-key dired-mode-map (kbd "M-s") 'other-window)
+  (define-key dired-mode-map (kbd "C-o") 'find-file)
 
-  (define-key helm-map (kbd "M-j") 'helm-previous-line)
-  (define-key helm-map (kbd "M-l") 'helm-next-line)
-  (define-key helm-map (kbd "M-J") 'helm-previous-page)
-  (define-key helm-map (kbd "M-L") 'helm-next-page)
-  )
+  (define-key helm-map (kbd "M-i") 'helm-previous-line)
+  (define-key helm-map (kbd "M-k") 'helm-next-line)
+  (define-key helm-map (kbd "M-I") 'helm-previous-page)
+  (define-key helm-map (kbd "M-K") 'helm-next-page)
 
-;; unbind the common ones TODO
+  (define-key erc-mode-map (kbd "RET") nil)
+  (define-key erc-mode-map (kbd "C-<return>") 'erc-send-current-line)
+)
+
+;;; key sequences
+
+(define-prefix-command 'jsynacek-menu-keymap)
+(global-set-key (kbd "<menu>") 'jsynacek-menu-keymap)
+;; apps
+(global-set-key (kbd "<menu> a c") 'calc)
+(global-set-key (kbd "<menu> a e") 'eshell)
+(global-set-key (kbd "<menu> a g") 'magit-status)
+;; evaluations
+(global-set-key (kbd "<menu> e b") 'eval-buffer)
+(global-set-key (kbd "<menu> e d") 'eval-defun)
+(global-set-key (kbd "<menu> e e") 'eval-last-sexp)
+(global-set-key (kbd "<menu> e r") 'eval-region)
+;; marking
+(global-set-key (kbd "<menu> m d") 'mark-defun)
+;; transpositions
+(global-set-key (kbd "<menu> t l") 'transpose-lines)
+(global-set-key (kbd "<menu> t s") 'transpose-sexps)
+(global-set-key (kbd "<menu> t w") 'transpose-words)
+;; org mode?
+
+;;; unbindings
 
 (global-set-key (kbd "C-z") nil)
 (global-set-key (kbd "C-a") nil)
@@ -332,4 +423,7 @@
 (global-set-key (kbd "C-x k") nil)
 (global-set-key (kbd "C-x C-f") nil)
 
-(load custom-file)
+(global-unset-key (kbd "<left>"))
+(global-unset-key (kbd "<right>"))
+(global-unset-key (kbd "<up>"))
+(global-unset-key (kbd "<down>"))

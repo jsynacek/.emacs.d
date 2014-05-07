@@ -89,10 +89,10 @@ Use favorite font instead. Default is `jsynacek/font', if bound, otherwise
 
 (setq org-plantuml-jar-path "/usr/share/java/plantuml.jar")
 
-;; (global-set-key (kbd "C-c a") 'org-agenda)
-;; (global-set-key (kbd "C-c c") 'org-capture)
-;; (global-set-key (kbd "C-c l") 'org-store-link)
-;; (global-set-key (kbd "C-c b") 'org-iswitchb)
+(global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c c") 'org-capture)
+(global-set-key (kbd "C-c l") 'org-store-link)
+(global-set-key (kbd "C-c b") 'org-iswitchb)
 
 ;; (add-hook 'org-mode-hook 'org-indent-mode)
 

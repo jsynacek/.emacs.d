@@ -42,7 +42,4 @@
 ;(setq erc-autoaway-message)
 (setq erc-auto-set-away t)
 
-(define-key erc-mode-map (kbd "RET") nil)
-(define-key erc-mode-map (kbd "C-<return>") 'erc-send-current-line)
-
 (provide 'setup-erc)

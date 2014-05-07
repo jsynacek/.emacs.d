@@ -1,11 +1,3 @@
-(defun describe-thing-at-point ()
-  (interactive)
-  (let ((function (function-called-at-point))
-        (variable (variable-at-point)))
-    (cond
-     ((/= variable 0) (describe-variable variable))
-     (function (describe-function function)))))
-
 (defun my-multi-occur-in-matching-buffers (regexp &optional allbufs)
   "Show all lines matching REGEXP in all buffers."
   (interactive (occur-read-primary-args))
