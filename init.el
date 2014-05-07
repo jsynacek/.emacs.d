@@ -53,16 +53,16 @@
     (unless (package-installed-p pkg)
       (package-install pkg))))
 
-(setq ergoemacs-theme nil)
-(setq ergoemacs-keyboard-layout "us")
-(use-package ergoemacs-mode
-  :config
-  (progn
-    (bind-key "M-;" 'comment-dwim)
-    ;; TODO rebind M-e/M-r to backward-kill-sexp/kill-sexp ?
-    (bind-key "M-D" 'backward-kill-sexp)
-    (bind-key "M-F" 'kill-sexp)
-    (ergoemacs-mode 1)))
+;; (setq ergoemacs-theme nil)
+;; (setq ergoemacs-keyboard-layout "us")
+;; (use-package ergoemacs-mode
+;;   :config
+;;   (progn
+;;     (bind-key "M-;" 'comment-dwim)
+;;     ;; TODO rebind M-e/M-r to backward-kill-sexp/kill-sexp ?
+;;     (bind-key "M-D" 'backward-kill-sexp)
+;;     (bind-key "M-F" 'kill-sexp)
+;;     (ergoemacs-mode -11)))
 
 (use-package server
   :init
@@ -242,5 +242,94 @@
 ;; (require 'setup-ediff)
 (require 'setup-erc)
 ;; (require 'setup-org)
+
+;;; keybindings
+(global-set-key (kbd "M-a") 'helm-M-x)
+(global-set-key (kbd "C-F") 'helm-occur)
+(global-set-key (kbd "C-o") 'find-file) ; TODO make it switch buffers with
+                                        ; universal argument?
+(global-set-key (kbd "M-z") 'undo-tree-undo)
+(global-set-key (kbd "M-Z") 'undo-tree-redo)
+(global-set-key (kbd "M-SPC") 'set-mark-command)
+(global-set-key (kbd "M-t") 'completion-at-point)
+
+;; basic movement
+(global-set-key (kbd "M-i") 'previous-line)
+(global-set-key (kbd "M-k") 'next-line)
+(global-set-key (kbd "M-j") 'backward-char)
+(global-set-key (kbd "M-l") 'forward-char)
+
+(global-set-key (kbd "M-u") 'backward-word)
+(global-set-key (kbd "M-o") 'forward-word)
+
+(global-set-key (kbd "M-h") 'beginning-of-line)
+(global-set-key (kbd "M-H") 'end-of-line)
+
+(global-set-key (kbd "M-K") 'scroll-up-command)
+(global-set-key (kbd "M-I") 'scroll-down-command)
+
+;; killing and yanking
+(global-set-key (kbd "M-d") 'backward-delete-char-untabify)
+(global-set-key (kbd "M-f") 'delete-forward-char)
+
+(global-set-key (kbd "M-e") 'backward-kill-word)
+(global-set-key (kbd "M-r") 'kill-word)
+(global-set-key (kbd "M-E") 'backward-kill-sexp)
+(global-set-key (kbd "M-R") 'backward-kill-word)
+(global-set-key (kbd "M-x") 'kill-region)    ; TODO cut region or line
+(global-set-key (kbd "M-c") 'kill-ring-save) ; TODO copy region or line
+(global-set-key (kbd "M-v") 'yank)
+(global-set-key (kbd "M-V") 'yank-pop)
+(defun jsynacek-kill-line-backward ()
+  (interactive)
+  (kill-line 0))
+(global-set-key (kbd "M-g") 'kill-line)
+(global-set-key (kbd "M-G") 'jsynacek-kill-line-backward)
+
+;; search and replace
+(global-set-key (kbd "M-y") 'isearch-forward)
+(global-set-key (kbd "M-Y") 'isearch-backward)
+(global-set-key (kbd "M-5") 'query-replace)
+(global-set-key (kbd "M-%") 'query-replace-regexp)
+
+;; buffers, windows and frames
+(global-set-key (kbd "C-b") 'switch-to-buffer)
+(global-set-key (kbd "C-s") 'save-buffer)
+(global-set-key (kbd "C-w") 'kill-buffer)
+
+(global-set-key (kbd "M-2") 'delete-window)
+(global-set-key (kbd "M-3") 'delete-other-windows)
+(global-set-key (kbd "M-s") 'other-window)
+
+;; info and help
+
+;;; mode-specific keybindings
+(progn
+  (define-key minibuffer-local-map (kbd "M-i") 'previous-history-element)
+  (define-key minibuffer-local-map (kbd "M-k") 'next-history-element)
+  (define-key minibuffer-local-map (kbd "M-j") 'previous-line)
+  (define-key minibuffer-local-map (kbd "M-l") 'next-line)
+
+  (define-key isearch-mode-map (kbd "M-y") 'isearch-repeat-forward)
+  (define-key isearch-mode-map (kbd "M-Y") 'isearch-repeat-backward)
+
+  (define-key dired-mode-map (kbd "M-s") 'other-window)
+
+  (define-key helm-map (kbd "M-j") 'helm-previous-line)
+  (define-key helm-map (kbd "M-l") 'helm-next-line)
+  (define-key helm-map (kbd "M-J") 'helm-previous-page)
+  (define-key helm-map (kbd "M-L") 'helm-next-page)
+  )
+
+;; unbind the common ones TODO
+
+(global-set-key (kbd "C-z") nil)
+(global-set-key (kbd "C-a") nil)
+(global-set-key (kbd "C-e") nil)
+(global-set-key (kbd "C-v") nil)
+(global-set-key (kbd "C-y") nil)
+(global-set-key (kbd "C-x b") nil)
+(global-set-key (kbd "C-x k") nil)
+(global-set-key (kbd "C-x C-f") nil)
 
 (load custom-file)
