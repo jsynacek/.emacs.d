@@ -180,9 +180,7 @@
           (message "Opening file...")
         (message "Aborting")))
 
-    (recentf-mode t)
-
-    (bind-key "C-x C-r" 'ido-recentf-open)))
+    (recentf-mode t)))
 
 (use-package smex
   :init (smex-initialize))
@@ -223,6 +221,9 @@
 (defun jsynacek-highlight-trailing-whitespace ()
   (highlight-regexp "\\s-+$" 'hi-pink))
 (add-hook 'find-file-hook 'jsynacek-highlight-trailing-whitespace)
+
+;; isearch filenames in dired
+(add-hook 'dired-mode-hook 'dired-isearch-filenames-mode)
 
 ;;; remappings
 
@@ -266,7 +267,18 @@
 
 (global-set-key (kbd "M-a") 'helm-M-x)
 (global-set-key (kbd "C-f") 'helm-occur)
-(global-set-key (kbd "C-o") 'find-file)
+(defun jsynacek-find-file-or-recentf (arg)
+  "Call `find-file' if run with nil argument. If called with a
+universal argument, run `helm-recentf' if bound, otherwise
+`ido-recentf-open'."
+  (interactive "P")
+  (if (null arg)
+      (call-interactively 'find-file)
+    (if (fboundp 'helm-recentf)
+        (helm-recentf)
+      (ido-recentf-open))))
+(global-set-key (kbd "C-o") 'jsynacek-find-file-or-recentf)
+(global-set-key (kbd "C-d") 'dired)
 (global-set-key (kbd "M-z") 'undo-tree-undo)
 (global-set-key (kbd "M-Z") 'undo-tree-redo)
 (global-set-key (kbd "M-SPC") 'set-mark-command)
@@ -327,6 +339,7 @@
   (end-of-line)
   (set-mark (line-beginning-position)))
 (global-set-key (kbd "C-a") 'mark-whole-buffer)
+(global-set-key (kbd "M-6") 'mark-defun)
 (global-set-key (kbd "M-7") 'jsynacek-mark-line)
 (global-set-key (kbd "M-8") 'er/expand-region)
 (global-set-key (kbd "M-9") 'er/contract-region)
@@ -338,17 +351,37 @@
 (global-set-key (kbd "M-%") 'query-replace-regexp)
 
 ;; buffers, windows and frames
-(global-set-key (kbd "C-b") 'switch-to-buffer)
-(global-set-key (kbd "C-s") 'save-buffer)
-;; (global-set-key (kbd "C-S") 'write-file)
+(defun jsynacek-switch-to-buffer (arg)
+  ""
+  (interactive "P")
+  (if (null arg)
+      (call-interactively 'switch-to-buffer)
+    (call-interactively 'switch-to-buffer-other-window)))
+(global-set-key (kbd "C-b") 'jsynacek-switch-to-buffer)
+(defun jsynacek-save-buffer-or-write-file (arg)
+  ""
+  (interactive "P")
+  (if (null arg)
+      (call-interactively 'save-buffer)
+    (call-interactively 'write-file)))
+(global-set-key (kbd "C-s") 'jsynacek-save-buffer-or-write-file)
 (global-set-key (kbd "C-w") 'kill-buffer)
+(global-set-key (kbd "C-r") 'revert-buffer)
+
 
 (global-set-key (kbd "M-2") 'delete-window)
 (global-set-key (kbd "M-3") 'delete-other-windows)
 (global-set-key (kbd "M-s") 'other-window)
+(defun jsynacek-previous-window ()
+  (interactive)
+  (other-window -1))
+(global-set-key (kbd "M-S") 'jsynacek-previous-window)
+(defun jsynacek-make-frame-and-select ()
+  (interactive)
+  (select-frame (make-frame-command)))
+(global-set-key (kbd "C-n") 'jsynacek-make-frame-and-select)
 
 ;; info and help
-(global-set-key (kbd "C-/") 'info)
 (global-set-key (kbd "C-h 1") 'describe-function)
 (global-set-key (kbd "C-h 2") 'describe-variable)
 (global-set-key (kbd "C-h 3") 'describe-key)
@@ -368,8 +401,6 @@
 (progn
   (define-key minibuffer-local-map (kbd "M-i") 'previous-history-element)
   (define-key minibuffer-local-map (kbd "M-k") 'next-history-element)
-  (define-key minibuffer-local-map (kbd "M-j") 'previous-line)
-  (define-key minibuffer-local-map (kbd "M-l") 'next-line)
 
   (define-key prog-mode-map (kbd "M-J") 'backward-sexp)
   (define-key prog-mode-map (kbd "M-L") 'forward-sexp)
@@ -380,7 +411,10 @@
   (define-key isearch-mode-map (kbd "M-Y") 'isearch-repeat-backward)
 
   (define-key dired-mode-map (kbd "M-s") 'other-window)
-  (define-key dired-mode-map (kbd "C-o") 'find-file)
+  (define-key dired-mode-map (kbd "C-o") 'jsynacek-find-file-or-recentf)
+  (define-key dired-mode-map (kbd "M-z") 'dired-undo)
+  (define-key dired-mode-map (kbd "M-J") 'dired-prev-subdir)
+  (define-key dired-mode-map (kbd "M-L") 'dired-next-subdir)
 
   (define-key helm-map (kbd "M-i") 'helm-previous-line)
   (define-key helm-map (kbd "M-k") 'helm-next-line)
