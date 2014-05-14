@@ -7,6 +7,7 @@
  '(backup-directory-alist (quote (("." . "/home/jsynacek/emacsbackup"))))
  '(c-macro-prompt-flag t)
  '(column-number-mode t)
+ '(comment-style (quote multi-line))
  '(compilation-ask-about-save nil)
  '(custom-enabled-themes (quote (solarized-dark)))
  '(custom-safe-themes
@@ -52,7 +53,7 @@
    (quote
     (("gnu" . "http://elpa.gnu.org/packages/")
      ("melpa" . "http://melpa.milkbox.net/packages/"))))
- '(recentf-exclude (quote ("/tmp/")) t)
+ '(recentf-exclude (quote ("/tmp/")))
  '(recentf-save-file "/home/jsynacek/.emacs.d/.recentf")
  '(save-place-file "~/.emacs.d/places")
  '(scroll-preserve-screen-position 1)
