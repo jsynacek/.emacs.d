@@ -24,10 +24,10 @@
 
 ;; host specific preconfig
 (if (string= (car (split-string (system-name) "\\."))
-             "jsynacek-ntb")
+             "jsynacek-ntb-home")
     ;; home config
     (progn
-      (setq jsynacek/font "Inconsolata")
+      (setq jsynacek/font "Inconsolata-14")
       (setq user-mail-address "jsynacek@gmail.com"))
     ;; work config
   (progn
@@ -390,7 +390,7 @@ universal argument, run `helm-recentf' if bound, otherwise
   (interactive)
   (if (= (point) (+ (line-beginning-position) (current-indentation)))
       (beginning-of-line)
-    (back-to-indentation))))
+    (back-to-indentation)))
 (bind-key* "M-h" 'jsynacek-beginning-of-line)
 (bind-key* "M-H" 'end-of-line)
 
