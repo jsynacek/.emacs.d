@@ -2,6 +2,8 @@
 
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 (setq custom-file (expand-file-name "emacs-custom.el" user-emacs-directory))
+(require 'package)
+(package-initialize)
 (load custom-file)
 
 ;; basic settings
@@ -59,11 +61,9 @@
 
 ;;; packages
 
-(require 'package)
-(package-initialize)
 (require 'use-package)
 
-(let ((pkg-list '(buffer-move
+(let ((pkg-list '(ace-window
                   diminish
                   helm
                   magit
@@ -378,7 +378,20 @@ universal argument, run `helm-recentf' if bound, otherwise
 (bind-key "M-u" 'backward-word)
 (bind-key "M-o" 'forward-word)
 
-(bind-key* "M-h" 'beginning-of-line)
+(defun jsynacek-open-line ()
+  ""
+  (interactive)
+  (end-of-line)
+  (newline-and-indent))
+(bind-key [(shift return)] 'jsynacek-open-line)
+
+(defun jsynacek-beginning-of-line ()
+  ""
+  (interactive)
+  (if (= (point) (+ (line-beginning-position) (current-indentation)))
+      (beginning-of-line)
+    (back-to-indentation))))
+(bind-key* "M-h" 'jsynacek-beginning-of-line)
 (bind-key* "M-H" 'end-of-line)
 
 (bind-key "M-K" 'scroll-up-command)
@@ -400,16 +413,16 @@ universal argument, run `helm-recentf' if bound, otherwise
     (let ((column (current-column)))
       (kill-whole-line)
       (move-to-column column))))
-(bind-key "M-x" 'jsynacek-kill-line-or-region)
+(bind-key* "M-x" 'jsynacek-kill-line-or-region)
 (defun jsynacek-copy-line-or-region ()
   "Copy region if it is active. Otherwise copy current line."
   (interactive)
   (if (region-active-p)
       (kill-ring-save (region-beginning) (region-end))
     (kill-ring-save (line-beginning-position) (line-beginning-position 2))))
-(bind-key "M-c" 'jsynacek-copy-line-or-region)
-(bind-key "M-v" 'yank)
-(bind-key "M-V" 'yank-pop)
+(bind-key* "M-c" 'jsynacek-copy-line-or-region)
+(bind-key* "M-v" 'yank)
+(bind-key* "M-V" 'yank-pop)
 
 (defun jsynacek-kill-line-backward ()
   "Kill the line backward."
@@ -453,14 +466,9 @@ universal argument, run `helm-recentf' if bound, otherwise
 (bind-key "C-w" 'kill-buffer)
 (bind-key "C-r" 'revert-buffer)
 
-
 (bind-key "M-2" 'delete-window)
 (bind-key "M-3" 'delete-other-windows)
-(bind-key* "M-s" 'other-window)
-(defun jsynacek-previous-window ()
-  (interactive)
-  (other-window -1))
-(bind-key* "M-S" 'jsynacek-previous-window)
+(bind-key* "M-s" 'ace-window)
 (defun jsynacek-make-frame-and-select ()
   (interactive)
   (select-frame (make-frame-command)))
@@ -534,7 +542,6 @@ universal argument, run `helm-recentf' if bound, otherwise
 ;;; unbindings
 
 (unbind-key "C-z")
-(unbind-key "C-a")
 (unbind-key "C-e")
 (unbind-key "C-v")
 (unbind-key "C-y")
