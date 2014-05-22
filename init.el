@@ -303,7 +303,8 @@
 
 ;; highlight trailing whitespace with ugly pink
 (defun jsynacek-highlight-trailing-whitespace ()
-  (highlight-regexp "\\s-+$" 'hi-pink))
+;  (highlight-regexp "\\s-+$" 'hi-pink))
+  (setq-local show-trailing-whitespace t))
 (add-hook 'find-file-hook 'jsynacek-highlight-trailing-whitespace)
 
 ;; isearch filenames in dired
