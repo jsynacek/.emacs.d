@@ -63,7 +63,8 @@
 
 (require 'use-package)
 
-(let ((pkg-list '(ace-window
+(let ((pkg-list '(ace-jump-mode
+                  ace-window
                   diminish
                   helm
                   magit
@@ -336,7 +337,7 @@
   (end-of-buffer)
   (dired-next-line -1))
 (define-key dired-mode-map [remap end-of-buffer] 'dired-jump-to-bottom)
-
+(global-set-key [remap other-window] 'ace-window)
 
 ;;; requires
 
@@ -348,9 +349,14 @@
 (require 'setup-erc)
 
 ;;; keybindings
+;; TODO use C-, as leader instead of <menu>?
+(bind-key "M-/" 'hippie-expand) ;TODO
+(bind-key "C-." 'ace-jump-mode)
+(bind-key "<f12>" 'recompile)
+(bind-key "C-M-<backspace>" 'backward-kill-sexp)
 
-(bind-key "M-a" 'helm-M-x)
-(bind-key "C-f" 'helm-occur)
+;; (bind-key "M-a" 'helm-M-x)
+;; (bind-key "C-f" 'helm-occur)
 (defun jsynacek-find-file-or-recentf (arg)
   "Call `find-file' if run with nil argument. If called with a
 universal argument, run `helm-recentf' if bound, otherwise
@@ -363,21 +369,23 @@ universal argument, run `helm-recentf' if bound, otherwise
     (if (fboundp 'helm-recentf)
         (helm-recentf)
       (ido-recentf-open))))
-(bind-key* "C-o" 'jsynacek-find-file-or-recentf)
-(bind-key "C-d" 'dired)
-(bind-key "M-z" 'undo-tree-undo)
-(bind-key "M-Z" 'undo-tree-redo)
-(bind-key "M-SPC" 'set-mark-command)
-(bind-key "M-t" 'completion-at-point)
+(global-set-key [remap find-file] 'jsynacek-find-file-or-recentf)
+
+;; (bind-key* "C-o" 'jsynacek-find-file-or-recentf)
+;; (bind-key "C-d" 'dired)
+;; (bind-key "M-z" 'undo-tree-undo)
+;; (bind-key "M-Z" 'undo-tree-redo)
+;; (bind-key "M-SPC" 'set-mark-command)
+;; (bind-key "M-t" 'completion-at-point)
 
 ;; basic movement
-(bind-key "M-i" 'previous-line)
-(bind-key "M-k" 'next-line)
-(bind-key "M-j" 'backward-char)
-(bind-key "M-l" 'forward-char)
+;; (bind-key "M-i" 'previous-line)
+;; (bind-key "M-k" 'next-line)
+;; (bind-key "M-j" 'backward-char)
+;; (bind-key "M-l" 'forward-char)
 
-(bind-key "M-u" 'backward-word)
-(bind-key "M-o" 'forward-word)
+;; (bind-key "M-u" 'backward-word)
+;; (bind-key "M-o" 'forward-word)
 
 (defun jsynacek-open-line ()
   ""
@@ -392,20 +400,22 @@ universal argument, run `helm-recentf' if bound, otherwise
   (if (= (point) (+ (line-beginning-position) (current-indentation)))
       (beginning-of-line)
     (back-to-indentation)))
-(bind-key* "M-h" 'jsynacek-beginning-of-line)
-(bind-key* "M-H" 'end-of-line)
+(global-set-key [remap move-beginning-of-line] 'jsynacek-beginning-of-line) ;TODO this makes M-m (back-to-indentation) free to use
 
-(bind-key "M-K" 'scroll-up-command)
-(bind-key "M-I" 'scroll-down-command)
+;; (bind-key* "M-h" 'jsynacek-beginning-of-line)
+;; (bind-key* "M-H" 'end-of-line)
 
-;; killing and yanking
-(bind-key "M-d" 'backward-delete-char-untabify)
-(bind-key "M-f" 'delete-forward-char)
+;; (bind-key "M-K" 'scroll-up-command)
+;; (bind-key "M-I" 'scroll-down-command)
 
-(bind-key "M-e" 'backward-kill-word)
-(bind-key "M-r" 'kill-word)
-(bind-key "M-E" 'backward-kill-sexp)
-(bind-key "M-R" 'kill-sexp)
+;; ;; killing and yanking
+;; (bind-key "M-d" 'backward-delete-char-untabify)
+;; (bind-key "M-f" 'delete-forward-char)
+
+;; (bind-key "M-e" 'backward-kill-word)
+;; (bind-key "M-r" 'kill-word)
+;; (bind-key "M-E" 'backward-kill-sexp)
+;; (bind-key "M-R" 'kill-sexp)
 (defun jsynacek-kill-line-or-region ()
   "Kill region if it is active. Otherwise kill current line."
   (interactive)
@@ -414,40 +424,43 @@ universal argument, run `helm-recentf' if bound, otherwise
     (let ((column (current-column)))
       (kill-whole-line)
       (move-to-column column))))
-(bind-key* "M-x" 'jsynacek-kill-line-or-region)
+(global-set-key [remap kill-region] 'jsynacek-kill-line-or-region)
+
+;; (bind-key* "M-x" 'jsynacek-kill-line-or-region)
 (defun jsynacek-copy-line-or-region ()
   "Copy region if it is active. Otherwise copy current line."
   (interactive)
   (if (region-active-p)
       (kill-ring-save (region-beginning) (region-end))
     (kill-ring-save (line-beginning-position) (line-beginning-position 2))))
-(bind-key* "M-c" 'jsynacek-copy-line-or-region)
-(bind-key* "M-v" 'yank)
-(bind-key* "M-V" 'yank-pop)
+(global-set-key [remap kill-ring-save] 'jsynacek-copy-line-or-region)
+;; (bind-key* "M-c" 'jsynacek-copy-line-or-region)
+;; (bind-key* "M-v" 'yank)
+;; (bind-key* "M-V" 'yank-pop)
 
 (defun jsynacek-kill-line-backward ()
   "Kill the line backward."
   (interactive)
   (kill-line 0))
-(bind-key "M-g" 'kill-line)
-(bind-key "M-G" 'jsynacek-kill-line-backward)
+;; (bind-key "M-g" 'kill-line)
+;; (bind-key "M-G" 'jsynacek-kill-line-backward)
 
 ;; selection
 (defun jsynacek-mark-line ()
   (interactive)
   (end-of-line)
   (set-mark (line-beginning-position)))
-(bind-key "C-a" 'mark-whole-buffer)
+;; (bind-key "C-a" 'mark-whole-buffer)
 (bind-key "M-6" 'mark-defun)
 (bind-key "M-7" 'jsynacek-mark-line)
 (bind-key "M-8" 'er/expand-region)
 (bind-key "M-9" 'er/contract-region)
 
 ;; search and replace
-(bind-key "M-y" 'isearch-forward)
-(bind-key "M-Y" 'isearch-backward)
-(bind-key "M-5" 'query-replace)
-(bind-key "M-%" 'query-replace-regexp)
+;; (bind-key "M-y" 'isearch-forward)
+;; (bind-key "M-Y" 'isearch-backward)
+;; (bind-key "M-5" 'query-replace)
+;; (bind-key "M-%" 'query-replace-regexp)
 
 ;; buffers, windows and frames
 (defun jsynacek-switch-to-buffer (arg)
@@ -456,24 +469,24 @@ universal argument, run `helm-recentf' if bound, otherwise
   (if (null arg)
       (call-interactively 'switch-to-buffer)
     (call-interactively 'switch-to-buffer-other-window)))
-(bind-key "C-b" 'jsynacek-switch-to-buffer)
+;; (bind-key "C-b" 'jsynacek-switch-to-buffer)
 (defun jsynacek-save-buffer-or-write-file (arg)
   ""
   (interactive "P")
   (if (null arg)
       (call-interactively 'save-buffer)
     (call-interactively 'write-file)))
-(bind-key "C-s" 'jsynacek-save-buffer-or-write-file)
-(bind-key "C-w" 'kill-buffer)
-(bind-key "C-r" 'revert-buffer)
+;; (bind-key "C-s" 'jsynacek-save-buffer-or-write-file)
+;; (bind-key "C-w" 'kill-buffer)
+;; (bind-key "C-r" 'revert-buffer)
 
 (bind-key "M-2" 'delete-window)
 (bind-key "M-3" 'delete-other-windows)
-(bind-key* "M-s" 'ace-window)
+;; (bind-key* "M-s" 'ace-window)
 (defun jsynacek-make-frame-and-select ()
   (interactive)
   (select-frame (make-frame-command)))
-(bind-key "C-n" 'jsynacek-make-frame-and-select)
+;; (bind-key "C-n" 'jsynacek-make-frame-and-select)
 
 ;; info and help
 (bind-key "C-h 1" 'describe-function)
@@ -495,25 +508,25 @@ universal argument, run `helm-recentf' if bound, otherwise
 (progn
   ;; (define-key eshell-command-map (kbd "M-G") 'eshell-kill-input)
 
-  (define-key minibuffer-local-map (kbd "M-i") 'previous-history-element)
-  (define-key minibuffer-local-map (kbd "M-k") 'next-history-element)
+  ;; (define-key minibuffer-local-map (kbd "M-i") 'previous-history-element)
+  ;; (define-key minibuffer-local-map (kbd "M-k") 'next-history-element)
 
-  (define-key prog-mode-map (kbd "M-J") 'backward-sexp)
-  (define-key prog-mode-map (kbd "M-L") 'forward-sexp)
-  (define-key prog-mode-map (kbd "M-[") 'backward-up-list)
-  (define-key prog-mode-map (kbd "M-]") 'down-list)
+  ;; (define-key prog-mode-map (kbd "M-J") 'backward-sexp)
+  ;; (define-key prog-mode-map (kbd "M-L") 'forward-sexp)
+  ;; (define-key prog-mode-map (kbd "M-[") 'backward-up-list)
+  ;; (define-key prog-mode-map (kbd "M-]") 'down-list)
 
-  (define-key isearch-mode-map (kbd "M-y") 'isearch-repeat-forward)
-  (define-key isearch-mode-map (kbd "M-Y") 'isearch-repeat-backward)
+  ;; (define-key isearch-mode-map (kbd "M-y") 'isearch-repeat-forward)
+  ;; (define-key isearch-mode-map (kbd "M-Y") 'isearch-repeat-backward)
 
-  (define-key dired-mode-map (kbd "M-z") 'dired-undo)
-  (define-key dired-mode-map (kbd "M-J") 'dired-prev-subdir)
-  (define-key dired-mode-map (kbd "M-L") 'dired-next-subdir)
+  ;; (define-key dired-mode-map (kbd "M-z") 'dired-undo)
+  ;; (define-key dired-mode-map (kbd "M-J") 'dired-prev-subdir)
+  ;; (define-key dired-mode-map (kbd "M-L") 'dired-next-subdir)
 
-  (define-key helm-map (kbd "M-i") 'helm-previous-line)
-  (define-key helm-map (kbd "M-k") 'helm-next-line)
-  (define-key helm-map (kbd "M-I") 'helm-previous-page)
-  (define-key helm-map (kbd "M-K") 'helm-next-page)
+  ;; (define-key helm-map (kbd "M-i") 'helm-previous-line)
+  ;; (define-key helm-map (kbd "M-k") 'helm-next-line)
+  ;; (define-key helm-map (kbd "M-I") 'helm-previous-page)
+  ;; (define-key helm-map (kbd "M-K") 'helm-next-page)
 
   (define-key erc-mode-map (kbd "RET") nil)
   (define-key erc-mode-map (kbd "C-<return>") 'erc-send-current-line)
@@ -542,15 +555,15 @@ universal argument, run `helm-recentf' if bound, otherwise
 
 ;;; unbindings
 
-(unbind-key "C-z")
-(unbind-key "C-e")
-(unbind-key "C-v")
-(unbind-key "C-y")
-(unbind-key "C-x b")
-(unbind-key "C-x k")
-(unbind-key "C-x C-f")
+;; (unbind-key "C-z")
+;; (unbind-key "C-e")
+;; (unbind-key "C-v")
+;; (unbind-key "C-y")
+;; (unbind-key "C-x b")
+;; (unbind-key "C-x k")
+;; (unbind-key "C-x C-f")
 
-(unbind-key "<left>")
-(unbind-key "<right>")
-(unbind-key "<up>")
-(unbind-key "<down>")
+;; (unbind-key "<left>")
+;; (unbind-key "<right>")
+;; (unbind-key "<up>")
+;; (unbind-key "<down>")
