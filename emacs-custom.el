@@ -7,7 +7,7 @@
  '(backup-directory-alist (quote (("." . "/home/jsynacek/emacsbackup"))))
  '(c-macro-prompt-flag t)
  '(column-number-mode t)
- '(comment-style (quote multi-line))
+ '(comment-style (quote extra-line))
  '(compilation-ask-about-save nil)
  '(custom-enabled-themes (quote (solarized-dark)))
  '(custom-safe-themes
@@ -44,6 +44,7 @@
  '(indent-tabs-mode nil)
  '(kill-ring-max 1024)
  '(magit-diff-refine-hunk t)
+ '(magit-use-overlays nil)
  '(mark-even-if-inactive t)
  '(max-lisp-eval-depth 6000)
  '(max-specpdl-size 13000)

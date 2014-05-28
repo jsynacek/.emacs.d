@@ -350,7 +350,7 @@
 
 ;;; keybindings
 ;; TODO use C-, as leader instead of <menu>?
-(bind-key "M-/" 'hippie-expand) ;TODO
+(bind-key "M-/" 'hippie-expand) ;TODO customize a bit
 (bind-key "C-." 'ace-jump-mode)
 (bind-key "<f12>" 'recompile)
 (bind-key "C-M-<backspace>" 'backward-kill-sexp)
