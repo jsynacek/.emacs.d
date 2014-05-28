@@ -389,7 +389,6 @@
 ;; (require 'setup-bbdb)
 ;; (require 'setup-dired)
 ;; (require 'setup-ediff)
-(require 'setup-erc)
 
 ;;; keybindings
 ;; TODO use C-, as leader instead of <menu>?
