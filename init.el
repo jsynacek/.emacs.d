@@ -131,6 +131,47 @@
     (require 'dired-x)
     (setq dired-dwim-target t)))
 
+(use-package erc
+  :config
+  (progn
+    (require 'erc-autoaway)
+    (add-to-list 'erc-modules 'notifications 'autoaway)
+
+    (setq erc-nick "jsynacek")
+    (setq erc-away-nickname "jsynacek|away")
+    (setq erc-log-insert-log-on-open nil)
+    (setq erc-log-channels t)
+    (setq erc-log-channels-directory "~/.irclogs/")
+    (setq erc-save-buffer-on-part t)
+    (setq erc-hide-timestamps nil)
+    (setq erc-fill-column 100)
+                                        ; add channels to the mode-line (in the corresponding face) only when
+                                        ; the current nickname or any of your keywords are mentioned.
+                                        ; http://www.emacswiki.org/emacs/ErcChannelTracking
+    (setq erc-current-nick-highlight-type 'nick)
+                                        ; (setq erc-keywords '("\\berc[-a-z]*\\b" "\\bemms[-a-z]*\\b"))
+
+    (setq erc-track-exclude-types '("JOIN" "PART" "QUIT" "NICK" "MODE"))
+    (setq erc-track-faces-priority-list
+          '(erc-current-nick-face erc-keyword-face))
+    (setq erc-track-priority-faces-only 'all)
+
+    ;; autoaway stuff
+                                        ; automatically remove away status when sending something to the server
+    (setq erc-auto-discard-away t)
+    (setq erc-autoaway-idle-seconds 1200)
+    (setq erc-auto-set-away t)
+
+    (add-hook 'erc-insert-post-hook 'erc-save-buffer-in-logs)
+
+    ;; FIXME this causes emacs to throw error when attempting to close it by
+    ;;       clicking on the window's close button
+    ;; (defadvice save-buffers-kill-emacs (before save-logs (arg) activate)
+    ;;   (save-some-buffers t (lambda ()
+    ;;                          (when (and (eq major-mode 'erc-mode)
+    ;;                                     (not (null buffer-file-name)))))))
+    ))
+
 (use-package helm
   :config
   (progn
@@ -150,7 +191,7 @@
 
     ;; prevent accidentaly printing buffers
     (bind-key "P" nil ibuffer-mode-map)
-))
+    ))
 
 (use-package magit
   :config
@@ -272,7 +313,9 @@
 (use-package undo-tree
   :init (undo-tree-mode))
 
-(use-package uniquify)
+(use-package uniquify
+  :init
+  (setq uniquify-buffer-name-style 'post-forward))
 
 ;; Show the current function name in the header line
 ;; (which-function-mode 1)
@@ -321,8 +364,8 @@
         (linum-mode 1)
         (goto-line (read-number "Goto line: ")))
     (linum-mode -1)))
-(global-set-key [remap goto-line] 'goto-line-with-feedback)
-(global-set-key [remap list-buffers] 'ibuffer)
+(bind-key [remap goto-line] 'goto-line-with-feedback)
+(bind-key [remap list-buffers] 'ibuffer)
 (defun dired-back-to-start-of-files ()
   (interactive)
   (backward-char (- (current-column) 2)))
@@ -337,7 +380,7 @@
   (end-of-buffer)
   (dired-next-line -1))
 (define-key dired-mode-map [remap end-of-buffer] 'dired-jump-to-bottom)
-(global-set-key [remap other-window] 'ace-window)
+(bind-key [remap other-window] 'ace-window)
 
 ;;; requires
 
@@ -354,6 +397,7 @@
 (bind-key "C-." 'ace-jump-mode)
 (bind-key "<f12>" 'recompile)
 (bind-key "C-M-<backspace>" 'backward-kill-sexp)
+(bind-key "M-x" 'helm-M-x)
 
 ;; (bind-key "M-a" 'helm-M-x)
 ;; (bind-key "C-f" 'helm-occur)
@@ -369,7 +413,7 @@ universal argument, run `helm-recentf' if bound, otherwise
     (if (fboundp 'helm-recentf)
         (helm-recentf)
       (ido-recentf-open))))
-(global-set-key [remap find-file] 'jsynacek-find-file-or-recentf)
+(bind-key [remap find-file] 'jsynacek-find-file-or-recentf)
 
 ;; (bind-key* "C-o" 'jsynacek-find-file-or-recentf)
 ;; (bind-key "C-d" 'dired)
@@ -400,7 +444,7 @@ universal argument, run `helm-recentf' if bound, otherwise
   (if (= (point) (+ (line-beginning-position) (current-indentation)))
       (beginning-of-line)
     (back-to-indentation)))
-(global-set-key [remap move-beginning-of-line] 'jsynacek-beginning-of-line) ;TODO this makes M-m (back-to-indentation) free to use
+(bind-key [remap move-beginning-of-line] 'jsynacek-beginning-of-line) ;TODO this makes M-m (back-to-indentation) free to use
 
 ;; (bind-key* "M-h" 'jsynacek-beginning-of-line)
 ;; (bind-key* "M-H" 'end-of-line)
@@ -424,7 +468,7 @@ universal argument, run `helm-recentf' if bound, otherwise
     (let ((column (current-column)))
       (kill-whole-line)
       (move-to-column column))))
-(global-set-key [remap kill-region] 'jsynacek-kill-line-or-region)
+(bind-key [remap kill-region] 'jsynacek-kill-line-or-region)
 
 ;; (bind-key* "M-x" 'jsynacek-kill-line-or-region)
 (defun jsynacek-copy-line-or-region ()
@@ -433,7 +477,7 @@ universal argument, run `helm-recentf' if bound, otherwise
   (if (region-active-p)
       (kill-ring-save (region-beginning) (region-end))
     (kill-ring-save (line-beginning-position) (line-beginning-position 2))))
-(global-set-key [remap kill-ring-save] 'jsynacek-copy-line-or-region)
+(bind-key [remap kill-ring-save] 'jsynacek-copy-line-or-region)
 ;; (bind-key* "M-c" 'jsynacek-copy-line-or-region)
 ;; (bind-key* "M-v" 'yank)
 ;; (bind-key* "M-V" 'yank-pop)
@@ -536,6 +580,8 @@ universal argument, run `helm-recentf' if bound, otherwise
 
 (define-prefix-command 'jsynacek-menu-keymap)
 (bind-key "<menu>" 'jsynacek-menu-keymap)
+;; M-x
+(bind-key "<menu> M-x" 'execute-extended-command)
 ;; apps
 (bind-key "<menu> a c" 'calc)
 (bind-key "<menu> a e" 'eshell)

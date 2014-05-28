@@ -63,7 +63,6 @@
  '(split-height-threshold nil)
  '(split-width-threshold 160)
  '(tramp-default-method "ssh")
- '(uniquify-buffer-name-style (quote forward) nil (uniquify))
  '(whitespace-style
    (quote
     (face tabs spaces trailing lines newline empty space-after-tab space-mark tab-mark newline-mark)))
