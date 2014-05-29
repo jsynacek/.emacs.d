@@ -129,7 +129,9 @@
   :config
   (progn
     (require 'dired-x)
-    (setq dired-dwim-target t)))
+    (setq dired-dwim-target t)
+    ;; isearch filenames in dired
+    (add-hook 'dired-mode-hook 'dired-isearch-filenames-mode)))
 
 (use-package erc
   :config
@@ -351,9 +353,6 @@
   (setq-local show-trailing-whitespace t))
 (add-hook 'find-file-hook 'jsynacek-highlight-trailing-whitespace)
 
-;; isearch filenames in dired
-(add-hook 'dired-mode-hook 'dired-isearch-filenames-mode)
-
 ;;; remappings
 
 (defun goto-line-with-feedback ()
@@ -392,6 +391,7 @@
 
 ;;; keybindings
 ;; TODO use C-, as leader instead of <menu>?
+(bind-key "M-`" 'other-frame)
 (bind-key "M-/" 'hippie-expand) ;TODO customize a bit
 (bind-key "C-." 'ace-jump-mode)
 (bind-key "<f12>" 'recompile)
