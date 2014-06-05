@@ -228,6 +228,19 @@
     (bind-key "q" 'magit-mode-quit-window magit-status-mode-map)
     (bind-key "W" 'magit-toggle-whitespace magit-status-mode-map)))
 
+(use-package notmuch
+  :config
+  (progn
+    (defun jsynacek-notmuch-search-unread ()
+      (interactive)
+      (notmuch-hello-search "tag:unread"))
+    (defun jsynacek-notmuch-mark-read ()
+      (interactive)
+      (notmuch-search-tag '("-unread")))
+    (bind-key "<XF86Mail>" 'notmuch)
+    (bind-key "u" 'jsynacek-notmuch-search-unread notmuch-hello-mode-map)
+    (bind-key "k" 'jsynacek-notmuch-mark-read notmuch-search-mode-map)))
+
 (use-package org
   :config
   (progn
