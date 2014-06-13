@@ -17,7 +17,7 @@
 (setq ring-bell-function 'ignore)
 (prefer-coding-system 'utf-8)
 
-(setq jsynacek/org-default-notes-file "~/work/gtd/inbox.org.gpg")
+(setq jsynacek/org-default-notes-file "~/Dropbox/inbox.org.gpg")
 
 (setq user-full-name "Jan Synáček")
 (setq user-nick "jsynacek")
@@ -36,7 +36,10 @@
     (setq jsynacek/org-tags-column -80)))
 
 (set-default-font jsynacek/font)
-(setq default-frame-alist `((font . ,jsynacek/font)))
+(setq default-frame-alist `((width . 110)
+                            (fullscreen . fullheight)
+                            (vertical-scroll-bars . nil)
+                            (font . ,jsynacek/font)))
 
 (setq browse-url-generic-program "firefox")
 
@@ -234,11 +237,20 @@
     (defun jsynacek-notmuch-search-unread ()
       (interactive)
       (notmuch-hello-search "tag:unread"))
+    (defun jsynacek-notmuch-search-inbox ()
+      (interactive)
+      (notmuch-hello-search "tag:inbox"))
     (defun jsynacek-notmuch-mark-read ()
       (interactive)
       (notmuch-search-tag '("-unread")))
+
+    (setq notmuch-fcc-dirs "Sent"
+          notmuch-search-oldest-first nil
+          notmuch-show-logo nil)
+
     (bind-key "<XF86Mail>" 'notmuch)
     (bind-key "u" 'jsynacek-notmuch-search-unread notmuch-hello-mode-map)
+    (bind-key "i" 'jsynacek-notmuch-search-inbox notmuch-hello-mode-map)
     (bind-key "k" 'jsynacek-notmuch-mark-read notmuch-search-mode-map)))
 
 (use-package org

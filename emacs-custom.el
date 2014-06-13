@@ -61,6 +61,7 @@
  '(recentf-save-file "/home/jsynacek/.emacs.d/.recentf")
  '(save-place-file "~/.emacs.d/places")
  '(scroll-preserve-screen-position 1)
+ '(send-mail-function (quote smtpmail-send-it))
  '(show-paren-mode t)
  '(smex-save-file "~/.emacs.d/.smex-items")
  '(split-height-threshold nil)
