@@ -198,6 +198,21 @@
     (bind-key "P" nil ibuffer-mode-map)
     ))
 
+(use-package ido
+  :config
+  (progn
+    (use-package ido-vertical-mode
+      :config
+      (ido-vertical-mode t))
+
+    (setq ido-enable-flex-matching t
+          ido-use-filename-at-point 'guess
+          ido-use-url-at-point t
+          ido-case-fold t
+          ido-everywhere t)
+
+    (ido-mode t)))
+
 (use-package magit
   :config
   (progn
