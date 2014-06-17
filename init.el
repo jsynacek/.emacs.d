@@ -27,8 +27,9 @@
              "jsynacek-ntb-home")
     ;; home config
     (progn
-      (setq jsynacek/font "Terminus")
-      (setq user-mail-address "jsynacek@gmail.com"))
+      (setq jsynacek/font "Terminus 14")
+      (setq user-mail-address "jsynacek@gmail.com")
+      (setq jsynacek/org-tags-column -80))
     ;; work config
   (progn
     (setq jsynacek/font "Terminus")
