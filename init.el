@@ -75,6 +75,7 @@
                   projectile
                   pydoc-info
                   smex
+                  smartparens
                   solarized-theme
                   undo-tree
                   visual-regexp
@@ -349,6 +350,13 @@
         (message "Aborting")))
 
     (recentf-mode t)))
+
+(use-package smartparens
+  :config
+  (progn
+    (require 'smartparens-config)
+    (show-smartparens-global-mode t)
+    (smartparens-global-strict-mode t)))
 
 (use-package smex
   :init (smex-initialize))
