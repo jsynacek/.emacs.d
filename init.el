@@ -17,7 +17,7 @@
 (setq ring-bell-function 'ignore)
 (prefer-coding-system 'utf-8)
 
-(setq jsynacek/org-default-notes-file "~/Dropbox/inbox.org.gpg")
+(setq jsynacek/org-default-notes-file "~/Dropbox/orgfiles/inbox.org.gpg")
 
 (setq user-full-name "Jan Synáček")
 (setq user-nick "jsynacek")
@@ -70,6 +70,7 @@
 (let ((pkg-list '(ace-jump-mode
                   ace-window
                   diminish
+                  discover-my-major
                   helm
                   magit
                   projectile
@@ -129,6 +130,8 @@
     (eval-after-load 'hi-lock
       '(diminish 'hi-lock-mode))
     ))
+
+(use-package discover-my-major)
 
 (use-package dired
   :config
@@ -297,8 +300,9 @@
     (setq org-default-notes-file (if (boundp 'jsynacek/org-default-notes-file)
                                      jsynacek/org-default-notes-file))
 
-    (setq org-agenda-files `(,org-default-notes-file)
-          org-capture-templates '(("t" "New TODO item into Inbox" entry (file+headline org-agenda-files "Inbox") "** TODO %?\nadded:%U"))
+    (setq org-agenda-files `(,org-default-notes-file "~/Dropbox/orgfiles/birthday.org")
+          org-capture-templates '(("t" "New TODO item into Inbox" entry
+                                   (file+headline org-agenda-files "Inbox") "** TODO %?\n   added:%U"))
           org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "|" "DONE")
                               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))
           org-todo-keyword-faces '(("STARTED" . (:foreground "#af8700" :weight bold))))
@@ -356,7 +360,9 @@
   (progn
     (require 'smartparens-config)
     (show-smartparens-global-mode t)
-    (smartparens-global-strict-mode t)))
+    ;; (smartparens-global-strict-mode t)
+    (add-hook 'emacs-lisp-mode-hook 'turn-on-smartparens-strict-mode)
+    (add-hook 'c-mode-hook 'turn-on-smartparens-strict-mode)))
 
 (use-package smex
   :init (smex-initialize))
@@ -586,6 +592,12 @@ universal argument, run `helm-recentf' if bound, otherwise
 (bind-key "C-h 3" 'describe-key)
 (bind-key "C-h 5" 'man)
 (bind-key "C-h `" 'elisp-index-search)
+(bind-key "C-m" 'discover-my-major 'help-command)
+(bind-key "C-f" 'find-function 'help-command)
+(bind-key "C-k" 'find-function-on-key 'help-command)
+(bind-key "C-v" 'find-variable 'help-command)
+(bind-key "C-l" 'find-library 'help-command)
+
 (defun describe-thing-at-point ()
   (interactive)
   (let ((function (function-called-at-point))
