@@ -278,6 +278,8 @@
   (progn
     ;; enable syntax highlighting in html exports
     (require 'htmlize)
+    (add-to-list 'load-path "/home/jsynacek/work/git/upstream/org-mode/contrib/lisp/")
+    (require 'org-notmuch)
 
     (setq org-completion-use-ido t
           org-log-done 'time
@@ -312,8 +314,10 @@
                                    "** %?\n   added:%U" :empty-lines-after 1))
           org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "|" "DONE")
                               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))
-          org-todo-keyword-faces '(("STARTED" . (:foreground "#af8700" :weight bold))))
+          org-todo-keyword-faces '(("STARTED" . (:foreground "#af8700" :weight bold)))
+          org-agenda-start-on-weekday nil)
 
+    
     ;; confirm plantuml source evaluation by default
     (defun jsynacek/org-confirm-plantuml-link-function (lang body)
       (not (string= lang "plantuml")))
