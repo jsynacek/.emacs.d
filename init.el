@@ -304,8 +304,12 @@
                                      jsynacek/org-default-notes-file))
 
     (setq org-agenda-files `(,org-default-notes-file "~/Dropbox/orgfiles/birthday.org")
-          org-capture-templates '(("t" "New TODO item into Inbox" entry
-                                   (file+headline org-agenda-files "Inbox") "** TODO %?\n   added:%U"))
+          org-capture-templates '(("t" "New item into Inbox" entry
+                                   (file+headline org-agenda-files "Inbox")
+                                   "** %?\n   added:%U" :empty-lines-after 1)
+                                  ("n" "Note" entry
+                                   (file+headline "~/Dropbox/orgfiles/notes.org" "Work notes")
+                                   "** %?\n   added:%U" :empty-lines-after 1))
           org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "|" "DONE")
                               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))
           org-todo-keyword-faces '(("STARTED" . (:foreground "#af8700" :weight bold))))
