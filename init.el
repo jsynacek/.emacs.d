@@ -287,6 +287,9 @@
           org-catch-invisible-edits 'error
           )
 
+    (setq org-refile-targets '(("~/Dropbox/orgfiles/inbox.org.gpg" :level . 1)
+                               ("~/Dropbox/orgfiles/someday.org" :level . 2)))
+
     (let ((font (if (boundp 'jsynacek/font)
                     (make-symbol jsynacek/font)
                   'fixed-pitch)))
