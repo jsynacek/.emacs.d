@@ -285,8 +285,11 @@
           org-log-done 'time
           ;; start my week on monday
           calendar-week-start-day 1
+          ;; org-clock-idle-time 2
+          org-clock-persist t
           ;; catch invisible edits
           org-catch-invisible-edits 'error
+          org-clock-into-drawer t
           )
 
     (setq org-refile-targets '(("~/Dropbox/orgfiles/inbox.org.gpg" :level . 1)
@@ -305,7 +308,9 @@
     (setq org-default-notes-file (if (boundp 'jsynacek/org-default-notes-file)
                                      jsynacek/org-default-notes-file))
 
-    (setq org-agenda-files `(,org-default-notes-file "~/Dropbox/orgfiles/birthday.org")
+    (setq org-agenda-files `(,org-default-notes-file
+                             "~/Dropbox/orgfiles/birthday.org"
+                             "~/Dropbox/orgfiles/bugzilla.org")
           org-capture-templates '(("t" "New item into Inbox" entry
                                    (file+headline org-agenda-files "Inbox")
                                    "** %?\n   added:%U" :empty-lines-after 1)
@@ -315,9 +320,8 @@
           org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "|" "DONE")
                               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))
           org-todo-keyword-faces '(("STARTED" . (:foreground "#af8700" :weight bold)))
-          org-agenda-start-on-weekday nil)
+          )
 
-    
     ;; confirm plantuml source evaluation by default
     (defun jsynacek/org-confirm-plantuml-link-function (lang body)
       (not (string= lang "plantuml")))
