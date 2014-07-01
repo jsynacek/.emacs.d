@@ -316,7 +316,10 @@
                                    "** %?\n   added:%U" :empty-lines-after 1)
                                   ("n" "Note" entry
                                    (file+headline "~/Dropbox/orgfiles/notes.org" "Work notes")
-                                   "** %?\n   added:%U" :empty-lines-after 1))
+                                   "** %?\n   added:%U" :empty-lines-after 1)
+                                  ("i" "Interruption" entry
+                                   (file+headline org-agenda-files "Inbox")
+                                   "** interruption: %?\n" :clock-in :clock-resume))
           org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "|" "DONE")
                               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))
           org-todo-keyword-faces '(("STARTED" . (:foreground "#af8700" :weight bold)))
