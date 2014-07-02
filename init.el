@@ -281,6 +281,11 @@
     (add-to-list 'load-path "/home/jsynacek/work/git/upstream/org-mode/contrib/lisp/")
     (require 'org-notmuch)
 
+    (add-to-list 'auto-mode-alist '("\\.\\(org\\|txt\\)$" . org-mode))
+
+    ;; don't leave empty lines in collapsed view
+    (setq org-cycle-separator-lines 0)
+
     (setq org-completion-use-ido t
           org-log-done 'time
           ;; start my week on monday
@@ -291,6 +296,8 @@
           org-catch-invisible-edits 'error
           org-clock-into-drawer t
           )
+
+    (org-clock-persistence-insinuate)
 
     (setq org-refile-targets '(("~/Dropbox/orgfiles/inbox.org.gpg" :level . 1)
                                ("~/Dropbox/orgfiles/someday.org" :level . 2)))
@@ -319,7 +326,7 @@
                                    "** %?\n   added:%U" :empty-lines-after 1)
                                   ("i" "Interruption" entry
                                    (file+headline org-agenda-files "Inbox")
-                                   "** interruption: %?\n" :clock-in :clock-resume))
+                                   "** interruption: %?\n   %U" :clock-in :clock-resume))
           org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "|" "DONE")
                               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))
           org-todo-keyword-faces '(("STARTED" . (:foreground "#af8700" :weight bold)))

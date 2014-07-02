@@ -7,7 +7,6 @@
  '(backup-directory-alist (quote (("." . "/home/jsynacek/emacsbackup"))))
  '(c-macro-prompt-flag t)
  '(column-number-mode t)
- '(comment-style (quote extra-line))
  '(compilation-ask-about-save nil)
  '(custom-enabled-themes (quote (solarized-dark)))
  '(custom-safe-themes
