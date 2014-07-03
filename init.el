@@ -294,6 +294,7 @@
           org-clock-persist t
           ;; catch invisible edits
           org-catch-invisible-edits 'error
+          org-clock-out-switch-to-state "DONE"
           org-clock-into-drawer t
           )
 
@@ -356,10 +357,16 @@
 
     (setq org-plantuml-jar-path "/usr/share/java/plantuml.jar")
 
+    ;; global keybindings
     (bind-key "C-c a" 'org-agenda)
     (bind-key "C-c c" 'org-capture)
     (bind-key "C-c l" 'org-store-link)
-    (bind-key "C-c b" 'org-iswitchb)))
+    (bind-key "C-c b" 'org-iswitchb)
+    (define-prefix-command 'jsynacek-f9-keymap)
+    (bind-key "<f9>" 'jsynacek-f9-keymap)
+    (bind-key "<f9> C-i" 'org-clock-in)
+    (bind-key "<f9> C-j" 'org-clock-jump-to-current-clock)
+))
 
 (use-package projectile
   :config
