@@ -45,7 +45,7 @@
  '(ido-work-directory-list-ignore-regexps (quote (".*")))
  '(indent-tabs-mode nil)
  '(kill-ring-max 1024)
- '(magit-diff-refine-hunk t)
+ '(magit-diff-refine-hunk nil)
  '(magit-diff-use-overlays nil)
  '(magit-use-overlays nil)
  '(mark-even-if-inactive t)

@@ -342,7 +342,8 @@
      'org-babel-load-languages
      '((emacs-lisp . t)
        (plantuml . t)
-       (python . t)))
+       (python . t)
+       (sh . t)))
 
     ;; do not export the validation link
     (setq org-html-validation-link nil)
