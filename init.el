@@ -292,9 +292,9 @@
           calendar-week-start-day 1
           ;; org-clock-idle-time 2
           org-clock-persist t
+          org-clock-history-length 10
           ;; catch invisible edits
           org-catch-invisible-edits 'error
-          org-clock-out-switch-to-state "DONE"
           org-clock-into-drawer t
           )
 
