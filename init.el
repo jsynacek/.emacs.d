@@ -28,7 +28,7 @@
     ;; home config
     (progn
       (setq jsynacek/font "Terminus 14")
-      (setq user-mail-address "jsynacek@gmail.com")
+      (setq user-mail-address "jan.synacek@gmail.com")
       (setq jsynacek/org-tags-column -80))
     ;; work config
   (progn
@@ -365,8 +365,8 @@
     (define-prefix-command 'jsynacek-f9-keymap)
     (bind-key "<f9>" 'jsynacek-f9-keymap)
     (bind-key "<f9> C-i" 'org-clock-in)
-    (bind-key "<f9> C-j" 'org-clock-jump-to-current-clock)
-))
+    (bind-key "<f9> C-o" 'org-clock-out)
+    (bind-key "<f9> C-j" 'org-clock-jump-to-current-clock)))
 
 (use-package projectile
   :config
