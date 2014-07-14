@@ -255,6 +255,14 @@
     (bind-key "q" 'magit-mode-quit-window magit-status-mode-map)
     (bind-key "W" 'magit-toggle-whitespace magit-status-mode-map)))
 
+(use-package multiple-cursors
+  :config
+  (progn
+    (bind-key "C-S-c C-S-c" 'mc/edit-lines)
+    (bind-key "C->" 'mc/mark-next-like-this)
+    (bind-key "C-<" 'mc/mark-previous-like-this)
+    (bind-key "C-c C-<" 'mc/mark-all-like-this)))
+
 (use-package notmuch
   :config
   (progn
