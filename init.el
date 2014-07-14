@@ -188,8 +188,7 @@
 
 (use-package helm
   :config
-  (progn
-    ))
+  (progn))
 
 (use-package ibuffer
   :config
@@ -435,7 +434,8 @@
 (defun jsynacek-c-mode-hook-defaults ()
   (setq c-default-style "linux"
         indent-tabs-mode t
-        subword-mode t))
+        subword-mode t)
+  (auto-complete-mode))
 (add-hook 'c-mode-hook 'jsynacek-c-mode-hook-defaults)
 
 (defun jsynacek-sh-mode-hook-defaults ()
@@ -499,6 +499,7 @@
 (bind-key "<f12>" 'recompile)
 (bind-key "C-M-<backspace>" 'backward-kill-sexp)
 (bind-key "M-x" 'helm-M-x)
+(bind-key "M-X" 'smex-major-mode-commands)
 
 ;; (bind-key "M-a" 'helm-M-x)
 ;; (bind-key "C-f" 'helm-occur)
@@ -704,7 +705,6 @@ universal argument, run `helm-recentf' if bound, otherwise
 (bind-key "<menu> t l" 'transpose-lines)
 (bind-key "<menu> t s" 'transpose-sexps)
 (bind-key "<menu> t w" 'transpose-words)
-;; org mode?
 
 ;;; unbindings
 
