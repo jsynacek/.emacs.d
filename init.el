@@ -290,6 +290,8 @@
     ;; don't leave empty lines in collapsed view
     (setq org-cycle-separator-lines 0)
 
+    (setq org-use-speed-commands t)
+
     (setq org-completion-use-ido t
           org-log-done 'time
           ;; start my week on monday
