@@ -42,7 +42,8 @@
                             (vertical-scroll-bars . nil)
                             (font . ,jsynacek/font)))
 
-(setq browse-url-generic-program "firefox")
+(setq browse-url-browser-function 'browse-url-generic)
+(setq browse-url-generic-program "google-chrome")
 
 ;; modes
 (scroll-bar-mode -1)
