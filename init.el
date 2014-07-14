@@ -67,7 +67,8 @@
 
 (require 'use-package)
 
-(let ((pkg-list '(ace-jump-mode
+(let ((pkg-list '(ace-link
+                  ace-jump-mode
                   ace-window
                   diminish
                   discover-my-major
@@ -100,6 +101,9 @@
   :init
   (unless (server-running-p)
     (server-start)))
+
+(require 'ace-link)
+(ace-link-setup-default)
 
 (use-package calendar
   :config
