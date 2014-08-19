@@ -52,7 +52,6 @@
  '(max-lisp-eval-depth 6000)
  '(max-specpdl-size 13000)
  '(mouse-yank-at-point t)
- '(next-screen-context-lines 4)
  '(package-archives
    (quote
     (("gnu" . "http://elpa.gnu.org/packages/")
@@ -60,7 +59,6 @@
  '(recentf-exclude (quote ("/tmp/")))
  '(recentf-save-file "/home/jsynacek/.emacs.d/.recentf")
  '(save-place-file "~/.emacs.d/places")
- '(scroll-preserve-screen-position 1)
  '(send-mail-function (quote smtpmail-send-it))
  '(show-paren-mode t)
  '(smex-save-file "~/.emacs.d/.smex-items")
