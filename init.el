@@ -39,7 +39,7 @@
 
 (set-default-font jsynacek/font)
 (setq default-frame-alist `((width . 110)
-                            (fullscreen . fullheight)
+                            (fullscreen . maximized)
                             (vertical-scroll-bars . nil)
                             (font . ,jsynacek/font)))
 
@@ -73,7 +73,6 @@
                   ace-jump-mode
                   ace-window
                   diminish
-                  discover-my-major
                   helm
                   magit
                   projectile
@@ -396,15 +395,6 @@
 
     (recentf-mode t)))
 
-(use-package smartparens
-  :config
-  (progn
-    (require 'smartparens-config)
-    (show-smartparens-global-mode t)
-    ;; (smartparens-global-strict-mode t)
-    (add-hook 'emacs-lisp-mode-hook 'turn-on-smartparens-strict-mode)
-    (add-hook 'c-mode-hook 'turn-on-smartparens-strict-mode)))
-
 (use-package smex
   :init (smex-initialize))
 
@@ -451,16 +441,6 @@
 (add-hook 'find-file-hook 'jsynacek-highlight-trailing-whitespace)
 
 ;;; remappings
-
-(defun goto-line-with-feedback ()
-  "Show line numbers temporarily, while prompting for the line number input"
-  (interactive)
-  (unwind-protect
-      (progn
-        (linum-mode 1)
-        (goto-line (read-number "Goto line: ")))
-    (linum-mode -1)))
-(bind-key [remap goto-line] 'goto-line-with-feedback)
 (bind-key [remap list-buffers] 'ibuffer)
 (defun dired-back-to-start-of-files ()
   (interactive)
