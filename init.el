@@ -157,6 +157,8 @@
     (setq erc-log-channels-directory "~/.irclogs/")
     (setq erc-save-buffer-on-part t)
     (setq erc-hide-timestamps nil)
+    (setq erc-fill-function #'erc-fill-static)
+    (setq erc-fill-static-center 15)
     (setq erc-fill-column 100)
                                         ; add channels to the mode-line (in the corresponding face) only when
                                         ; the current nickname or any of your keywords are mentioned.
@@ -395,6 +397,15 @@
 
     (recentf-mode t)))
 
+;; (use-package smartparens
+;;   :config
+;;   (progn
+;;     (require 'smartparens-config)
+;;     (show-smartparens-global-mode t)
+;;     ;; (smartparens-global-strict-mode t)
+;;     (add-hook 'emacs-lisp-mode-hook 'turn-on-smartparens-strict-mode)
+;;     (add-hook 'c-mode-hook 'turn-on-smartparens-strict-mode)))
+
 (use-package smex
   :init (smex-initialize))
 
@@ -570,3 +581,19 @@
 (bind-key "<menu> t s" 'transpose-sexps)
 (bind-key "<menu> t w" 'transpose-words)
 
+(use-package elfeed
+  :config
+  (progn
+    (setq elfeed-feeds
+          '(("http://nullprogram.com/feed/" blog emacs)
+            "http://www.drdobbs.com/rss/all"
+            ("http://irreal.org/blog/?feed=rss2" irreal)
+            "http://lxer.com/module/newswire/headlines.rss"
+            ("http://www.masteringemacs.org/feed/" emacs)
+            "http://feeds.feedburner.com/Phoronix"
+            ("http://planet.emacsen.org/atom.xml" emacs)
+            "http://www.root.cz/rss/zpravicky/"
+            "http://wz2100.net/news/feeds/atom/"
+            ("http://whattheemacsd.com/atom.xml" emacs)
+            "http://www.winehq.org/news/rss/"
+            "http://www.zive.cz/system/RSS.xml"))))
