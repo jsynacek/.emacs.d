@@ -18,7 +18,7 @@
 (setq ring-bell-function 'ignore)
 (prefer-coding-system 'utf-8)
 
-(setq jsynacek/org-default-notes-file "~/Dropbox/orgfiles/inbox.org.gpg")
+(setq jsynacek/org-default-notes-file "~/SpiderOak Hive/orgfiles/inbox.org.gpg")
 
 (setq user-full-name "Jan Synáček")
 (setq user-nick "jsynacek")
@@ -314,8 +314,8 @@
 
     (org-clock-persistence-insinuate)
 
-    (setq org-refile-targets '(("~/Dropbox/orgfiles/inbox.org.gpg" :level . 1)
-                               ("~/Dropbox/orgfiles/someday.org" :level . 2)))
+    (setq org-refile-targets '(("~/SpiderOak Hive/orgfiles/inbox.org.gpg" :level . 1)
+                               ("~/SpiderOak Hive/orgfiles/someday.org" :level . 2)))
 
     (let ((font (if (boundp 'jsynacek/font)
                     (make-symbol jsynacek/font)
@@ -331,13 +331,13 @@
                                      jsynacek/org-default-notes-file))
 
     (setq org-agenda-files `(,org-default-notes-file
-                             "~/Dropbox/orgfiles/birthday.org"
-                             "~/Dropbox/orgfiles/bugzilla.org")
+                             "~/SpiderOak Hive/orgfiles/birthday.org"
+                             "~/SpiderOak Hive/orgfiles/bugzilla.org")
           org-capture-templates '(("t" "New item into Inbox" entry
                                    (file+headline org-agenda-files "Inbox")
                                    "** %?\n   added:%U" :empty-lines-after 1)
                                   ("n" "Note" entry
-                                   (file+headline "~/Dropbox/orgfiles/notes.org" "Work notes")
+                                   (file+headline "~/SpiderOak Hive/orgfiles/notes.org" "Work notes")
                                    "** %?\n   added:%U" :empty-lines-after 1)
                                   ("i" "Interruption" entry
                                    (file+headline org-agenda-files "Inbox")
