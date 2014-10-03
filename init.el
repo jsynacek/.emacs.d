@@ -1,6 +1,7 @@
 ;;; general
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 (add-to-list 'load-path "/usr/share/emacs/site-lisp") ; notmuch.el
+(add-to-list 'load-path "~/work/git/upstream/org-mode/contrib/lisp/") ; org-notmuch.el
 
 (setq backup-directory-alist '(("." . "~/.emacs.d/backup")))
 (setq smex-save-file "~/.emacs.d/.smex-items")
@@ -21,6 +22,8 @@
 
 (setq ring-bell-function 'ignore)
 (prefer-coding-system 'utf-8)
+
+(setq Man-width 80)
 
 (defun jsynacek-highlight-trailing-whitespace ()
   (setq-local show-trailing-whitespace t))
@@ -68,6 +71,11 @@
 	     '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
 
+(require 'bbdb)
+(bbdb-initialize 'message)
+(bbdb-mua-auto-update-init 'message)
+(setq bbdb-update-records-p 'create)
+
 (require 'erc)
 (setq erc-nick-uniquifier "_")
 (setq erc-current-nick-highlight-type 'nick)
@@ -113,6 +121,12 @@
 (setq notmuch-search-oldest-first nil)
 (setq notmuch-fcc-dirs "Sent")
 (setq notmuch-show-logo nil)
+
+(require 'org)
+(setq org-agenda-files '("~/SpiderOak Hive/orgfiles/inbox.org.gpg"
+			 "~/SpiderOak Hive/orgfiles/birthday.org"))
+
+(require 'org-notmuch)
 
 (defun jsynacek-notmuch-mark-read-and-archive ()
   (interactive)
