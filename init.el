@@ -3,7 +3,6 @@
 (add-to-list 'load-path "/usr/share/emacs/site-lisp") ; notmuch.el
 
 (setq backup-directory-alist '(("." . "~/.emacs.d/backup")))
-(setq save-place-file "~/.emacs.d/places")
 (setq smex-save-file "~/.emacs.d/.smex-items")
 
 (setq tramp-default-method "ssh")
