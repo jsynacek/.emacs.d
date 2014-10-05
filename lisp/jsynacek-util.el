@@ -155,8 +155,6 @@
     (global-set-key "ml" 'jsynacek-mark-line)
     (global-set-key "mi" 'mark-defun)
 
-    (global-set-key "h" nil) ; TODO for now
-    (global-set-key "H" nil) ; TODO for now
     (global-set-key "x" 'jsynacek-kill-line-or-region)
     (global-set-key "c" 'jsynacek-copy-line-or-region)
     (global-set-key "v" 'yank)
