@@ -90,8 +90,8 @@
        "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p"
        "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "A" "B" "C" "D" "E" "F"
        "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V"
-       "W" "X" "Y" "Z" "1" "2" "3" "4" "5" "6" "7" "8" "9" "0" "\\"
-       "/"))
+       "W" "X" "Y" "Z" "1" "2" "3" "4" "5" "6" "7" "8" "9" "0" "/" ","
+       "\\"))
 
 (defun jsynacek-reset-keybindings (unbind)
   (dolist (c jsynacek--chars)
@@ -162,6 +162,7 @@
     (global-set-key "v" 'yank)
     ;; (global-set-key "" 'f)
 
+    (global-set-key "," 'ace-jump-mode)
     (global-set-key "/" 'isearch-forward)
     (global-set-key "\\" 'just-one-space)
     (global-set-key "z" 'undo)
