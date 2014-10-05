@@ -1,6 +1,7 @@
 ;;; general
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 (add-to-list 'load-path "/usr/share/emacs/site-lisp") ; notmuch.el
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e") ; mu4e.el
 (add-to-list 'load-path "~/work/git/upstream/org-mode/contrib/lisp/") ; org-notmuch.el
 
 (setq backup-directory-alist '(("." . "~/.emacs.d/backup")))
@@ -29,33 +30,12 @@
   (setq-local show-trailing-whitespace t))
 (add-hook 'find-file-hook #'jsynacek-highlight-trailing-whitespace)
 
-(global-unset-key (kbd "C-z"))
+(global-unset-key (kbd "C-h")) ; learn to use f1
+(global-unset-key (kbd "C-z")) ; no suspend
 
 ;;; editing
 (setq global-auto-revert-mode t)
 (setq mouse-yank-at-point t)
-
-(global-set-key [remap list-buffers] 'ibuffer)
-
-(define-prefix-command 'jsynacek-menu-keymap)
-(global-set-key (kbd "<menu>") 'jsynacek-menu-keymap)
-;; M-x
-(global-set-key (kbd "<menu> M-x") 'execute-extended-command)
-;; apps
-(global-set-key (kbd "<menu> a c") 'calc)
-(global-set-key (kbd "<menu> a e") 'eshell)
-(global-set-key (kbd "<menu> a g") 'magit-status)
-;; evaluations
-(global-set-key (kbd "<menu> e b") 'eval-buffer)
-(global-set-key (kbd "<menu> e d") 'eval-defun)
-(global-set-key (kbd "<menu> e e") 'eval-last-sexp)
-(global-set-key (kbd "<menu> e r") 'eval-region)
-;; marking
-(global-set-key (kbd "<menu> m d") 'mark-defun)
-;; transpositions
-(global-set-key (kbd "<menu> t l") 'transpose-lines)
-(global-set-key (kbd "<menu> t s") 'transpose-sexps)
-(global-set-key (kbd "<menu> t w") 'transpose-words)
 
 (defalias 'dtw 'delete-trailing-whitespace)
 (defalias 'plp 'package-list-packages)
@@ -71,10 +51,11 @@
 	     '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
 
-(require 'bbdb)
-(bbdb-initialize 'message)
-(bbdb-mua-auto-update-init 'message)
-(setq bbdb-update-records-p 'create)
+(require 'ace-jump-mode)
+;; (require 'bbdb)
+;; (bbdb-initialize 'message)
+;; (bbdb-mua-auto-update-init 'message)
+;; (setq bbdb-update-records-p 'create)
 
 (require 'erc)
 (setq erc-nick-uniquifier "_")
@@ -89,45 +70,24 @@
 (define-key erc-mode-map (kbd "RET") nil)
 (define-key erc-mode-map (kbd "C-<return>") 'erc-send-current-line)
 
+(require 'expand-region)
+(setq expand-region-contract-fast-key "M")
+
 (require 'dired)
 (setq dired-listing-switches "-al --group-directories-first")
+(require 'dired-x)
 
 (require 'helm)
-(helm-mode t)
-(add-to-list 'helm-completing-read-handlers-alist '(find-file . nil))
-(add-to-list 'helm-completing-read-handlers-alist '(find-file-other-window . nil))
-(add-to-list 'helm-completing-read-handlers-alist '(find-alternate-file . nil))
-(add-to-list 'helm-completing-read-handlers-alist '(kill-buffer . nil))
-(global-set-key (kbd "M-x") 'helm-M-x)		  ; was execute-extended-command
-(global-set-key (kbd "M-y") 'helm-show-kill-ring) ; was yank-pop
-(global-set-key (kbd "C-h a") 'helm-apropos)	  ; was apropos-command
-(global-set-key (kbd "C-h l") 'helm-locate-library) ; was view-lossage
-(global-set-key (kbd "C-x b") 'helm-mini)
-(global-set-key (kbd "M-s a") 'ag)
-(global-set-key (kbd "M-s b") 'helm-bookmarks)
-(global-set-key (kbd "M-s g") 'helm-do-grep)
-(global-set-key (kbd "M-s i") 'helm-semantic-or-imenu)
-(global-set-key (kbd "M-s m") 'helm-man-woman)
-(global-set-key (kbd "M-s o") 'helm-occur) ; was occur
-(global-set-key (kbd "M-s s") 'helm-swoop)
+;; (helm-mode t)
+;; (add-to-list 'helm-completing-read-handlers-alist '(find-file . nil))
+;; (add-to-list 'helm-completing-read-handlers-alist '(find-file-other-window . nil))
+;; (add-to-list 'helm-completing-read-handlers-alist '(find-alternate-file . nil))
+;; (add-to-list 'helm-completing-read-handlers-alist '(kill-buffer . nil))
 
 (require 'helm-git-grep)
 (global-set-key (kbd "M-s M-g") 'helm-git-grep)
 
-;; (require 'ido)
-;; (ido-mode t)
-
 (require 'notmuch)
-(setq notmuch-search-oldest-first nil)
-(setq notmuch-fcc-dirs "Sent")
-(setq notmuch-show-logo nil)
-
-(require 'org)
-(setq org-agenda-files '("~/SpiderOak Hive/orgfiles/inbox.org.gpg"
-			 "~/SpiderOak Hive/orgfiles/birthday.org"))
-
-(require 'org-notmuch)
-
 (defun jsynacek-notmuch-mark-read-and-archive ()
   (interactive)
   (notmuch-search-tag '("-unread"))
@@ -143,8 +103,11 @@
   (notmuch-hello-search "tag:inbox"))
 (define-key notmuch-hello-mode-map "i" 'jsynacek-notmuch-search-inbox)
 
-;; (require 'smex)
-;; (smex-initialize)
+(require 'org)
+(setq org-agenda-files '("~/SpiderOak Hive/orgfiles/inbox.org.gpg"
+			 "~/SpiderOak Hive/orgfiles/birthday.org"))
+
+(require 'org-notmuch)
 
 (require 'solarized)
 (setq solarized-use-variable-pitch nil)
@@ -155,4 +118,63 @@
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward)
 
+(load "jsynacek-util.el")
 (require 'private)
+
+(global-set-key [remap list-buffers] 'ibuffer)
+(global-set-key (kbd "C-o") 'find-file)	; was open-line
+(global-set-key (kbd "C-w") 'jsynacek-kill-current-buffer) ; was kill-region
+(global-set-key (kbd "<f2>") 'save-buffer)
+(global-set-key (kbd "M-6") 'jsynacek-mark-block)
+(global-set-key (kbd "M-7") 'jsynacek-mark-line)
+(global-set-key (kbd "M-j") 'ace-jump-mode) ; was indent-new-comment-line
+
+(define-prefix-command 'jsynacek-insert-keymap)
+(global-set-key (kbd "M-p") 'jsynacek-insert-keymap)
+(global-set-key (kbd "M-p j") 'jsynacek-insert-brackets)
+(global-set-key (kbd "M-p k") 'jsynacek-insert-curly)
+(global-set-key (kbd "M-p u") 'jsynacek-insert-double-quotes)
+(global-set-key (kbd "M-p i") 'jsynacek-insert-single-quotes)
+
+(define-prefix-command 'jsynacek-menu-keymap)
+(global-set-key (kbd "<menu>") 'jsynacek-menu-keymap)
+;; M-x
+(global-set-key (kbd "<menu> M-x") 'execute-extended-command)
+;; apps
+(global-set-key (kbd "<menu> a c") 'calc)
+(global-set-key (kbd "<menu> a e") 'eshell)
+(global-set-key (kbd "<menu> a g") 'magit-status)
+;; evaluations
+
+(global-set-key (kbd "<menu> e b") 'eval-buffer)
+(global-set-key (kbd "<menu> e d") 'eval-defun)
+(global-set-key (kbd "<menu> e e") 'eval-last-sexp)
+(global-set-key (kbd "<menu> e r") 'eval-region)
+;; marking
+(global-set-key (kbd "<menu> m d") 'mark-defun)
+
+(define-prefix-command 'jsynacek-transpose-keymap)
+(global-set-key (kbd "M-t") 'jsynacek-transpose-keymap)
+(global-set-key (kbd "M-t t") 'transpose-chars)
+(global-set-key (kbd "M-t M-t") 'transpose-chars)
+(global-set-key (kbd "M-t s") 'transpose-sexps)
+(global-set-key (kbd "M-t w") 'transpose-words)
+(global-set-key (kbd "M-t l") 'transpose-lines)
+
+;; searching
+(global-set-key (kbd "M-i") 'isearch-forward) ; was tab-to-tab-stop
+(define-key isearch-mode-map (kbd "M-i") 'isearch-repeat-forward)
+(global-set-key (kbd "M-u") 'isearch-backward) ; was upcase-word
+(define-key isearch-mode-map (kbd "M-u") 'isearch-repeat-backward)
+(global-set-key (kbd "M-s a") 'ag)
+(global-set-key (kbd "M-s b") 'helm-bookmarks)
+(global-set-key (kbd "M-s g") 'rgrep)
+(global-set-key (kbd "M-s i") 'helm-semantic-or-imenu)
+(global-set-key (kbd "M-s m") 'helm-man-woman)
+(global-set-key (kbd "M-s s") 'helm-swoop)
+
+(global-set-key (kbd "M-a") 'helm-M-x)		  ; was backward-sentence
+(global-set-key (kbd "M-y") 'helm-show-kill-ring) ; was yank-pop
+(global-set-key (kbd "C-h a") 'helm-apropos)	  ; was apropos-command
+(global-set-key (kbd "C-h l") 'helm-locate-library) ; was view-lossage
+(global-set-key (kbd "C-x b") 'helm-mini)
