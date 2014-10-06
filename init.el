@@ -143,9 +143,23 @@
 (global-set-key (kbd "C-d") 'dired)     ; was delete-char
 (global-set-key (kbd "C-w") 'jsynacek-kill-current-buffer) ; was kill-region
 (global-set-key (kbd "<f2>") 'save-buffer)
+(global-set-key (kbd "M-2") 'delete-window)
+(global-set-key (kbd "M-3") 'delete-other-windows)
 (global-set-key (kbd "M-6") 'jsynacek-mark-block)
 (global-set-key (kbd "M-7") 'jsynacek-mark-line)
 (global-set-key (kbd "M-,") 'ace-jump-mode) ; was indent-new-comment-line
+(global-set-key (kbd "M-a") 'helm-M-x)            ; was backward-sentence
+(global-set-key (kbd "M-y") 'helm-show-kill-ring) ; was yank-pop
+(global-set-key (kbd "<f1> a") 'helm-apropos)      ; was apropos-command
+(global-set-key (kbd "<f1> l") 'helm-locate-library) ; was view-lossage
+(global-set-key (kbd "C-x b") 'helm-mini)
+
+(define-prefix-command 'jsynacek-window-keymap)
+(global-set-key (kbd "M-w") 'jsynacek-window-keymap)
+(global-set-key (kbd "M-w i") 'windmove-up)
+(global-set-key (kbd "M-w j") 'windmove-left)
+(global-set-key (kbd "M-w k") 'windmove-down)
+(global-set-key (kbd "M-w l") 'windmove-right)
 
 (define-prefix-command 'jsynacek-insert-keymap)
 (global-set-key (kbd "M-p") 'jsynacek-insert-keymap)
@@ -157,7 +171,7 @@
 (define-prefix-command 'jsynacek-menu-keymap)
 (global-set-key (kbd "<menu>") 'jsynacek-menu-keymap)
 ;; M-x
-(global-set-key (kbd "<menu> M-x") 'execute-extended-command)
+(global-set-key (kbd "<menu> M-x") 'helm-M-x)
 ;; apps
 (global-set-key (kbd "<menu> a c") 'calc)
 (global-set-key (kbd "<menu> a e") 'eshell)
@@ -191,8 +205,3 @@
 (global-set-key (kbd "M-s m") 'helm-man-woman)
 (global-set-key (kbd "M-s s") 'helm-swoop)
 
-(global-set-key (kbd "M-a") 'helm-M-x)            ; was backward-sentence
-(global-set-key (kbd "M-y") 'helm-show-kill-ring) ; was yank-pop
-(global-set-key (kbd "C-h a") 'helm-apropos)      ; was apropos-command
-(global-set-key (kbd "C-h l") 'helm-locate-library) ; was view-lossage
-(global-set-key (kbd "C-x b") 'helm-mini)

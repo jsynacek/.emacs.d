@@ -51,6 +51,15 @@
     (save-excursion
       (kill-ring-save (line-beginning-position) (1+ (line-end-position))))))
 
+(defun jsynacek-yank ()
+  (interactive)
+  (let ((text (current-kill 0)))
+    (when (and (stringp text)
+	       (string-equal (substring text -1) "\n"))
+      (end-of-line)
+      (newline))
+    (insert-for-yank (current-kill 0)))) ; TODO fixme vim-like
+
 ;;; marking
 (defun jsynacek-mark-line ()
   "Select the current line"
@@ -148,10 +157,11 @@
     (global-set-key "mm" 'er/expand-region)
     (global-set-key "ml" 'jsynacek-mark-line)
     (global-set-key "mi" 'mark-defun)
+    (global-set-key "mk" 'jsynacek-mark-block)
 
     (global-set-key "x" 'jsynacek-kill-line-or-region)
     (global-set-key "c" 'jsynacek-copy-line-or-region)
-    (global-set-key "v" 'yank)
+    (global-set-key "v" 'jsynacek-yank)
     ;; (global-set-key "" 'f)
 
     (global-set-key "," 'ace-jump-mode)
@@ -160,8 +170,7 @@
     (global-set-key "z" 'undo-tree-undo)
     (global-set-key "Z" 'undo-tree-redo)
     (global-set-key " " 'jsynacek-switch-to-emacs-mode)
-    )
-  )
+    ))
 
 (defun jsynacek-switch-to-emacs-mode ()
   (interactive)
