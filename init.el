@@ -119,7 +119,7 @@
 
 (require 'org)
 (setq org-agenda-files '("~/SpiderOak Hive/orgfiles/inbox.org.gpg"
-			 "~/SpiderOak Hive/orgfiles/birthday.org"))
+                         "~/SpiderOak Hive/orgfiles/birthday.org"))
 
 (require 'org-notmuch)
 
@@ -138,8 +138,9 @@
 (require 'private)
 
 (global-set-key [remap list-buffers] 'ibuffer)
-(global-set-key (kbd "C-o") 'find-file)	; was open-line
-(global-set-key (kbd "C-b") 'helm-mini)	; was backward-char
+(global-set-key (kbd "C-o") 'find-file) ; was open-line
+(global-set-key (kbd "C-b") 'helm-mini) ; was backward-char
+(global-set-key (kbd "C-d") 'dired)     ; was delete-char
 (global-set-key (kbd "C-w") 'jsynacek-kill-current-buffer) ; was kill-region
 (global-set-key (kbd "<f2>") 'save-buffer)
 (global-set-key (kbd "M-6") 'jsynacek-mark-block)
@@ -190,8 +191,8 @@
 (global-set-key (kbd "M-s m") 'helm-man-woman)
 (global-set-key (kbd "M-s s") 'helm-swoop)
 
-(global-set-key (kbd "M-a") 'helm-M-x)		  ; was backward-sentence
+(global-set-key (kbd "M-a") 'helm-M-x)            ; was backward-sentence
 (global-set-key (kbd "M-y") 'helm-show-kill-ring) ; was yank-pop
-(global-set-key (kbd "C-h a") 'helm-apropos)	  ; was apropos-command
+(global-set-key (kbd "C-h a") 'helm-apropos)      ; was apropos-command
 (global-set-key (kbd "C-h l") 'helm-locate-library) ; was view-lossage
 (global-set-key (kbd "C-x b") 'helm-mini)
