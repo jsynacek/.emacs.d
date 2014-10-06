@@ -45,6 +45,9 @@
   (ggtags-mode 1))
 (add-hook 'c-mode-hook #'jsynacek-ggtags-mode)
 
+(defadvice eval-region (after jsynacek-eval-region-advice-after activate)
+  (deactivate-mark))
+
 ;;; packages
 (require 'package)
 (add-to-list 'package-archives
@@ -56,6 +59,17 @@
 ;; (bbdb-initialize 'message)
 ;; (bbdb-mua-auto-update-init 'message)
 ;; (setq bbdb-update-records-p 'create)
+
+(require 'dired)
+(setq dired-listing-switches "-al --group-directories-first")
+(require 'dired-x)
+
+(require 'elfeed)
+(define-key elfeed-search-mode-map "i"
+  (lambda ()
+    (interactive)
+    (goto-char (point-min))
+    (next-line)))
 
 (require 'erc)
 (setq erc-nick-uniquifier "_")
@@ -73,10 +87,6 @@
 (require 'expand-region)
 (setq expand-region-contract-fast-key "M")
 
-(require 'dired)
-(setq dired-listing-switches "-al --group-directories-first")
-(require 'dired-x)
-
 (require 'helm)
 ;; (helm-mode t)
 ;; (add-to-list 'helm-completing-read-handlers-alist '(find-file . nil))
@@ -88,6 +98,10 @@
 (global-set-key (kbd "M-s M-g") 'helm-git-grep)
 
 (require 'notmuch)
+(setq notmuch-search-oldest-first nil)
+(setq notmuch-fcc-dirs "Sent")
+(setq notmuch-show-logo nil)
+
 (defun jsynacek-notmuch-mark-read-and-archive ()
   (interactive)
   (notmuch-search-tag '("-unread"))
@@ -115,6 +129,8 @@
       '("d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" default))
 (load-theme 'solarized-light)
 
+(require 'undo-tree)
+
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward)
 
@@ -123,11 +139,12 @@
 
 (global-set-key [remap list-buffers] 'ibuffer)
 (global-set-key (kbd "C-o") 'find-file)	; was open-line
+(global-set-key (kbd "C-b") 'helm-mini)	; was backward-char
 (global-set-key (kbd "C-w") 'jsynacek-kill-current-buffer) ; was kill-region
 (global-set-key (kbd "<f2>") 'save-buffer)
 (global-set-key (kbd "M-6") 'jsynacek-mark-block)
 (global-set-key (kbd "M-7") 'jsynacek-mark-line)
-(global-set-key (kbd "M-j") 'ace-jump-mode) ; was indent-new-comment-line
+(global-set-key (kbd "M-,") 'ace-jump-mode) ; was indent-new-comment-line
 
 (define-prefix-command 'jsynacek-insert-keymap)
 (global-set-key (kbd "M-p") 'jsynacek-insert-keymap)

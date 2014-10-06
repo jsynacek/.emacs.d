@@ -25,24 +25,24 @@
   (interactive)
   (end-of-line)
   (newline-and-indent)
-  (jsynacek-emacs-mode))
+  (jsynacek-switch-to-emacs-mode))
 
 (defun jsynacek-open-above ()
   (interactive)
   (beginning-of-line)
   (backward-char)
   (newline-and-indent)
-  (jsynacek-emacs-mode))
+  (jsynacek-switch-to-emacs-mode))
 
 (defun jsynacek-change-char ()
   (interactive)
   (delete-char 1)
-  (jsynacek-emacs-mode))
+  (jsynacek-switch-to-emacs-mode))
 
 (defun jsynacek-change ()
   (interactive)
   (jsynacek-kill-line-or-region)
-  (jsynacek-emacs-mode))
+  (jsynacek-switch-to-emacs-mode))
 
 (defun jsynacek-copy-line-or-region ()
   (interactive)
@@ -85,13 +85,16 @@
 
 
 
-(setq jsynacek--chars
+(defconst jsynacek--chars
       (list
        "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p"
        "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "A" "B" "C" "D" "E" "F"
        "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V"
        "W" "X" "Y" "Z" "1" "2" "3" "4" "5" "6" "7" "8" "9" "0" "/" ","
-       "\\"))
+       " " ":" "\\"))
+
+(defvar jsynacek-current-mode ()
+  'emacs)
 
 (defun jsynacek-reset-keybindings (unbind)
   (dolist (c jsynacek--chars)
@@ -100,15 +103,7 @@
 
 ;;; remaps
 (defun jsynacek-emacs-mode ()
-  (interactive)
-  (jsynacek-reset-keybindings nil)
-  (setq jsynacek-current-mode 'emacs)
-  (setq jsynacek-mode-line-mode-string "E "))
-
-(defvar jsynacek-current-mode ()
-  'emacs)
-
-(defvar jsynacek-mode-line-mode-string "E ")
+  (jsynacek-reset-keybindings nil))
 
 (define-prefix-command 'jsynacek-kill-keymap)
 (define-prefix-command 'jsynacek-replace-keymap)
@@ -117,7 +112,6 @@
 (define-prefix-command 'jsynacek-mark-keymap)
 
 (defun jsynacek-command-mode ()
-  (interactive)
   (progn
     (jsynacek-reset-keybindings t)
     (global-set-key "i" 'previous-line)
@@ -163,20 +157,35 @@
     (global-set-key "," 'ace-jump-mode)
     (global-set-key "/" 'isearch-forward)
     (global-set-key "\\" 'just-one-space)
-    (global-set-key "z" 'undo)
-    ;; (global-set-key "Z" 'redo)
+    (global-set-key "z" 'undo-tree-undo)
+    (global-set-key "Z" 'undo-tree-redo)
+    (global-set-key " " 'jsynacek-switch-to-emacs-mode)
     )
-  (setq jsynacek-current-mode 'command)
-  (setq jsynacek-mode-line-mode-string "C "))
+  )
+
+(defun jsynacek-switch-to-emacs-mode ()
+  (interactive)
+  (progn
+    (jsynacek-emacs-mode)
+    (setq jsynacek-current-mode 'emacs)
+    (modify-all-frames-parameters (list (cons 'cursor-color "#93a1a1"))) ; TODO use set-face-attribute
+    ))
+
+(defun jsynacek-switch-to-command-mode ()
+  (interactive)
+  (progn
+    (jsynacek-command-mode)
+    (setq jsynacek-current-mode 'command)
+    (modify-all-frames-parameters (list (cons 'cursor-color "#268bd2"))) ; TODO use set-face-attribute
+    ))
 
 (defun jsynacek-toggle-modes ()
   (interactive)
   (if (equal jsynacek-current-mode 'emacs)
-      (progn
-	(jsynacek-command-mode)
-	(message "Command mode"))
-    (progn
-      (jsynacek-emacs-mode)
-      (message "Emacs mode"))))
+      (jsynacek-switch-to-command-mode)
+    (jsynacek-switch-to-emacs-mode)))
 
-(global-set-key (kbd "<f12>") 'jsynacek-toggle-modes)
+(add-hook 'minibuffer-setup-hook #'jsynacek-switch-to-emacs-mode)
+(add-hook 'minibuffer-exit-hook #'jsynacek-switch-to-command-mode) ; TODO make this correctly restore the last state?
+
+(global-set-key (kbd "M-SPC") 'jsynacek-toggle-modes) ; was just-one-space
