@@ -68,8 +68,9 @@
 (define-key elfeed-search-mode-map "i"
   (lambda ()
     (interactive)
-    (goto-char (point-min))
-    (next-line)))
+    (goto-line 2)))
+(define-key elfeed-search-mode-map "k" 'elfeed-search-untag-all-unread)
+(define-key elfeed-search-mode-map "r" nil)
 
 (require 'erc)
 (setq erc-nick-uniquifier "_")
@@ -140,19 +141,27 @@
 (global-set-key [remap list-buffers] 'ibuffer)
 (global-set-key (kbd "C-o") 'find-file) ; was open-line
 (global-set-key (kbd "C-b") 'helm-mini) ; was backward-char
+(global-set-key (kbd "C-x b") 'helm-mini)
 (global-set-key (kbd "C-d") 'dired)     ; was delete-char
 (global-set-key (kbd "C-w") 'jsynacek-kill-current-buffer) ; was kill-region
 (global-set-key (kbd "<f2>") 'save-buffer)
 (global-set-key (kbd "M-2") 'delete-window)
+(global-set-key (kbd "M-x") 'helm-M-x)
 (global-set-key (kbd "M-3") 'delete-other-windows)
 (global-set-key (kbd "M-6") 'jsynacek-mark-block)
 (global-set-key (kbd "M-7") 'jsynacek-mark-line)
 (global-set-key (kbd "M-,") 'ace-jump-mode) ; was indent-new-comment-line
-(global-set-key (kbd "M-a") 'helm-M-x)            ; was backward-sentence
 (global-set-key (kbd "M-y") 'helm-show-kill-ring) ; was yank-pop
 (global-set-key (kbd "<f1> a") 'helm-apropos)      ; was apropos-command
 (global-set-key (kbd "<f1> l") 'helm-locate-library) ; was view-lossage
-(global-set-key (kbd "C-x b") 'helm-mini)
+
+(define-prefix-command 'jsynacek-apps-keymap)
+(global-set-key (kbd "M-a") 'jsynacek-apps-keymap) ; was backward-sentence
+(global-set-key (kbd "M-a M-a") 'magit-status)	   ; default app
+(global-set-key (kbd "M-a a") 'magit-status)	   ; default app
+(global-set-key (kbd "M-a d") 'dired)
+(global-set-key (kbd "M-a m") 'notmuch)		   ; email
+(global-set-key (kbd "M-a s") 'shell)		   ; shell
 
 (define-prefix-command 'jsynacek-window-keymap)
 (global-set-key (kbd "M-w") 'jsynacek-window-keymap)
@@ -197,8 +206,8 @@
 (global-set-key (kbd "M-i") 'isearch-forward) ; was tab-to-tab-stop
 (define-key isearch-mode-map (kbd "M-i") 'isearch-repeat-forward)
 (global-set-key (kbd "M-u") 'isearch-backward) ; was upcase-word
+
 (define-key isearch-mode-map (kbd "M-u") 'isearch-repeat-backward)
-(global-set-key (kbd "M-s a") 'ag)
 (global-set-key (kbd "M-s b") 'helm-bookmarks)
 (global-set-key (kbd "M-s g") 'rgrep)
 (global-set-key (kbd "M-s i") 'helm-semantic-or-imenu)

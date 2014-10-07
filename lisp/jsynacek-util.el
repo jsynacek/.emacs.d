@@ -21,6 +21,45 @@
   (interactive)
   (insert-pair nil ?' ?'))
 
+(defun jsynacek-open-before-char ()
+  (interactive)
+  (backward-char)
+  (jsynacek-switch-to-emacs-mode))
+
+(defun jsynacek-comment-line-or-region ()
+  (interactive)
+  (if (region-active-p)
+      (comment-dwim nil)
+    (progn
+      (jsynacek-mark-line)
+      (comment-dwim nil))))
+
+;;; opening
+(defun jsynacek-open-after-char ()
+  (interactive)
+  (forward-char)
+  (jsynacek-switch-to-emacs-mode))
+
+(defun jsynacek-open-before-word ()
+  (interactive)
+  (backward-word)
+  (jsynacek-switch-to-emacs-mode))
+
+(defun jsynacek-open-after-word ()
+  (interactive)
+  (forward-word)
+  (jsynacek-switch-to-emacs-mode))
+
+(defun jsynacek-open-beginning-of-line () ; TODO optional universal arg to make it jump back to indentation?
+  (interactive)
+  (beginning-of-line)
+  (jsynacek-switch-to-emacs-mode))
+
+(defun jsynacek-open-end-of-line ()
+  (interactive)
+  (end-of-line)
+  (jsynacek-switch-to-emacs-mode))
+
 (defun jsynacek-open-below ()
   (interactive)
   (end-of-line)
@@ -34,6 +73,7 @@
   (newline-and-indent)
   (jsynacek-switch-to-emacs-mode))
 
+
 (defun jsynacek-change-char ()
   (interactive)
   (delete-char 1)
@@ -43,6 +83,16 @@
   (interactive)
   (jsynacek-kill-line-or-region)
   (jsynacek-switch-to-emacs-mode))
+
+(defun jsynacek-replace-char (c)
+  (interactive "cReplace with:")
+  (delete-char 1)
+  (insert c)
+  (backward-char))
+
+(defun jsynacek-join-lines ()
+  (interactive)
+  (delete-indentation -1))
 
 (defun jsynacek-copy-line-or-region ()
   (interactive)
@@ -55,10 +105,15 @@
   (interactive)
   (let ((text (current-kill 0)))
     (when (and (stringp text)
-	       (string-equal (substring text -1) "\n"))
+               (string-equal (substring text -1) "\n"))
       (end-of-line)
       (newline))
     (insert-for-yank (current-kill 0)))) ; TODO fixme vim-like
+
+(defun jsynacek-exchange-point-and-mark ()
+  (interactive)
+  (if (region-active-p)
+      (exchange-point-and-mark)))
 
 ;;; marking
 (defun jsynacek-mark-line ()
@@ -82,6 +137,10 @@
     (set-mark p1)))
 
 ;;; killing
+(defun jsynacek-kill-line-backward ()
+  (interactive)
+  (kill-region (line-beginning-position) (point)))
+
 (defun jsynacek-kill-line-or-region (&optional arg)
   (interactive "p")
   (if (region-active-p)
@@ -99,16 +158,15 @@
        "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p"
        "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "A" "B" "C" "D" "E" "F"
        "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V"
-       "W" "X" "Y" "Z" "1" "2" "3" "4" "5" "6" "7" "8" "9" "0" "/" ","
-       " " ":" "\\"))
+       "W" "X" "Y" "Z" "1" "2" "3" "4" "5" "6" "7" "8" "9" "0" "." ","
+       "/" " " ":" ";" "{" "}" "[" "]" "\\"))
 
-(defvar jsynacek-current-mode ()
-  'emacs)
+(defvar jsynacek-current-mode () 'emacs)
 
 (defun jsynacek-reset-keybindings (unbind)
   (dolist (c jsynacek--chars)
     (global-set-key c (or unbind
-			  'self-insert-command))))
+                          'self-insert-command))))
 
 ;;; remaps
 (defun jsynacek-emacs-mode ()
@@ -119,6 +177,8 @@
 (define-prefix-command 'jsynacek-change-keymap)
 (define-prefix-command 'jsynacek-sexp-keymap)
 (define-prefix-command 'jsynacek-mark-keymap)
+(define-prefix-command 'jsynacek-switch-keymap)
+(define-prefix-command 'jsynacek-comment-keymap)
 
 (defun jsynacek-command-mode ()
   (progn
@@ -132,44 +192,70 @@
     (global-set-key "l" 'forward-char)
     (global-set-key "L" 'end-of-line)
     (global-set-key "u" 'backward-word)
+    (global-set-key "U" 'backward-paragraph)
     (global-set-key "o" 'forward-word)
+    (global-set-key "O" 'forward-paragraph)
+    (global-set-key "r" 'jsynacek-replace-char) ; TODO move to change map?
+    (global-set-key "[" 'beginning-of-defun)
+    (global-set-key "]" 'end-of-defun)
+
+    (global-set-key "x" 'jsynacek-kill-line-or-region)
+    (global-set-key "c" 'jsynacek-copy-line-or-region)
+    (global-set-key "v" 'jsynacek-yank)
+
+    (global-set-key "." 'jsynacek-exchange-point-and-mark)
+    (global-set-key "," 'ace-jump-mode)
+    (global-set-key "/" 'isearch-forward)
+    (global-set-key "\\" 'just-one-space) ; TODO make own version that when invoked with only one space will remove that too
+
+    (global-set-key "z" 'undo-tree-undo)
+    (global-set-key "Z" 'undo-tree-redo)
 
     (global-set-key "g" 'jsynacek-sexp-keymap)
+    (global-set-key "gg" 'ace-jump-mode)
     (global-set-key "gi" 'backward-up-list)
     (global-set-key "gj" 'backward-sexp)
     (global-set-key "gk" 'down-list)
     (global-set-key "gl" 'forward-sexp)
+    (global-set-key "gL" 'goto-line)
     (global-set-key "gu" 'beginning-of-defun)
     (global-set-key "go" 'end-of-defun)
 
     (global-set-key "f" 'jsynacek-change-keymap)
+    (global-set-key "fi" 'jsynacek-join-lines)
     (global-set-key "ff" 'jsynacek-change)
-    (global-set-key "fi" 'jsynacek-open-above)
-    (global-set-key "fk" 'jsynacek-open-below)
     (global-set-key "fl" 'jsynacek-change-char)
 
     (global-set-key "d" 'jsynacek-kill-keymap)
     (global-set-key "dd" 'jsynacek-kill-line-or-region)
     (global-set-key "du" 'backward-kill-word)
     (global-set-key "do" 'kill-word)
+    (global-set-key "dJ" 'jsynacek-kill-line-backward)
+    (global-set-key "dL" 'kill-line)
 
     (global-set-key "m" 'jsynacek-mark-keymap)
     (global-set-key "mm" 'er/expand-region)
+    (global-set-key "m " 'set-mark-command)
     (global-set-key "ml" 'jsynacek-mark-line)
     (global-set-key "mi" 'mark-defun)
     (global-set-key "mk" 'jsynacek-mark-block)
 
-    (global-set-key "x" 'jsynacek-kill-line-or-region)
-    (global-set-key "c" 'jsynacek-copy-line-or-region)
-    (global-set-key "v" 'jsynacek-yank)
-    ;; (global-set-key "" 'f)
+    (global-set-key " " 'jsynacek-switch-keymap)
+    (global-set-key "  " 'jsynacek-switch-to-emacs-mode)
+    (global-set-key " i" 'jsynacek-open-above)
+    (global-set-key " k" 'jsynacek-open-below)
+    (global-set-key " j" 'jsynacek-open-before-char)
+    (global-set-key " J" 'jsynacek-open-beginning-of-line)
+    (global-set-key " l" 'jsynacek-open-after-char)
+    (global-set-key " L" 'jsynacek-open-end-of-line)
+    (global-set-key " o" 'jsynacek-open-after-word)
+    (global-set-key " u" 'jsynacek-open-before-word)
 
-    (global-set-key "," 'ace-jump-mode)
-    (global-set-key "/" 'isearch-forward)
-    (global-set-key "\\" 'just-one-space)
-    (global-set-key "z" 'undo-tree-undo)
-    (global-set-key "Z" 'undo-tree-redo)
-    (global-set-key " " 'jsynacek-switch-to-emacs-mode)
+    (global-set-key ";" 'jsynacek-comment-keymap)
+    (global-set-key ";;" 'jsynacek-comment-line-or-region)
+    (global-set-key ";l" 'comment-dwim)
+
+    ;; . tag related?
     ))
 
 (defun jsynacek-switch-to-emacs-mode ()
@@ -177,7 +263,8 @@
   (progn
     (jsynacek-emacs-mode)
     (setq jsynacek-current-mode 'emacs)
-    (modify-all-frames-parameters (list (cons 'cursor-color "#93a1a1"))) ; TODO use set-face-attribute
+    (modify-all-frames-parameters (list (cons 'cursor-color "#93a1a1")
+                                        (cons 'cursor-type 'bar))) ; TODO use set-face-attribute
     ))
 
 (defun jsynacek-switch-to-command-mode ()
@@ -185,7 +272,8 @@
   (progn
     (jsynacek-command-mode)
     (setq jsynacek-current-mode 'command)
-    (modify-all-frames-parameters (list (cons 'cursor-color "#268bd2"))) ; TODO use set-face-attribute
+    (modify-all-frames-parameters (list (cons 'cursor-color "#268bd2")
+                                        (cons 'cursor-type 'box))) ; TODO use set-face-attribute
     ))
 
 (defun jsynacek-toggle-modes ()
@@ -196,5 +284,6 @@
 
 (add-hook 'minibuffer-setup-hook #'jsynacek-switch-to-emacs-mode)
 (add-hook 'minibuffer-exit-hook #'jsynacek-switch-to-command-mode) ; TODO make this correctly restore the last state?
+(jsynacek-switch-to-command-mode)
 
 (global-set-key (kbd "M-SPC") 'jsynacek-toggle-modes) ; was just-one-space
