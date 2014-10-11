@@ -146,11 +146,14 @@
 (global-set-key (kbd "C-w") 'jsynacek-kill-current-buffer) ; was kill-region
 (global-set-key (kbd "<f2>") 'save-buffer)
 (global-set-key (kbd "M-2") 'delete-window)
-(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "M-3") 'delete-other-windows)
+(global-set-key (kbd "M-RET") (if (fboundp 'helm-M-x)
+				  'helm-M-x
+				'execute-extended-command))
+(global-set-key (kbd "M-x") 'jsynacek-kill-line-or-region)
 (global-set-key (kbd "M-c") 'jsynacek-copy-line-or-region) ; was capitalize-word
 (global-set-key (kbd "M-v") 'jsynacek-yank) ; was scroll-down
 (global-set-key (kbd "M-z") 'undo-tree-undo) ; was zap-to-char
-(global-set-key (kbd "M-3") 'delete-other-windows)
 (global-set-key (kbd "M-,") 'ace-jump-mode) ; was indent-new-comment-line
 (global-set-key (kbd "M-y") 'helm-show-kill-ring) ; was yank-pop
 (global-set-key (kbd "<f1> a") 'helm-apropos)      ; was apropos-command
@@ -167,12 +170,13 @@
 (global-set-key (kbd "M-k") 'next-line) ; was kill-sentence
 (global-set-key (kbd "M-K") 'scroll-up)
 (global-set-key (kbd "M-l") 'forward-char) ; was downcase-region
+(global-set-key (kbd "M-o") 'forward-word) ; was "set face to something"
+(global-set-key (kbd "M-u") 'backward-word) ; was upcase-word
 
 (define-prefix-command 'jsynacek-apps-keymap)
 (global-set-key (kbd "M-a") 'jsynacek-apps-keymap) ; was backward-sentence
 (global-set-key (kbd "M-a M-a") 'magit-status)	   ; default app
 (global-set-key (kbd "M-a a") 'magit-status)	   ; default app
-(global-set-key (kbd "M-a d") 'dired)
 (global-set-key (kbd "M-a g") 'rgrep)
 (global-set-key (kbd "M-a m") 'notmuch)		   ; email
 (global-set-key (kbd "M-a s") 'shell)		   ; shell
@@ -184,6 +188,11 @@
 (global-set-key (kbd "M-w k") 'windmove-down)
 (global-set-key (kbd "M-w l") 'windmove-right)
 
+(define-prefix-command 'jsynacek-org-keymap)
+(global-set-key (kbd "M-r") 'jsynacek-org-keymap)
+(global-set-key (kbd "M-r a") 'org-agenda)
+(global-set-key (kbd "M-r c") 'org-capture)
+
 (define-prefix-command 'jsynacek-insert-keymap)
 (global-set-key (kbd "M-p") 'jsynacek-insert-keymap)
 (global-set-key (kbd "M-p j") 'jsynacek-insert-brackets)
@@ -191,20 +200,13 @@
 (global-set-key (kbd "M-p u") 'jsynacek-insert-double-quotes)
 (global-set-key (kbd "M-p i") 'jsynacek-insert-single-quotes)
 
-(define-prefix-command 'jsynacek-menu-keymap)
-(global-set-key (kbd "<menu>") 'jsynacek-menu-keymap)
-;; M-x
-(global-set-key (kbd "<menu> M-x") 'helm-M-x)
-;; apps
-(global-set-key (kbd "<menu> a c") 'calc)
-(global-set-key (kbd "<menu> a e") 'eshell)
-(global-set-key (kbd "<menu> a g") 'magit-status)
-;; evaluations
-
-(global-set-key (kbd "<menu> e b") 'eval-buffer)
-(global-set-key (kbd "<menu> e d") 'eval-defun)
-(global-set-key (kbd "<menu> e e") 'eval-last-sexp)
-(global-set-key (kbd "<menu> e r") 'eval-region)
+(define-prefix-command 'jsynacek-eval-keymap)
+(global-set-key (kbd "M-e") 'jsynacek-eval-keymap)
+(global-set-key (kbd "M-e M-e") 'eval-last-sexp)
+(global-set-key (kbd "M-e b") 'eval-buffer)
+(global-set-key (kbd "M-e d") 'eval-defun)
+(global-set-key (kbd "M-e e") 'eval-last-sexp)
+(global-set-key (kbd "M-e r") 'eval-region)
 
 (define-prefix-command 'jsynacek-transpose-keymap)
 (global-set-key (kbd "M-t") 'jsynacek-transpose-keymap)
@@ -214,13 +216,8 @@
 (global-set-key (kbd "M-t w") 'transpose-words)
 (global-set-key (kbd "M-t l") 'transpose-lines)
 
-;; searching
-(global-set-key (kbd "M-u") 'isearch-backward) ; was upcase-word
-(define-key isearch-mode-map (kbd "M-u") 'isearch-repeat-backward)
-
 (global-set-key (kbd "M-s b") 'helm-bookmarks)
 (global-set-key (kbd "M-s g") 'rgrep)
-(global-set-key (kbd "M-s i") 'helm-semantic-or-imenu)
+(global-set-key (kbd "M-s i") 'helm-semantic-or-imenu) ; TODO move to code navigation together with tag-related stuff
 (global-set-key (kbd "M-s m") 'helm-man-woman)
 (global-set-key (kbd "M-s s") 'helm-swoop)
-

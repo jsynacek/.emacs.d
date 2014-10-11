@@ -115,11 +115,11 @@
 (defun jsynacek-yank ()
   (interactive)
   (let ((text (current-kill 0)))
-    (when (and (stringp text)
-               (string-equal (substring text -1) "\n"))
-      (end-of-line)
-      (newline))
-    (insert-for-yank (current-kill 0)))) ; TODO fixme vim-like
+    ;; (when (and (stringp text)
+    ;;            (string-equal (substring text -1) "\n"))
+    ;;   (end-of-line)
+    ;;   (newline))
+    (insert-for-yank (current-kill 0)))) ; TODO fixme vim-like?
 
 (defun jsynacek-exchange-point-and-mark ()
   (interactive)
@@ -157,6 +157,11 @@
   (if (region-active-p)
       (kill-region (region-beginning) (region-end))
     (kill-whole-line arg)))
+
+(defun jsynacek-kill-defun ()
+  (interactive)
+  (mark-defun)
+  (kill-region (region-beginning) (region-end)))
 
 (defun jsynacek-kill-current-buffer ()
   (interactive)
@@ -206,11 +211,12 @@
     (global-set-key "U" 'backward-paragraph)
     (global-set-key "o" 'forward-word)
     (global-set-key "O" 'forward-paragraph)
-    (global-set-key "r" 'jsynacek-replace-char) ; TODO move to change map?
+    (global-set-key "r" 'jsynacek-replace-char)
     (global-set-key "[" 'beginning-of-defun)
     (global-set-key "]" 'end-of-defun)
     (global-set-key "<" 'beginning-of-buffer)
     (global-set-key ">" 'end-of-buffer)
+    (global-set-key "e" 'delete-forward-char)
 
     (global-set-key "x" 'jsynacek-kill-line-or-region)
     (global-set-key "c" 'jsynacek-copy-line-or-region)
@@ -242,6 +248,7 @@
 
     (global-set-key "d" 'jsynacek-kill-keymap)
     (global-set-key "dd" 'jsynacek-kill-line-or-region)
+    (global-set-key "di" 'jsynacek-kill-defun)
     (global-set-key "do" 'kill-word)
     (global-set-key "du" 'backward-kill-word)
     (global-set-key "dJ" 'jsynacek-kill-line-backward)
