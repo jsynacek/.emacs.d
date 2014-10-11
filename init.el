@@ -147,19 +147,33 @@
 (global-set-key (kbd "<f2>") 'save-buffer)
 (global-set-key (kbd "M-2") 'delete-window)
 (global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "M-c") 'jsynacek-copy-line-or-region) ; was capitalize-word
+(global-set-key (kbd "M-v") 'jsynacek-yank) ; was scroll-down
+(global-set-key (kbd "M-z") 'undo-tree-undo) ; was zap-to-char
 (global-set-key (kbd "M-3") 'delete-other-windows)
-(global-set-key (kbd "M-6") 'jsynacek-mark-block)
-(global-set-key (kbd "M-7") 'jsynacek-mark-line)
 (global-set-key (kbd "M-,") 'ace-jump-mode) ; was indent-new-comment-line
 (global-set-key (kbd "M-y") 'helm-show-kill-ring) ; was yank-pop
 (global-set-key (kbd "<f1> a") 'helm-apropos)      ; was apropos-command
 (global-set-key (kbd "<f1> l") 'helm-locate-library) ; was view-lossage
+
+(global-set-key (kbd "M-/") 'isearch-forward) ; was dabbrev-expand
+(global-set-key (kbd "M-?") 'isearch-backward)
+(define-key isearch-mode-map (kbd "M-/") 'isearch-repeat-forward)
+(define-key isearch-mode-map (kbd "M-?") 'isearch-repeat-backward)
+
+(global-set-key (kbd "M-i") 'previous-line) ; was tab-to-tab-stop
+(global-set-key (kbd "M-I") 'scroll-down)
+(global-set-key (kbd "M-j") 'backward-char) ; was indent-new-comment-line
+(global-set-key (kbd "M-k") 'next-line) ; was kill-sentence
+(global-set-key (kbd "M-K") 'scroll-up)
+(global-set-key (kbd "M-l") 'forward-char) ; was downcase-region
 
 (define-prefix-command 'jsynacek-apps-keymap)
 (global-set-key (kbd "M-a") 'jsynacek-apps-keymap) ; was backward-sentence
 (global-set-key (kbd "M-a M-a") 'magit-status)	   ; default app
 (global-set-key (kbd "M-a a") 'magit-status)	   ; default app
 (global-set-key (kbd "M-a d") 'dired)
+(global-set-key (kbd "M-a g") 'rgrep)
 (global-set-key (kbd "M-a m") 'notmuch)		   ; email
 (global-set-key (kbd "M-a s") 'shell)		   ; shell
 
@@ -191,8 +205,6 @@
 (global-set-key (kbd "<menu> e d") 'eval-defun)
 (global-set-key (kbd "<menu> e e") 'eval-last-sexp)
 (global-set-key (kbd "<menu> e r") 'eval-region)
-;; marking
-(global-set-key (kbd "<menu> m d") 'mark-defun)
 
 (define-prefix-command 'jsynacek-transpose-keymap)
 (global-set-key (kbd "M-t") 'jsynacek-transpose-keymap)
@@ -203,11 +215,9 @@
 (global-set-key (kbd "M-t l") 'transpose-lines)
 
 ;; searching
-(global-set-key (kbd "M-i") 'isearch-forward) ; was tab-to-tab-stop
-(define-key isearch-mode-map (kbd "M-i") 'isearch-repeat-forward)
 (global-set-key (kbd "M-u") 'isearch-backward) ; was upcase-word
-
 (define-key isearch-mode-map (kbd "M-u") 'isearch-repeat-backward)
+
 (global-set-key (kbd "M-s b") 'helm-bookmarks)
 (global-set-key (kbd "M-s g") 'rgrep)
 (global-set-key (kbd "M-s i") 'helm-semantic-or-imenu)

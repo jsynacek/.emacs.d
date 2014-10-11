@@ -69,8 +69,13 @@
 (defun jsynacek-open-above ()
   (interactive)
   (beginning-of-line)
-  (backward-char)
-  (newline-and-indent)
+  (if (= (point) 1)
+      (progn
+	(newline)
+	(backward-char))
+    (progn
+      (backward-char)
+      (newline-and-indent)))
   (jsynacek-switch-to-emacs-mode))
 
 
@@ -79,7 +84,13 @@
   (delete-char 1)
   (jsynacek-switch-to-emacs-mode))
 
-(defun jsynacek-change ()
+; TODO pretty ineffective to the point where it's visible
+(defun jsynacek-change-word ()
+  (interactive)
+  (er/mark-word)
+  (jsynacek-change-line-or-region))
+
+(defun jsynacek-change-line-or-region ()
   (interactive)
   (jsynacek-kill-line-or-region)
   (jsynacek-switch-to-emacs-mode))
@@ -159,7 +170,7 @@
        "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "A" "B" "C" "D" "E" "F"
        "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V"
        "W" "X" "Y" "Z" "1" "2" "3" "4" "5" "6" "7" "8" "9" "0" "." ","
-       "/" " " ":" ";" "{" "}" "[" "]" "\\"))
+       "/" " " ":" ";" "{" "}" "[" "]" "<" ">" "\\"))
 
 (defvar jsynacek-current-mode () 'emacs)
 
@@ -198,6 +209,8 @@
     (global-set-key "r" 'jsynacek-replace-char) ; TODO move to change map?
     (global-set-key "[" 'beginning-of-defun)
     (global-set-key "]" 'end-of-defun)
+    (global-set-key "<" 'beginning-of-buffer)
+    (global-set-key ">" 'end-of-buffer)
 
     (global-set-key "x" 'jsynacek-kill-line-or-region)
     (global-set-key "c" 'jsynacek-copy-line-or-region)
@@ -206,7 +219,7 @@
     (global-set-key "." 'jsynacek-exchange-point-and-mark)
     (global-set-key "," 'ace-jump-mode)
     (global-set-key "/" 'isearch-forward)
-    (global-set-key "\\" 'just-one-space) ; TODO make own version that when invoked with only one space will remove that too
+    (global-set-key "\\" 'fixup-whitespace)
 
     (global-set-key "z" 'undo-tree-undo)
     (global-set-key "Z" 'undo-tree-redo)
@@ -218,27 +231,28 @@
     (global-set-key "gk" 'down-list)
     (global-set-key "gl" 'forward-sexp)
     (global-set-key "gL" 'goto-line)
-    (global-set-key "gu" 'beginning-of-defun)
     (global-set-key "go" 'end-of-defun)
+    (global-set-key "gu" 'beginning-of-defun)
 
     (global-set-key "f" 'jsynacek-change-keymap)
     (global-set-key "fi" 'jsynacek-join-lines)
-    (global-set-key "ff" 'jsynacek-change)
+    (global-set-key "ff" 'jsynacek-change-line-or-region)
     (global-set-key "fl" 'jsynacek-change-char)
+    (global-set-key "fo" 'jsynacek-change-word)
 
     (global-set-key "d" 'jsynacek-kill-keymap)
     (global-set-key "dd" 'jsynacek-kill-line-or-region)
-    (global-set-key "du" 'backward-kill-word)
     (global-set-key "do" 'kill-word)
+    (global-set-key "du" 'backward-kill-word)
     (global-set-key "dJ" 'jsynacek-kill-line-backward)
     (global-set-key "dL" 'kill-line)
 
     (global-set-key "m" 'jsynacek-mark-keymap)
     (global-set-key "mm" 'er/expand-region)
     (global-set-key "m " 'set-mark-command)
-    (global-set-key "ml" 'jsynacek-mark-line)
     (global-set-key "mi" 'mark-defun)
     (global-set-key "mk" 'jsynacek-mark-block)
+    (global-set-key "ml" 'jsynacek-mark-line)
 
     (global-set-key " " 'jsynacek-switch-keymap)
     (global-set-key "  " 'jsynacek-switch-to-emacs-mode)
