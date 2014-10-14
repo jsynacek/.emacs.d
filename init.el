@@ -24,7 +24,7 @@
 (setq ring-bell-function 'ignore)
 (prefer-coding-system 'utf-8)
 
-(setq Man-width 80)
+(setq Man-width 90)
 
 (defun jsynacek-highlight-trailing-whitespace ()
   (setq-local show-trailing-whitespace t))
@@ -149,7 +149,7 @@
 (global-set-key (kbd "M-3") 'delete-other-windows)
 (global-set-key (kbd "M-RET") (if (fboundp 'helm-M-x)
 				  'helm-M-x
-				'execute-extended-command))
+				'execute-extended-command)) ; TODO this breaks in org-mode!
 (global-set-key (kbd "M-x") 'jsynacek-kill-line-or-region)
 (global-set-key (kbd "M-c") 'jsynacek-copy-line-or-region) ; was capitalize-word
 (global-set-key (kbd "M-v") 'jsynacek-yank) ; was scroll-down
@@ -158,6 +158,7 @@
 (global-set-key (kbd "M-y") 'helm-show-kill-ring) ; was yank-pop
 (global-set-key (kbd "<f1> a") 'helm-apropos)      ; was apropos-command
 (global-set-key (kbd "<f1> l") 'helm-locate-library) ; was view-lossage
+(global-set-key (kbd "<f1> M") 'helm-man-woman)
 
 (global-set-key (kbd "M-/") 'isearch-forward) ; was dabbrev-expand
 (global-set-key (kbd "M-?") 'isearch-backward)

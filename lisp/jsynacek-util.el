@@ -203,9 +203,9 @@
     (global-set-key "I" 'scroll-down)
     (global-set-key "j" 'backward-char)
     (global-set-key "J" 'beginning-of-line)
-    (global-set-key "k" 'next-line)
+    (global-set-key "k" 'next-line)	; TODO doesn't work in man-mode, dired, ...
     (global-set-key "K" 'scroll-up)
-    (global-set-key "l" 'forward-char)
+    (global-set-key "l" 'forward-char)	; TODO breaks in info-mode
     (global-set-key "L" 'end-of-line)
     (global-set-key "u" 'backward-word)
     (global-set-key "U" 'backward-paragraph)
@@ -254,7 +254,7 @@
     (global-set-key "dJ" 'jsynacek-kill-line-backward)
     (global-set-key "dL" 'kill-line)
 
-    (global-set-key "m" 'jsynacek-mark-keymap)
+    (global-set-key "m" 'jsynacek-mark-keymap) ; TODO breaks in notmuch
     (global-set-key "mm" 'er/expand-region)
     (global-set-key "m " 'set-mark-command)
     (global-set-key "mi" 'mark-defun)
