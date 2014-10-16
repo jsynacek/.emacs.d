@@ -163,9 +163,16 @@
   (mark-defun)
   (kill-region (region-beginning) (region-end)))
 
-(defun jsynacek-kill-current-buffer ()
-  (interactive)
-  (kill-buffer (current-buffer)))
+(defun jsynacek-kill-current-buffer (arg)
+  "Kill the currently active buffer.
+
+If called with a prefix argument, also delete the currently focused window."
+  (interactive "P")
+  (kill-buffer (current-buffer))
+  (when current-prefix-arg
+    (condition-case nil
+	(delete-window)
+      (error nil))))
 
 
 
