@@ -63,8 +63,7 @@
 (defun jsynacek-open-below ()
   (interactive)
   (end-of-line)
-  (newline-and-indent)
-  (jsynacek-switch-to-emacs-mode))
+  (newline-and-indent))
 
 (defun jsynacek-open-above ()
   (interactive)
@@ -75,8 +74,7 @@
 	(backward-char))
     (progn
       (backward-char)
-      (newline-and-indent)))
-  (jsynacek-switch-to-emacs-mode))
+      (newline-and-indent))))
 
 
 (defun jsynacek-change-char ()
@@ -310,8 +308,7 @@ If called with a prefix argument, also delete the currently focused window."
       (jsynacek-switch-to-command-mode)
     (jsynacek-switch-to-emacs-mode)))
 
-(add-hook 'minibuffer-setup-hook #'jsynacek-switch-to-emacs-mode)
-(add-hook 'minibuffer-exit-hook #'jsynacek-switch-to-command-mode) ; TODO make this correctly restore the last state?
-(jsynacek-switch-to-command-mode)
-
-(global-set-key (kbd "M-SPC") 'jsynacek-toggle-modes) ; was just-one-space
+;; (add-hook 'minibuffer-setup-hook #'jsynacek-switch-to-emacs-mode)
+;; (add-hook 'minibuffer-exit-hook #'jsynacek-switch-to-command-mode) ; TODO make this correctly restore the last state?
+;; (jsynacek-switch-to-command-mode)
+;; (global-set-key (kbd "M-SPC") 'jsynacek-toggle-modes) ; was just-one-space

@@ -20,6 +20,8 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (show-paren-mode t)
+(abbrev-mode t)
+(recentf-mode t)
 
 (setq ring-bell-function 'ignore)
 (prefer-coding-system 'utf-8)
@@ -51,7 +53,7 @@
 ;;; packages
 (require 'package)
 (add-to-list 'package-archives
-	     '("melpa" . "http://melpa.milkbox.net/packages/"))
+	     '("melpa" . "http://melpa.org/packages/"))
 (package-initialize)
 
 (require 'ace-jump-mode)
@@ -98,6 +100,21 @@
 (require 'helm-git-grep)
 (global-set-key (kbd "M-s M-g") 'helm-git-grep)
 
+(require 'ido)
+(ido-mode t)
+(ido-everywhere t)
+(setq ido-enable-flex-matching t)
+(setq ido-use-filename-at-point 'guess)
+(setq ido-use-url-at-point t)
+(setq ido-auto-merge-work-directories-length -1)
+
+(require 'magit)
+(setq magit-auto-revert-mode-lighter nil)
+; kill magit windows when quitting
+(define-key magit-mode-map "q" #'(lambda ()
+				   (interactive)
+				   (magit-mode-quit-window t)))
+
 (require 'notmuch)
 (setq notmuch-search-oldest-first nil)
 (setq notmuch-fcc-dirs "Sent")
@@ -121,14 +138,27 @@
 (require 'org)
 (setq org-agenda-files '("~/SpiderOak Hive/orgfiles/inbox.org.gpg"
                          "~/SpiderOak Hive/orgfiles/birthday.org"))
+(setq org-catch-invisible-edits 'show-and-error)
+(setq org-log-done 'time)
+(setq org-log-into-drawer t)
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "WAITING(w@/!)" "|" "DONE(d!)")))
+(setq org-clock-out-when-done t)
+(setq org-agenda-span 14)
+(setq org-agenda-start-on-weekday nil)
+(define-key org-mode-map (kbd "M-a") 'jsynacek-apps-keymap) ; was org-backward-sentence
 
 (require 'org-notmuch)
 
-(require 'solarized)
-(setq solarized-use-variable-pitch nil)
-(setq custom-safe-themes
-      '("d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" default))
-(load-theme 'solarized-light)
+;; (require 'solarized)
+;; (setq solarized-use-variable-pitch nil)
+;; (setq custom-safe-themes
+;;       '("d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" default))
+;; (load-theme 'solarized-light)
+;; (load-theme 'warm-night)
+
+(require 'recentf)
+(setq recentf-max-saved-items 50)
 
 (require 'undo-tree)
 
@@ -139,31 +169,45 @@
 (require 'private)
 
 (global-set-key [remap list-buffers] 'ibuffer)
-(global-set-key (kbd "C-o") 'find-file) ; was open-line
-(global-set-key (kbd "C-b") 'helm-mini) ; was backward-char
-(global-set-key (kbd "C-x b") 'helm-mini)
-(global-set-key (kbd "C-d") 'dired)     ; was delete-char
+(defun jsynacek-find-file (arg)
+  (interactive "P")
+  (if current-prefix-arg
+      (find-file (ido-completing-read "Open recent: "
+				      (recentf-elements recentf-max-saved-items)))
+    (call-interactively #'find-file)))
+(global-set-key (kbd "C-o") 'jsynacek-find-file) ; was open-line
+(global-set-key (kbd "C-b") 'switch-to-buffer) ; was backward-char
 (global-set-key (kbd "C-w") 'jsynacek-kill-current-buffer) ; was kill-region
 (global-set-key (kbd "<f2>") 'save-buffer)
 (global-set-key (kbd "M-2") 'delete-window)
 (global-set-key (kbd "M-3") 'delete-other-windows)
-(global-set-key (kbd "M-RET") (if (fboundp 'helm-M-x)
+(global-set-key (kbd "M-4") 'switch-to-buffer-other-window)
+(global-set-key (kbd "M-5") 'find-file-other-window)
+(global-set-key (kbd "M-7") #'(lambda () (interactive) (scroll-down (/ (- (window-height) 2)))))
+(global-set-key (kbd "M-8") #'(lambda () (interactive) (scroll-up (/ (- (window-height) 2) 2))))
+(global-set-key (kbd "M-9") 'backward-sexp)
+(global-set-key (kbd "M-0") 'forward-sexp)
+(global-set-key (kbd "M-SPC") 'set-mark-command)
+
+(global-set-key (kbd "<f5>") (if (fboundp 'helm-M-x)
 				  'helm-M-x
-				'execute-extended-command)) ; TODO this breaks in org-mode!
+				'execute-extended-command))
 (global-set-key (kbd "M-x") 'jsynacek-kill-line-or-region)
 (global-set-key (kbd "M-c") 'jsynacek-copy-line-or-region) ; was capitalize-word
 (global-set-key (kbd "M-v") 'jsynacek-yank) ; was scroll-down
+(define-key minibuffer-local-completion-map (kbd "M-v") 'jsynacek-yank)
 (global-set-key (kbd "M-z") 'undo-tree-undo) ; was zap-to-char
 (global-set-key (kbd "M-,") 'ace-jump-mode) ; was indent-new-comment-line
 (global-set-key (kbd "M-y") 'helm-show-kill-ring) ; was yank-pop
 (global-set-key (kbd "<f1> a") 'helm-apropos)      ; was apropos-command
 (global-set-key (kbd "<f1> l") 'helm-locate-library) ; was view-lossage
+(global-set-key (kbd "<f1> n") 'man)		     ; was view-emacs-news
 (global-set-key (kbd "<f1> M") 'helm-man-woman)
 
-(global-set-key (kbd "M-/") 'isearch-forward) ; was dabbrev-expand
-(global-set-key (kbd "M-?") 'isearch-backward)
-(define-key isearch-mode-map (kbd "M-/") 'isearch-repeat-forward)
-(define-key isearch-mode-map (kbd "M-?") 'isearch-repeat-backward)
+;; (global-set-key (kbd "M-/") 'isearch-forward) ; was dabbrev-expand
+;; (global-set-key (kbd "M-?") 'isearch-backward)
+;; (define-key isearch-mode-map (kbd "M-/") 'isearch-repeat-forward)
+;; (define-key isearch-mode-map (kbd "M-?") 'isearch-repeat-backward)
 
 (global-set-key (kbd "M-i") 'previous-line) ; was tab-to-tab-stop
 (global-set-key (kbd "M-I") 'scroll-down)
@@ -174,13 +218,13 @@
 (global-set-key (kbd "M-o") 'forward-word) ; was "set face to something"
 (global-set-key (kbd "M-u") 'backward-word) ; was upcase-word
 
-(define-prefix-command 'jsynacek-apps-keymap)
-(global-set-key (kbd "M-a") 'jsynacek-apps-keymap) ; was backward-sentence
-(global-set-key (kbd "M-a M-a") 'magit-status)	   ; default app
-(global-set-key (kbd "M-a a") 'magit-status)	   ; default app
-(global-set-key (kbd "M-a g") 'rgrep)
-(global-set-key (kbd "M-a m") 'notmuch)		   ; email
-(global-set-key (kbd "M-a s") 'shell)		   ; shell
+;; (define-prefix-command 'jsynacek-apps-keymap)
+;; (global-set-key (kbd "M-a") 'jsynacek-apps-keymap) ; was backward-sentence
+;;                                                    ; TODO this breaks in org-mode
+;; (global-set-key (kbd "M-a M-a") 'magit-status)	   ; default app
+;; (global-set-key (kbd "M-a a") 'magit-status)	   ; default app
+;; (global-set-key (kbd "M-a m") 'notmuch)		   ; email
+;; (global-set-key (kbd "M-a s") 'shell)		   ; shell
 
 (define-prefix-command 'jsynacek-window-keymap)
 (global-set-key (kbd "M-w") 'jsynacek-window-keymap)
@@ -218,7 +262,31 @@
 (global-set-key (kbd "M-t l") 'transpose-lines)
 
 (global-set-key (kbd "M-s b") 'helm-bookmarks)
+(global-set-key (kbd "M-s f") 'helm-find)
 (global-set-key (kbd "M-s g") 'rgrep)
-(global-set-key (kbd "M-s i") 'helm-semantic-or-imenu) ; TODO move to code navigation together with tag-related stuff
-(global-set-key (kbd "M-s m") 'helm-man-woman)
 (global-set-key (kbd "M-s s") 'helm-swoop)
+
+(define-prefix-command 'jsynacek-todo-keymap)
+(global-set-key (kbd "M-m") 'jsynacek-todo-keymap) ; was back-to-indentation
+(global-set-key (kbd "M-m e") nil) ; TODO evaluation
+(global-set-key (kbd "M-m o") 'jsynacek-open-below)
+(global-set-key (kbd "M-m O") 'jsynacek-open-above)
+(global-set-key (kbd "M-m a a") 'magit-status) ; TODO apps
+
+; e r d f - code related?
+(global-set-key (kbd "M-m r") 'ggtags-find-reference)
+(global-set-key (kbd "M-m f") 'ggtags-find-tag-dwim)
+(global-set-key (kbd "M-m e") 'helm-semantic-or-imenu)
+
+; mail
+(global-set-key (kbd "M-m m m") 'jsynacek-get-email)
+; org
+(global-set-key (kbd "M-m i l") 'org-store-link)
+(global-set-key (kbd "M-m i a") 'org-agenda)
+(global-set-key (kbd "M-m i c") 'org-capture)
+; apps
+(global-set-key (kbd "M-m a a") 'magit-status)
+(global-set-key (kbd "M-m a m") 'notmuch)
+(global-set-key (kbd "M-m a s") 'shell)
+
+(put 'dired-find-alternate-file 'disabled nil)
