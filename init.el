@@ -1,7 +1,5 @@
 ;;; general
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
-(add-to-list 'load-path "/usr/share/emacs/site-lisp") ; notmuch.el
-(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e") ; mu4e.el
 (add-to-list 'load-path "~/work/git/upstream/org-mode/contrib/lisp/") ; org-notmuch.el
 
 (setq backup-directory-alist '(("." . "~/.emacs.d/backup")))
