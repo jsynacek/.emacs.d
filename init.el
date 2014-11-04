@@ -30,7 +30,6 @@
   (setq-local show-trailing-whitespace t))
 (add-hook 'find-file-hook #'jsynacek-highlight-trailing-whitespace)
 
-(global-unset-key (kbd "C-h")) ; learn to use f1
 (global-unset-key (kbd "C-z")) ; no suspend
 
 ;;; editing
@@ -86,7 +85,8 @@
 (define-key erc-mode-map (kbd "C-<return>") 'erc-send-current-line)
 
 (require 'expand-region)
-(setq expand-region-contract-fast-key "M")
+(global-set-key (kbd "M-n") 'er/expand-region)
+(setq expand-region-contract-fast-key "N")
 
 (require 'helm)
 ;; (helm-mode t)
@@ -122,7 +122,6 @@
   (interactive)
   (notmuch-search-tag '("-unread"))
   (notmuch-search-archive-thread))
-(global-set-key (kbd "<XF86Mail>") 'notmuch)
 (define-key notmuch-search-mode-map "k" 'jsynacek-notmuch-mark-read-and-archive)
 (defun jsynacek-notmuch-search-unread ()
   (interactive)
@@ -136,6 +135,10 @@
 (require 'org)
 (setq org-agenda-files '("~/SpiderOak Hive/orgfiles/inbox.org.gpg"
                          "~/SpiderOak Hive/orgfiles/birthday.org"))
+(setq org-default-notes-file "~/SpiderOak Hive/orgfiles/inbox.org.gpg")
+(setq org-capture-templates '(("t" "New item into Inbox" entry
+			       (file org-agenda-files)
+			       "** %?\n   added:%U" :empty-lines-after 1)))
 (setq org-catch-invisible-edits 'show-and-error)
 (setq org-log-done 'time)
 (setq org-log-into-drawer t)
@@ -144,7 +147,6 @@
 (setq org-clock-out-when-done t)
 (setq org-agenda-span 14)
 (setq org-agenda-start-on-weekday nil)
-(define-key org-mode-map (kbd "M-a") 'jsynacek-apps-keymap) ; was org-backward-sentence
 
 (require 'org-notmuch)
 
@@ -158,6 +160,23 @@
 (require 'recentf)
 (setq recentf-max-saved-items 50)
 
+(require 'smartparens-config)
+(smartparens-global-strict-mode t)
+(show-smartparens-global-mode t)
+(sp-local-pair 'message-mode "'" nil :actions nil)
+(sp-local-pair 'c-mode "/*" "*/") sp-point-inside-string
+(define-key sp-keymap (kbd "C-M-f") 'sp-forward-sexp)
+(define-key sp-keymap (kbd "C-M-b") 'sp-backward-sexp)
+(define-key sp-keymap (kbd "C-M-d") 'sp-down-sexp)
+(define-key sp-keymap (kbd "C-M-u") 'sp-backward-up-sexp)
+(define-key sp-keymap (kbd "C-M-k") 'sp-kill-sexp)
+(define-key sp-keymap (kbd "C-k") 'sp-kill-hybrid-sexp)
+(define-key sp-keymap (kbd "M-D") 'sp-splice-sexp)
+(define-key sp-keymap (kbd "M-0") 'sp-forward-slurp-sexp)
+(define-key sp-keymap (kbd "M-9") 'sp-forward-barf-sexp)
+(define-key sp-keymap (kbd "M-(") 'sp-backward-slurp-sexp)
+(define-key sp-keymap (kbd "M-)") 'sp-backward-barf-sexp)
+
 (require 'undo-tree)
 
 (require 'uniquify)
@@ -166,6 +185,9 @@
 (load "jsynacek-util.el")
 (require 'private)
 
+
+;;; keybindings
+; basic
 (global-set-key [remap list-buffers] 'ibuffer)
 (defun jsynacek-find-file (arg)
   (interactive "P")
@@ -173,40 +195,38 @@
       (find-file (ido-completing-read "Open recent: "
 				      (recentf-elements recentf-max-saved-items)))
     (call-interactively #'find-file)))
-(global-set-key (kbd "C-o") 'jsynacek-find-file) ; was open-line
-(global-set-key (kbd "C-b") 'switch-to-buffer) ; was backward-char
-(global-set-key (kbd "C-w") 'jsynacek-kill-current-buffer) ; was kill-region
+;; (global-set-key (kbd "C-o") 'jsynacek-find-file) ; was open-line
+;; (global-set-key (kbd "C-b") 'switch-to-buffer) ; was backward-char
+;; (global-set-key (kbd "C-w") 'jsynacek-kill-current-buffer) ; was kill-region
+(global-set-key (kbd "C-x b") 'helm-mini)
+(global-set-key (kbd "C-h r") 'helm-info-emacs)
 (global-set-key (kbd "<f2>") 'save-buffer)
 (global-set-key (kbd "M-2") 'delete-window)
 (global-set-key (kbd "M-3") 'delete-other-windows)
 (global-set-key (kbd "M-4") 'switch-to-buffer-other-window)
 (global-set-key (kbd "M-5") 'find-file-other-window)
-(global-set-key (kbd "M-7") #'(lambda () (interactive) (scroll-down (/ (- (window-height) 2)))))
+(global-set-key (kbd "M-7") #'(lambda () (interactive) (scroll-down (/ (- (window-height) 2) 2))))
 (global-set-key (kbd "M-8") #'(lambda () (interactive) (scroll-up (/ (- (window-height) 2) 2))))
-(global-set-key (kbd "M-9") 'backward-sexp)
-(global-set-key (kbd "M-0") 'forward-sexp)
+(global-set-key (kbd "M-\\") 'fixup-whitespace) ; was delete-horizontal-space
+(global-set-key (kbd "M-/") 'hippie-expand) ; was dabbrev-expand
 (global-set-key (kbd "M-SPC") 'set-mark-command)
-
 (global-set-key (kbd "<f5>") (if (fboundp 'helm-M-x)
 				  'helm-M-x
 				'execute-extended-command))
 (global-set-key (kbd "M-x") 'jsynacek-kill-line-or-region)
 (global-set-key (kbd "M-c") 'jsynacek-copy-line-or-region) ; was capitalize-word
+(global-set-key (kbd "M-C") 'jsynacek-duplicate-line)
 (global-set-key (kbd "M-v") 'jsynacek-yank) ; was scroll-down
 (define-key minibuffer-local-completion-map (kbd "M-v") 'jsynacek-yank)
 (global-set-key (kbd "M-z") 'undo-tree-undo) ; was zap-to-char
+(global-set-key (kbd "M-Z") 'undo-tree-redo)
 (global-set-key (kbd "M-,") 'ace-jump-mode) ; was indent-new-comment-line
 (global-set-key (kbd "M-y") 'helm-show-kill-ring) ; was yank-pop
 (global-set-key (kbd "<f1> a") 'helm-apropos)      ; was apropos-command
 (global-set-key (kbd "<f1> l") 'helm-locate-library) ; was view-lossage
 (global-set-key (kbd "<f1> n") 'man)		     ; was view-emacs-news
 (global-set-key (kbd "<f1> M") 'helm-man-woman)
-
-;; (global-set-key (kbd "M-/") 'isearch-forward) ; was dabbrev-expand
-;; (global-set-key (kbd "M-?") 'isearch-backward)
-;; (define-key isearch-mode-map (kbd "M-/") 'isearch-repeat-forward)
-;; (define-key isearch-mode-map (kbd "M-?") 'isearch-repeat-backward)
-
+; movement
 (global-set-key (kbd "M-i") 'previous-line) ; was tab-to-tab-stop
 (global-set-key (kbd "M-I") 'scroll-down)
 (global-set-key (kbd "M-j") 'backward-char) ; was indent-new-comment-line
@@ -214,35 +234,23 @@
 (global-set-key (kbd "M-K") 'scroll-up)
 (global-set-key (kbd "M-l") 'forward-char) ; was downcase-region
 (global-set-key (kbd "M-o") 'forward-word) ; was "set face to something"
+(global-set-key (kbd "M-O") 'forward-paragraph)
 (global-set-key (kbd "M-u") 'backward-word) ; was upcase-word
-
-;; (define-prefix-command 'jsynacek-apps-keymap)
-;; (global-set-key (kbd "M-a") 'jsynacek-apps-keymap) ; was backward-sentence
-;;                                                    ; TODO this breaks in org-mode
-;; (global-set-key (kbd "M-a M-a") 'magit-status)	   ; default app
-;; (global-set-key (kbd "M-a a") 'magit-status)	   ; default app
-;; (global-set-key (kbd "M-a m") 'notmuch)		   ; email
-;; (global-set-key (kbd "M-a s") 'shell)		   ; shell
-
+(global-set-key (kbd "M-U") 'backward-paragraph)
+; selection
+(define-prefix-command 'jsynacek-selection-map)
+(global-set-key (kbd "M-;") 'jsynacek-selection-map)
+(global-set-key (kbd "M-; o") 'er/mark-word)
+(global-set-key (kbd "M-; O") 'er/mark-paragraph)
+(global-set-key (kbd "M-; k") 'jsynacek-mark-line) ; TODO this seems really not needed
+; windows
 (define-prefix-command 'jsynacek-window-keymap)
 (global-set-key (kbd "M-w") 'jsynacek-window-keymap)
 (global-set-key (kbd "M-w i") 'windmove-up)
 (global-set-key (kbd "M-w j") 'windmove-left)
 (global-set-key (kbd "M-w k") 'windmove-down)
 (global-set-key (kbd "M-w l") 'windmove-right)
-
-(define-prefix-command 'jsynacek-org-keymap)
-(global-set-key (kbd "M-r") 'jsynacek-org-keymap)
-(global-set-key (kbd "M-r a") 'org-agenda)
-(global-set-key (kbd "M-r c") 'org-capture)
-
-(define-prefix-command 'jsynacek-insert-keymap)
-(global-set-key (kbd "M-p") 'jsynacek-insert-keymap)
-(global-set-key (kbd "M-p j") 'jsynacek-insert-brackets)
-(global-set-key (kbd "M-p k") 'jsynacek-insert-curly)
-(global-set-key (kbd "M-p u") 'jsynacek-insert-double-quotes)
-(global-set-key (kbd "M-p i") 'jsynacek-insert-single-quotes)
-
+; evaluation
 (define-prefix-command 'jsynacek-eval-keymap)
 (global-set-key (kbd "M-e") 'jsynacek-eval-keymap)
 (global-set-key (kbd "M-e M-e") 'eval-last-sexp)
@@ -250,7 +258,7 @@
 (global-set-key (kbd "M-e d") 'eval-defun)
 (global-set-key (kbd "M-e e") 'eval-last-sexp)
 (global-set-key (kbd "M-e r") 'eval-region)
-
+; transposition
 (define-prefix-command 'jsynacek-transpose-keymap)
 (global-set-key (kbd "M-t") 'jsynacek-transpose-keymap)
 (global-set-key (kbd "M-t t") 'transpose-chars)
@@ -258,26 +266,21 @@
 (global-set-key (kbd "M-t s") 'transpose-sexps)
 (global-set-key (kbd "M-t w") 'transpose-words)
 (global-set-key (kbd "M-t l") 'transpose-lines)
-
-(global-set-key (kbd "M-s b") 'helm-bookmarks)
-(global-set-key (kbd "M-s f") 'helm-find)
+; searching
 (global-set-key (kbd "M-s g") 'rgrep)
 (global-set-key (kbd "M-s s") 'helm-swoop)
-
+; inserting
 (define-prefix-command 'jsynacek-todo-keymap)
 (global-set-key (kbd "M-m") 'jsynacek-todo-keymap) ; was back-to-indentation
-(global-set-key (kbd "M-m e") nil) ; TODO evaluation
 (global-set-key (kbd "M-m o") 'jsynacek-open-below)
 (global-set-key (kbd "M-m O") 'jsynacek-open-above)
-(global-set-key (kbd "M-m a a") 'magit-status) ; TODO apps
-
-; e r d f - code related?
+; code navigation
 (global-set-key (kbd "M-m r") 'ggtags-find-reference)
 (global-set-key (kbd "M-m f") 'ggtags-find-tag-dwim)
 (global-set-key (kbd "M-m e") 'helm-semantic-or-imenu)
-
 ; mail
-(global-set-key (kbd "M-m m m") 'jsynacek-get-email)
+(global-set-key (kbd "M-m m m") 'jsynacek-mail-get)
+(global-set-key (kbd "M-m m s") 'jsynacek-mail-send)
 ; org
 (global-set-key (kbd "M-m i l") 'org-store-link)
 (global-set-key (kbd "M-m i a") 'org-agenda)
@@ -286,5 +289,23 @@
 (global-set-key (kbd "M-m a a") 'magit-status)
 (global-set-key (kbd "M-m a m") 'notmuch)
 (global-set-key (kbd "M-m a s") 'shell)
+(global-set-key (kbd "M-m a p") 'proced)
+; comments
+(global-set-key (kbd "M-m ; ;") 'jsynacek-comment-line-or-region)
+; buffer
+(global-set-key (kbd "M-m b b") 'switch-to-buffer)
+(global-set-key (kbd "M-m b r") 'revert-buffer)
+(global-set-key (kbd "M-m b k") 'jsynacek-kill-current-buffer)
+; file and bookmarks
+(global-set-key (kbd "M-m g b") 'helm-bookmarks)
+(global-set-key (kbd "M-m g g") 'jsynacek-find-file)
+(global-set-key (kbd "M-m g v") 'find-alternate-file)
+(global-set-key (kbd "M-m g d") 'dired)
+; version control
+(global-set-key (kbd "M-m v l") 'magit-log)
 
+;;; enable "dangerous" commands
 (put 'dired-find-alternate-file 'disabled nil)
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
+(put 'narrow-to-region 'disabled nil)

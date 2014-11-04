@@ -4,23 +4,6 @@
 
 
 
-;;; insertion
-(defun jsynacek-insert-brackets ()
-  (interactive)
-  (insert-pair nil ?( ?)))
-
-(defun jsynacek-insert-curly ()
-  (interactive)
-  (insert-pair nil ?{ ?}))
-
-(defun jsynacek-insert-double-quotes ()
-  (interactive)
-  (insert-pair nil ?\" ?\"))
-
-(defun jsynacek-insert-single-quotes ()
-  (interactive)
-  (insert-pair nil ?' ?'))
-
 (defun jsynacek-open-before-char ()
   (interactive)
   (backward-char)
@@ -109,6 +92,16 @@
       (kill-ring-save (region-beginning) (region-end))
     (save-excursion
       (kill-ring-save (line-beginning-position) (1+ (line-end-position))))))
+
+(defun jsynacek-duplicate-line () ; TODO turn into duplicate-line-or-region
+  (interactive)
+  (kill-ring-save (line-beginning-position) (1+ (line-end-position)))
+  (save-excursion
+    (end-of-line)
+    (forward-char)
+    (forward-char)
+    (insert-for-yank (current-kill 0)))
+  (next-line)) ; TODO FIXME
 
 (defun jsynacek-yank ()
   (interactive)
