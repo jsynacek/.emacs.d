@@ -210,10 +210,10 @@
 (global-set-key (kbd "M-\\") 'fixup-whitespace) ; was delete-horizontal-space
 (global-set-key (kbd "M-/") 'hippie-expand) ; was dabbrev-expand
 (global-set-key (kbd "M-SPC") 'set-mark-command)
-(global-set-key (kbd "<f5>") (if (fboundp 'helm-M-x)
+(global-set-key (kbd "M-x") (if (fboundp 'helm-M-x)
 				  'helm-M-x
 				'execute-extended-command))
-(global-set-key (kbd "M-x") 'jsynacek-kill-line-or-region)
+					;(global-set-key (kbd "M-x") 'jsynacek-kill-line-or-region)
 (global-set-key (kbd "M-c") 'jsynacek-copy-line-or-region) ; was capitalize-word
 (global-set-key (kbd "M-C") 'jsynacek-duplicate-line)
 (global-set-key (kbd "M-v") 'jsynacek-yank) ; was scroll-down
