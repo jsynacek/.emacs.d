@@ -26,6 +26,9 @@
 
 (setq Man-width 90)
 
+;;; faces
+(set-face-foreground 'diff-hunk-header-face "#2aa198") ; solarized cyan
+
 (defun jsynacek-highlight-trailing-whitespace ()
   (setq-local show-trailing-whitespace t))
 (add-hook 'find-file-hook #'jsynacek-highlight-trailing-whitespace)
@@ -64,11 +67,11 @@
 (require 'dired-x)
 
 (require 'elfeed)
-(define-key elfeed-search-mode-map "i"
+(define-key elfeed-search-mode-map "c"
   (lambda ()
     (interactive)
     (goto-line 2)))
-(define-key elfeed-search-mode-map "k" 'elfeed-search-untag-all-unread)
+(define-key elfeed-search-mode-map "t" 'elfeed-search-untag-all-unread)
 (define-key elfeed-search-mode-map "r" nil)
 
 (require 'erc)
@@ -85,8 +88,8 @@
 (define-key erc-mode-map (kbd "C-<return>") 'erc-send-current-line)
 
 (require 'expand-region)
-(global-set-key (kbd "M-n") 'er/expand-region)
-(setq expand-region-contract-fast-key "N")
+(global-set-key (kbd "C-c -") 'er/expand-region)
+(setq expand-region-contract-fast-key "_")
 
 (require 'helm)
 ;; (helm-mode t)
@@ -150,27 +153,35 @@
 
 (require 'org-notmuch)
 
-;; (require 'solarized)
-;; (setq solarized-use-variable-pitch nil)
-;; (setq custom-safe-themes
-;;       '("d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" default))
-;; (load-theme 'solarized-light)
-;; (load-theme 'warm-night)
+(require 'solarized)
+(setq solarized-use-variable-pitch nil)
+(setq solarized-height-minus-1 1.0)
+(setq solarized-height-plus-1 1.0)
+(setq solarized-height-plus-2 1.0)
+(setq solarized-height-plus-3 1.0)
+(setq solarized-height-plus-4 1.0)
+(setq custom-safe-themes
+      '("d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" ; solarized-light
+	"8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" ; solarized-dark
+	default))
+(load-theme 'solarized-dark)
 
 (require 'recentf)
 (setq recentf-max-saved-items 50)
 
 (require 'smartparens-config)
-(smartparens-global-strict-mode t)
-(show-smartparens-global-mode t)
+(define-global-minor-mode jsynacek-smartparens-mode smartparens-mode
+  (lambda ()
+    (when (memq major-mode '(emacs-lisp-mode c-mode))
+      (smartparens-strict-mode 1))))
+(jsynacek-smartparens-mode 1)
 (sp-local-pair 'message-mode "'" nil :actions nil)
-(sp-local-pair 'c-mode "/*" "*/") sp-point-inside-string
 (define-key sp-keymap (kbd "C-M-f") 'sp-forward-sexp)
 (define-key sp-keymap (kbd "C-M-b") 'sp-backward-sexp)
 (define-key sp-keymap (kbd "C-M-d") 'sp-down-sexp)
 (define-key sp-keymap (kbd "C-M-u") 'sp-backward-up-sexp)
 (define-key sp-keymap (kbd "C-M-k") 'sp-kill-sexp)
-(define-key sp-keymap (kbd "C-k") 'sp-kill-hybrid-sexp)
+;(define-key sp-keymap (kbd "C-k") 'sp-kill-hybrid-sexp)
 (define-key sp-keymap (kbd "M-D") 'sp-splice-sexp)
 (define-key sp-keymap (kbd "M-0") 'sp-forward-slurp-sexp)
 (define-key sp-keymap (kbd "M-9") 'sp-forward-barf-sexp)
@@ -184,7 +195,6 @@
 
 (load "jsynacek-util.el")
 (require 'private)
-
 
 ;;; keybindings
 ; basic
@@ -214,29 +224,26 @@
 				  'helm-M-x
 				'execute-extended-command))
 					;(global-set-key (kbd "M-x") 'jsynacek-kill-line-or-region)
-(global-set-key (kbd "M-c") 'jsynacek-copy-line-or-region) ; was capitalize-word
-(global-set-key (kbd "M-C") 'jsynacek-duplicate-line)
-(global-set-key (kbd "M-v") 'jsynacek-yank) ; was scroll-down
+;(global-set-key (kbd "M-c") 'jsynacek-copy-line-or-region) ; was capitalize-word
+;(global-set-key (kbd "M-C") 'jsynacek-duplicate-line)
+;(global-set-key (kbd "M-v") 'jsynacek-yank) ; was scroll-down
 (define-key minibuffer-local-completion-map (kbd "M-v") 'jsynacek-yank)
 (global-set-key (kbd "M-z") 'undo-tree-undo) ; was zap-to-char
 (global-set-key (kbd "M-Z") 'undo-tree-redo)
-(global-set-key (kbd "M-,") 'ace-jump-mode) ; was indent-new-comment-line
+(global-set-key (kbd "C-c ,") 'ace-jump-mode)
 (global-set-key (kbd "M-y") 'helm-show-kill-ring) ; was yank-pop
-(global-set-key (kbd "<f1> a") 'helm-apropos)      ; was apropos-command
-(global-set-key (kbd "<f1> l") 'helm-locate-library) ; was view-lossage
-(global-set-key (kbd "<f1> n") 'man)		     ; was view-emacs-news
-(global-set-key (kbd "<f1> M") 'helm-man-woman)
+(global-set-key (kbd "C-h a") 'helm-apropos)      ; was apropos-command
+(global-set-key (kbd "C-h l") 'helm-locate-library) ; was view-lossage
+(global-set-key (kbd "C-h n") 'man)		     ; was view-emacs-news
+(global-set-key (kbd "C-h M") 'helm-man-woman)
 ; movement
-(global-set-key (kbd "M-i") 'previous-line) ; was tab-to-tab-stop
-(global-set-key (kbd "M-I") 'scroll-down)
-(global-set-key (kbd "M-j") 'backward-char) ; was indent-new-comment-line
-(global-set-key (kbd "M-k") 'next-line) ; was kill-sentence
-(global-set-key (kbd "M-K") 'scroll-up)
-(global-set-key (kbd "M-l") 'forward-char) ; was downcase-region
-(global-set-key (kbd "M-o") 'forward-word) ; was "set face to something"
-(global-set-key (kbd "M-O") 'forward-paragraph)
-(global-set-key (kbd "M-u") 'backward-word) ; was upcase-word
-(global-set-key (kbd "M-U") 'backward-paragraph)
+(global-set-key (kbd "M-c") 'previous-line)
+(global-set-key (kbd "M-C") 'scroll-down)
+(global-set-key (kbd "M-h") 'backward-char)
+(global-set-key (kbd "M-t") 'next-line)
+(global-set-key (kbd "M-T") 'scroll-up)
+(global-set-key (kbd "M-n") 'forward-char)
+(global-set-key (kbd "M-r") 'forward-word)
 ; selection
 (define-prefix-command 'jsynacek-selection-map)
 (global-set-key (kbd "M-;") 'jsynacek-selection-map)
@@ -246,10 +253,10 @@
 ; windows
 (define-prefix-command 'jsynacek-window-keymap)
 (global-set-key (kbd "M-w") 'jsynacek-window-keymap)
-(global-set-key (kbd "M-w i") 'windmove-up)
-(global-set-key (kbd "M-w j") 'windmove-left)
-(global-set-key (kbd "M-w k") 'windmove-down)
-(global-set-key (kbd "M-w l") 'windmove-right)
+(global-set-key (kbd "M-w c") 'windmove-up)
+(global-set-key (kbd "M-w h") 'windmove-left)
+(global-set-key (kbd "M-w t") 'windmove-down)
+(global-set-key (kbd "M-w n") 'windmove-right)
 ; evaluation
 (define-prefix-command 'jsynacek-eval-keymap)
 (global-set-key (kbd "M-e") 'jsynacek-eval-keymap)
@@ -259,13 +266,13 @@
 (global-set-key (kbd "M-e e") 'eval-last-sexp)
 (global-set-key (kbd "M-e r") 'eval-region)
 ; transposition
-(define-prefix-command 'jsynacek-transpose-keymap)
-(global-set-key (kbd "M-t") 'jsynacek-transpose-keymap)
-(global-set-key (kbd "M-t t") 'transpose-chars)
-(global-set-key (kbd "M-t M-t") 'transpose-chars)
-(global-set-key (kbd "M-t s") 'transpose-sexps)
-(global-set-key (kbd "M-t w") 'transpose-words)
-(global-set-key (kbd "M-t l") 'transpose-lines)
+;; (define-prefix-command 'jsynacek-transpose-keymap)
+;; (global-set-key (kbd "M-t") 'jsynacek-transpose-keymap)
+;; (global-set-key (kbd "M-t t") 'transpose-chars)
+;; (global-set-key (kbd "M-t M-t") 'transpose-chars)
+;; (global-set-key (kbd "M-t s") 'transpose-sexps)
+;; (global-set-key (kbd "M-t w") 'transpose-words)
+;; (global-set-key (kbd "M-t l") 'transpose-lines)
 ; searching
 (global-set-key (kbd "M-s g") 'rgrep)
 (global-set-key (kbd "M-s s") 'helm-swoop)
@@ -282,9 +289,9 @@
 (global-set-key (kbd "M-m m m") 'jsynacek-mail-get)
 (global-set-key (kbd "M-m m s") 'jsynacek-mail-send)
 ; org
-(global-set-key (kbd "M-m i l") 'org-store-link)
-(global-set-key (kbd "M-m i a") 'org-agenda)
-(global-set-key (kbd "M-m i c") 'org-capture)
+(global-set-key (kbd "C-c l") 'org-store-link)
+(global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c c") 'org-capture)
 ; apps
 (global-set-key (kbd "M-m a a") 'magit-status)
 (global-set-key (kbd "M-m a m") 'notmuch)
@@ -294,7 +301,7 @@
 (global-set-key (kbd "M-m ; ;") 'jsynacek-comment-line-or-region)
 ; buffer
 (global-set-key (kbd "M-m b b") 'switch-to-buffer)
-(global-set-key (kbd "M-m b r") 'revert-buffer)
+(global-set-key (kbd "C-c R") 'revert-buffer)
 (global-set-key (kbd "M-m b k") 'jsynacek-kill-current-buffer)
 ; file and bookmarks
 (global-set-key (kbd "M-m g b") 'helm-bookmarks)
@@ -302,7 +309,7 @@
 (global-set-key (kbd "M-m g v") 'find-alternate-file)
 (global-set-key (kbd "M-m g d") 'dired)
 ; version control
-(global-set-key (kbd "M-m v l") 'magit-log)
+(global-set-key (kbd "C-c v l") 'magit-log)
 
 ;;; enable "dangerous" commands
 (put 'dired-find-alternate-file 'disabled nil)
