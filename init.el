@@ -298,7 +298,7 @@
 (global-set-key (kbd "M-m a s") 'shell)
 (global-set-key (kbd "M-m a p") 'proced)
 ; comments
-(global-set-key (kbd "M-m ; ;") 'jsynacek-comment-line-or-region)
+(global-set-key (kbd "C-c ;") 'jsynacek-comment-line-or-region)
 ; buffer
 (global-set-key (kbd "M-m b b") 'switch-to-buffer)
 (global-set-key (kbd "C-c R") 'revert-buffer)
