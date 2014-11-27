@@ -27,7 +27,8 @@
 (setq Man-width 90)
 
 ;;; faces
-(set-face-foreground 'diff-hunk-header-face "#2aa198") ; solarized cyan
+(eval-after-load "diff-mode"
+  '(set-face-foreground 'diff-hunk-header-face "#2aa198")) ; solarized cyan
 
 (defun jsynacek-highlight-trailing-whitespace ()
   (setq-local show-trailing-whitespace t))
@@ -175,7 +176,6 @@
     (when (memq major-mode '(emacs-lisp-mode c-mode))
       (smartparens-strict-mode 1))))
 (jsynacek-smartparens-mode 1)
-(sp-local-pair 'message-mode "'" nil :actions nil)
 (define-key sp-keymap (kbd "C-M-f") 'sp-forward-sexp)
 (define-key sp-keymap (kbd "C-M-b") 'sp-backward-sexp)
 (define-key sp-keymap (kbd "C-M-d") 'sp-down-sexp)
@@ -276,11 +276,12 @@
 ; searching
 (global-set-key (kbd "M-s g") 'rgrep)
 (global-set-key (kbd "M-s s") 'helm-swoop)
-; inserting
+; inserting and removing
 (define-prefix-command 'jsynacek-todo-keymap)
 (global-set-key (kbd "M-m") 'jsynacek-todo-keymap) ; was back-to-indentation
 (global-set-key (kbd "M-m o") 'jsynacek-open-below)
 (global-set-key (kbd "M-m O") 'jsynacek-open-above)
+(global-set-key (kbd "C-c d") 'kill-whole-line)
 ; code navigation
 (global-set-key (kbd "M-m r") 'ggtags-find-reference)
 (global-set-key (kbd "M-m f") 'ggtags-find-tag-dwim)
