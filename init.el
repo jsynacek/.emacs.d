@@ -20,6 +20,7 @@
 (show-paren-mode t)
 (abbrev-mode t)
 (recentf-mode t)
+(column-number-mode 1)
 
 (setq ring-bell-function 'ignore)
 (prefer-coding-system 'utf-8)
