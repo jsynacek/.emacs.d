@@ -89,6 +89,18 @@
 (define-key erc-mode-map (kbd "RET") nil)
 (define-key erc-mode-map (kbd "C-<return>") 'erc-send-current-line)
 
+(require 'eshell)
+(defun pcomplete/eshell-mode/virsh ()
+  (pcomplete-here '("start"
+		    "shutdown"
+		    "reboot"))
+  (pcomplete-here ; TODO parse this information from 'virsh list --all'
+   '("f20"
+     "f21"
+     "systemd-devel"
+     "rhel-6"
+     "rhel-7")))
+
 (require 'expand-region)
 (global-set-key (kbd "C-c -") 'er/expand-region)
 (setq expand-region-contract-fast-key "_")
@@ -155,6 +167,9 @@
 
 (require 'org-notmuch)
 
+(require 'paredit)
+(add-hook 'emacs-lisp-mode-hook (lambda () (paredit-mode 1)))
+
 (require 'solarized)
 (setq solarized-use-variable-pitch nil)
 (setq solarized-height-minus-1 1.0)
@@ -171,23 +186,24 @@
 (require 'recentf)
 (setq recentf-max-saved-items 50)
 
-(require 'smartparens-config)
-(define-global-minor-mode jsynacek-smartparens-mode smartparens-mode
-  (lambda ()
-    (when (memq major-mode '(emacs-lisp-mode c-mode))
-      (smartparens-strict-mode 1))))
-(jsynacek-smartparens-mode 1)
-(define-key sp-keymap (kbd "C-M-f") 'sp-forward-sexp)
-(define-key sp-keymap (kbd "C-M-b") 'sp-backward-sexp)
-(define-key sp-keymap (kbd "C-M-d") 'sp-down-sexp)
-(define-key sp-keymap (kbd "C-M-u") 'sp-backward-up-sexp)
-(define-key sp-keymap (kbd "C-M-k") 'sp-kill-sexp)
-;(define-key sp-keymap (kbd "C-k") 'sp-kill-hybrid-sexp)
-(define-key sp-keymap (kbd "M-D") 'sp-splice-sexp)
-(define-key sp-keymap (kbd "M-0") 'sp-forward-slurp-sexp)
-(define-key sp-keymap (kbd "M-9") 'sp-forward-barf-sexp)
-(define-key sp-keymap (kbd "M-(") 'sp-backward-slurp-sexp)
-(define-key sp-keymap (kbd "M-)") 'sp-backward-barf-sexp)
+;; (require 'smartparens-config)
+;; (define-global-minor-mode jsynacek-smartparens-mode smartparens-mode
+;;   (lambda ()
+;;     (when (memq major-mode '(emacs-lisp-mode c-mode))
+;;       (smartparens-strict-mode 1))))
+;; (jsynacek-smartparens-mode 1)
+;; (define-key sp-keymap (kbd "C-M-f") 'sp-forward-sexp)
+;; (define-key sp-keymap (kbd "C-M-b") 'sp-backward-sexp)
+;; (define-key sp-keymap (kbd "C-M-d") 'sp-down-sexp)
+;; (define-key sp-keymap (kbd "C-M-u") 'sp-backward-up-sexp)
+;; (define-key sp-keymap (kbd "C-M-k") 'sp-kill-sexp)
+;; ;(define-key sp-keymap (kbd "C-k") 'sp-kill-hybrid-sexp)
+;; (define-key sp-keymap (kbd "M-D") 'sp-splice-sexp)
+;; (define-key sp-keymap (kbd "M-0") 'sp-forward-slurp-sexp)
+;; (define-key sp-keymap (kbd "M-9") 'sp-forward-barf-sexp)
+;; (define-key sp-keymap (kbd "M-(") 'sp-backward-slurp-sexp)
+;; (define-key sp-keymap (kbd "M-)") 'sp-backward-barf-sexp)
+
 
 (require 'undo-tree)
 
@@ -275,30 +291,31 @@
 ;; (global-set-key (kbd "M-t w") 'transpose-words)
 ;; (global-set-key (kbd "M-t l") 'transpose-lines)
 ; searching
-(global-set-key (kbd "M-s g") 'rgrep)
-(global-set-key (kbd "M-s s") 'helm-swoop)
+(global-set-key (kbd "C-c s g") 'rgrep)
+(global-set-key (kbd "C-c s s") 'helm-swoop)
+(global-set-key (kbd "C-c s .") 'isearch-forward-symbol-at-point)
 ; inserting and removing
-(define-prefix-command 'jsynacek-todo-keymap)
-(global-set-key (kbd "M-m") 'jsynacek-todo-keymap) ; was back-to-indentation
-(global-set-key (kbd "M-m o") 'jsynacek-open-below)
-(global-set-key (kbd "M-m O") 'jsynacek-open-above)
+(global-set-key (kbd "C-c o") 'jsynacek-open-below)
+(global-set-key (kbd "C-c O") 'jsynacek-open-above)
 (global-set-key (kbd "C-c d") 'kill-whole-line)
 ; code navigation
 (global-set-key (kbd "M-m r") 'ggtags-find-reference)
 (global-set-key (kbd "M-m f") 'ggtags-find-tag-dwim)
 (global-set-key (kbd "M-m e") 'helm-semantic-or-imenu)
 ; mail
-(global-set-key (kbd "M-m m m") 'jsynacek-mail-get)
-(global-set-key (kbd "M-m m s") 'jsynacek-mail-send)
+(define-prefix-command 'jsynacek-mail-keymap)
+(global-set-key (kbd "C-c m") 'jsynacek-mail-keymap)
+(global-set-key (kbd "C-c m m") 'jsynacek-mail-get)
+(global-set-key (kbd "C-c m s") 'jsynacek-mail-send)
+(global-set-key (kbd "C-c m n") 'notmuch)
 ; org
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
 ; apps
-(global-set-key (kbd "M-m a a") 'magit-status)
-(global-set-key (kbd "M-m a m") 'notmuch)
-(global-set-key (kbd "M-m a s") 'shell)
-(global-set-key (kbd "M-m a p") 'proced)
+(global-set-key (kbd "C-c g") 'magit-status)
+(global-set-key (kbd "C-c s") 'eshell)
+(global-set-key (kbd "C-c p") 'proced)
 ; comments
 (global-set-key (kbd "C-c ;") 'jsynacek-comment-line-or-region)
 ; buffer
