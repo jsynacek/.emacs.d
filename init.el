@@ -91,15 +91,21 @@
 
 (require 'eshell)
 (defun pcomplete/eshell-mode/virsh ()
-  (pcomplete-here '("start"
+  (pcomplete-here '("list"
+		    "start"
 		    "shutdown"
 		    "reboot"))
-  (pcomplete-here ; TODO parse this information from 'virsh list --all'
-   '("f20"
-     "f21"
-     "systemd-devel"
-     "rhel-6"
-     "rhel-7")))
+  (pcomplete-here
+   (let ((last-cmd (nth (1- pcomplete-last) pcomplete-args)))
+     (cond
+      ((equal "list" last-cmd)
+       '("--all"))
+      (t
+       '("f20"
+	 "f21"
+	 "systemd-devel"
+	 "rhel-6"
+	 "rhel-7")))))) ; TODO parse this information from 'virsh list --all'
 
 (require 'expand-region)
 (global-set-key (kbd "C-c -") 'er/expand-region)
