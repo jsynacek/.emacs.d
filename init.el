@@ -45,9 +45,10 @@
 (defalias 'plp 'package-list-packages)
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-(defun jsynacek-ggtags-mode ()
+(defun jsynacek-c-mode-setup ()
+  (c-set-style "linux")
   (ggtags-mode 1))
-(add-hook 'c-mode-hook #'jsynacek-ggtags-mode)
+(add-hook 'c-mode-hook #'jsynacek-c-mode-setup)
 
 (defadvice eval-region (after jsynacek-eval-region-advice-after activate)
   (deactivate-mark))
@@ -65,8 +66,9 @@
 ;; (setq bbdb-update-records-p 'create)
 
 (require 'dired)
-(setq dired-listing-switches "-al --group-directories-first")
 (require 'dired-x)
+(setq dired-listing-switches "-al --group-directories-first")
+(define-key dired-mode-map "P" 'dired-up-directory)
 
 (require 'elfeed)
 (define-key elfeed-search-mode-map "c"
@@ -91,7 +93,8 @@
 
 (require 'eshell)
 (defun pcomplete/eshell-mode/virsh ()
-  (pcomplete-here '("list"
+  (pcomplete-here '("destroy"
+		    "list"
 		    "start"
 		    "shutdown"
 		    "reboot"))
@@ -297,6 +300,8 @@
 ;; (global-set-key (kbd "M-t w") 'transpose-words)
 ;; (global-set-key (kbd "M-t l") 'transpose-lines)
 ; searching
+(define-prefix-command 'jsynacek-search-keymap)
+(global-set-key (kbd "C-c s") 'jsynacek-search-keymap)
 (global-set-key (kbd "C-c s g") 'rgrep)
 (global-set-key (kbd "C-c s s") 'helm-swoop)
 (global-set-key (kbd "C-c s .") 'isearch-forward-symbol-at-point)
@@ -335,6 +340,8 @@
 (global-set-key (kbd "M-m g d") 'dired)
 ; version control
 (global-set-key (kbd "C-c v l") 'magit-log)
+; other
+(global-set-key (kbd "C-c r") 'recompile)
 
 ;;; enable "dangerous" commands
 (put 'dired-find-alternate-file 'disabled nil)
