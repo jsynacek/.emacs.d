@@ -277,12 +277,12 @@
 (global-set-key (kbd "M-; O") 'er/mark-paragraph)
 (global-set-key (kbd "M-; k") 'jsynacek-mark-line) ; TODO this seems really not needed
 ; windows
-(define-prefix-command 'jsynacek-window-keymap)
-(global-set-key (kbd "M-w") 'jsynacek-window-keymap)
-(global-set-key (kbd "M-w c") 'windmove-up)
-(global-set-key (kbd "M-w h") 'windmove-left)
-(global-set-key (kbd "M-w t") 'windmove-down)
-(global-set-key (kbd "M-w n") 'windmove-right)
+;; (define-prefix-command 'jsynacek-window-keymap)
+;; (global-set-key (kbd "M-w") 'jsynacek-window-keymap)
+(global-set-key (kbd "C-c <up>") 'windmove-up)
+(global-set-key (kbd "C-c <left>") 'windmove-left)
+(global-set-key (kbd "C-c <down>") 'windmove-down)
+(global-set-key (kbd "C-c <right>") 'windmove-right)
 ; evaluation
 (define-prefix-command 'jsynacek-eval-keymap)
 (global-set-key (kbd "M-e") 'jsynacek-eval-keymap)
@@ -310,15 +310,15 @@
 (global-set-key (kbd "C-c O") 'jsynacek-open-above)
 (global-set-key (kbd "C-c d") 'kill-whole-line)
 ; code navigation
-(global-set-key (kbd "M-m r") 'ggtags-find-reference)
-(global-set-key (kbd "M-m f") 'ggtags-find-tag-dwim)
-(global-set-key (kbd "M-m e") 'helm-semantic-or-imenu)
+;;(global-set-key (kbd "M-m r") 'ggtags-find-reference)
+;;(global-set-key (kbd "M-m f") 'ggtags-find-tag-dwim)
+(global-set-key (kbd "C-c i") 'helm-semantic-or-imenu)
 ; mail
 (define-prefix-command 'jsynacek-mail-keymap)
 (global-set-key (kbd "C-c m") 'jsynacek-mail-keymap)
-(global-set-key (kbd "C-c m m") 'jsynacek-mail-get)
+(global-set-key (kbd "C-c m m") 'notmuch)
+(global-set-key (kbd "C-c m n") 'jsynacek-mail-get)
 (global-set-key (kbd "C-c m s") 'jsynacek-mail-send)
-(global-set-key (kbd "C-c m n") 'notmuch)
 ; org
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c a") 'org-agenda)
@@ -330,14 +330,14 @@
 ; comments
 (global-set-key (kbd "C-c ;") 'jsynacek-comment-line-or-region)
 ; buffer
-(global-set-key (kbd "M-m b b") 'switch-to-buffer)
+;;(global-set-key (kbd "M-m b b") 'switch-to-buffer)
 (global-set-key (kbd "C-c R") 'revert-buffer)
-(global-set-key (kbd "M-m b k") 'jsynacek-kill-current-buffer)
+;;(global-set-key (kbd "M-m b k") 'jsynacek-kill-current-buffer)
 ; file and bookmarks
-(global-set-key (kbd "M-m g b") 'helm-bookmarks)
-(global-set-key (kbd "M-m g g") 'jsynacek-find-file)
-(global-set-key (kbd "M-m g v") 'find-alternate-file)
-(global-set-key (kbd "M-m g d") 'dired)
+(global-set-key (kbd "C-c b") 'helm-bookmarks)
+;;(global-set-key (kbd "M-m g g") 'jsynacek-find-file)
+;;(global-set-key (kbd "M-m g v") 'find-alternate-file)
+;;(global-set-key (kbd "M-m g d") 'dired)
 ; version control
 (global-set-key (kbd "C-c v l") 'magit-log)
 ; other
