@@ -241,18 +241,12 @@
 (global-set-key (kbd "M-3") 'delete-other-windows)
 (global-set-key (kbd "M-4") 'switch-to-buffer-other-window)
 (global-set-key (kbd "M-5") 'find-file-other-window)
-(global-set-key (kbd "M-7") #'(lambda () (interactive) (scroll-down (/ (- (window-height) 2) 2))))
-(global-set-key (kbd "M-8") #'(lambda () (interactive) (scroll-up (/ (- (window-height) 2) 2))))
 (global-set-key (kbd "M-\\") 'fixup-whitespace) ; was delete-horizontal-space
-(global-set-key (kbd "M-/") 'hippie-expand) ; was dabbrev-expand
-(global-set-key (kbd "M-SPC") 'set-mark-command)
-(global-set-key (kbd "M-x") (if (fboundp 'helm-M-x)
+(global-set-key (kbd "C-c /") 'hippie-expand)
+(global-set-key (kbd "C-c x") (if (fboundp 'helm-M-x)
 				  'helm-M-x
 				'execute-extended-command))
 					;(global-set-key (kbd "M-x") 'jsynacek-kill-line-or-region)
-;(global-set-key (kbd "M-c") 'jsynacek-copy-line-or-region) ; was capitalize-word
-;(global-set-key (kbd "M-C") 'jsynacek-duplicate-line)
-;(global-set-key (kbd "M-v") 'jsynacek-yank) ; was scroll-down
 (define-key minibuffer-local-completion-map (kbd "M-v") 'jsynacek-yank)
 (global-set-key (kbd "M-z") 'undo-tree-undo) ; was zap-to-char
 (global-set-key (kbd "M-Z") 'undo-tree-redo)
