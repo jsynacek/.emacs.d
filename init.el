@@ -140,7 +140,6 @@
 				   (magit-mode-quit-window t)))
 
 (require 'notmuch)
-(setq notmuch-search-oldest-first nil)
 (setq notmuch-fcc-dirs "Sent")
 (setq notmuch-show-logo nil)
 
