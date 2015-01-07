@@ -108,7 +108,7 @@
 	 "f21"
 	 "systemd-devel"
 	 "rhel-6"
-	 "rhel-7")))))) ; TODO parse this information from 'virsh list --all'
+	 "rhel-7")))))) ; TODO parse this information from 'virsh list --all --name'
 
 (require 'expand-region)
 (global-set-key (kbd "C-c -") 'er/expand-region)
@@ -285,13 +285,12 @@
 (global-set-key (kbd "M-e e") 'eval-last-sexp)
 (global-set-key (kbd "M-e r") 'eval-region)
 ; transposition
-;; (define-prefix-command 'jsynacek-transpose-keymap)
-;; (global-set-key (kbd "M-t") 'jsynacek-transpose-keymap)
-;; (global-set-key (kbd "M-t t") 'transpose-chars)
-;; (global-set-key (kbd "M-t M-t") 'transpose-chars)
-;; (global-set-key (kbd "M-t s") 'transpose-sexps)
-;; (global-set-key (kbd "M-t w") 'transpose-words)
-;; (global-set-key (kbd "M-t l") 'transpose-lines)
+(define-prefix-command 'jsynacek-transpose-keymap)
+(global-set-key (kbd "C-c t") 'jsynacek-transpose-keymap)
+(global-set-key (kbd "C-c t t") 'transpose-chars)
+(global-set-key (kbd "C-c t s") 'transpose-sexps)
+(global-set-key (kbd "C-c t w") 'transpose-words)
+(global-set-key (kbd "C-c t l") 'transpose-lines)
 ; searching
 (define-prefix-command 'jsynacek-search-keymap)
 (global-set-key (kbd "C-c s") 'jsynacek-search-keymap)
@@ -328,9 +327,6 @@
 ;;(global-set-key (kbd "M-m b k") 'jsynacek-kill-current-buffer)
 ; file and bookmarks
 (global-set-key (kbd "C-c b") 'helm-bookmarks)
-;;(global-set-key (kbd "M-m g g") 'jsynacek-find-file)
-;;(global-set-key (kbd "M-m g v") 'find-alternate-file)
-;;(global-set-key (kbd "M-m g d") 'dired)
 ; version control
 (global-set-key (kbd "C-c v l") 'magit-log)
 ; other
