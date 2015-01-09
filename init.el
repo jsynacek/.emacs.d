@@ -172,6 +172,10 @@
 (setq org-clock-out-when-done t)
 (setq org-agenda-span 14)
 (setq org-agenda-start-on-weekday nil)
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((python . t)))
+(setq org-src-fontify-natively t)
 
 (require 'org-notmuch)
 
