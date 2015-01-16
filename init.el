@@ -1,3 +1,5 @@
+; TODO map C-x 4 s to new eshell window
+
 ;;; general
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 (add-to-list 'load-path "~/work/git/upstream/org-mode/contrib/lisp/") ; org-notmuch.el
@@ -77,6 +79,7 @@
     (goto-line 2)))
 (define-key elfeed-search-mode-map "t" 'elfeed-search-untag-all-unread)
 (define-key elfeed-search-mode-map "r" nil)
+(define-key elfeed-search-mode-map "n" 'elfeed-search-browse-url)
 
 (require 'erc)
 (setq erc-nick-uniquifier "_")
@@ -251,9 +254,9 @@
 				'execute-extended-command))
 					;(global-set-key (kbd "M-x") 'jsynacek-kill-line-or-region)
 (define-key minibuffer-local-completion-map (kbd "M-v") 'jsynacek-yank)
-(global-set-key (kbd "M-z") 'undo-tree-undo) ; was zap-to-char
-(global-set-key (kbd "M-Z") 'undo-tree-redo)
-(global-set-key (kbd "C-c ,") 'ace-jump-mode)
+(global-set-key (kbd "C-z") 'undo-tree-undo)
+(global-set-key (kbd "C-S-z") 'undo-tree-redo)
+(global-set-key (kbd "C-j") 'ace-jump-mode)
 (global-set-key (kbd "M-y") 'helm-show-kill-ring) ; was yank-pop
 (global-set-key (kbd "C-h a") 'helm-apropos)      ; was apropos-command
 (global-set-key (kbd "C-h l") 'helm-locate-library) ; was view-lossage
@@ -305,6 +308,7 @@
 (global-set-key (kbd "C-c o") 'jsynacek-open-below)
 (global-set-key (kbd "C-c O") 'jsynacek-open-above)
 (global-set-key (kbd "C-c d") 'kill-whole-line)
+
 ; code navigation
 ;;(global-set-key (kbd "M-m r") 'ggtags-find-reference)
 ;;(global-set-key (kbd "M-m f") 'ggtags-find-tag-dwim)
