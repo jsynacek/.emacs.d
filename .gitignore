@@ -1,7 +1,2 @@
-*.elc
-.ido.last
-.recentf
-.smex-items
 elpa/
-autosave/
 lisp/private.el
