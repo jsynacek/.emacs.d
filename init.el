@@ -38,6 +38,11 @@
 (require 'bind-key)
 
 ;; builtin
+(use-package cc-mode
+  :config
+  (add-hook 'c-mode-hook
+	    #'(lambda () (setq c-default-style "linux"))))
+
 (use-package dired
   :config
   (use-package dired-x)
