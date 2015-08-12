@@ -71,6 +71,23 @@
     (setq avy-style 'at-full))
   :bind ("C-." . avy-goto-subword-1))
 
+(use-package company
+  :ensure t
+  :config
+
+  (defun jsynacek-enable-company-mode ()
+    (company-mode 1))
+
+  (setq company-idle-delay 0.1)
+
+  (use-package company-c-headers
+    :ensure t
+    :config
+    (add-to-list 'company-backends 'company-c-headers))
+
+  (add-hook 'c-mode-hook 'jsynacek-enable-company-mode)
+  (add-hook 'emacs-lisp-mode-hook 'jsynacek-enable-company-mode))
+
 (use-package helm
   :ensure t
   :bind (("C-x b" . helm-mini)
