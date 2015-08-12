@@ -94,6 +94,10 @@
 	 ("C-c x" . helm-M-x)
 	 ("C-c i" . helm-imenu)))
 
+(use-package helm-git-grep
+  :ensure t
+  :bind ("C-c f" . helm-git-grep))
+
 (use-package helm-swoop
   :ensure t)
 
