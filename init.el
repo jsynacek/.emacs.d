@@ -92,16 +92,28 @@
   :ensure t
   :bind (("C-x b" . helm-mini)
 	 ("C-c x" . helm-M-x)
-	 ("C-c i" . helm-imenu)))
+	 ("C-c i" . helm-imenu)
+	 ("C-c b" . helm-bookmarks)))
 
 (use-package helm-git-grep
   :ensure t
   :bind ("C-c f" . helm-git-grep))
 
-(use-package helm-swoop
-  :ensure t)
+(define-prefix-command 'tags-prefix)
+(global-set-key (kbd "C-t") 'tags-prefix)
 
-(use-package ggtags
+(use-package helm-gtags
+  :ensure t
+  :bind
+  (("C-t n" . helm-gtags-dwim)
+   ("C-t r" . helm-gtags-find-tag)
+   ("C-t g" . helm-gtags-find-rtag)
+   ("C-t C-t" . helm-gtags-pop-stack)
+   ("C-t /" . helm-gtags-select)
+   ("C-t l" . helm-gtags-show-stack)
+   ("C-t m" . helm-gtags-update-tags)))
+
+(use-package helm-swoop
   :ensure t)
 
 (use-package magit
