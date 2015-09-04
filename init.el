@@ -18,8 +18,9 @@
 (setq global-auto-revert-mode t)
 (setq mouse-yank-at-point t)
 
-(setq make-backup-files nil)
-;(setq backup-directory-alist '(("." . "/tmp")))
+(setq backup-directory-alist '(("." . "~/.emacs.d/.cache/")))
+(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/.cache/\\1" t)))
+(make-directory "~/.emacs.d/.cache/" t)
 
 (require 'package)
 (add-to-list 'package-archives
