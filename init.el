@@ -119,7 +119,10 @@
 
 (use-package magit
   :ensure t
-  :bind ("C-c g" . magit-status))
+  :bind ("C-c g" . magit-status)
+  :config
+  (magit-define-popup-switch 'magit-log-popup
+			     ?m "Omit merge commits" "--no-merges"))
 
 (use-package notmuch
   :bind ("C-c m m" . jsynacek-notmuch)
