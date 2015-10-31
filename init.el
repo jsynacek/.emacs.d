@@ -32,6 +32,9 @@
 (defadvice eval-region (after jsynacek-eval-region-advice-after activate)
   (deactivate-mark))
 
+(add-hook 'scheme-mode-hook
+	  #'(lambda () (setq indent-tabs-mode nil)))
+
 ;;; packages
 (eval-when-compile
   (require 'use-package))
