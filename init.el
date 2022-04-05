@@ -11,9 +11,10 @@
 (blink-cursor-mode -1)
 (show-paren-mode t)
 (column-number-mode t)
-(setq default-frame-alist '((top . 0) (left . 500)
-			    ;; The real numbers are -1 for some reason.
-                            (width . 121) (height . 63)
+(setq default-frame-alist '((top . 0) (left . 100)
+                            ;; The real numbers are -1 for some reason.
+                            (width . 186) (height . 62)
+                            ;;(width . 121) (height . 63)
                             (vertical-scroll-bars . nil)))
 (setq x-stretch-cursor t)
 
@@ -41,6 +42,7 @@
 (setq Man-notify-method 'pushy)
 (setq completions-format 'one-column)
 (require 'grep)
+(electric-indent-mode -1)
 
 ;; email
 (load (concat user-emacs-directory "jsynacek-secret.el"))
@@ -83,20 +85,6 @@
 (global-set-key (kbd "C-;") 'er/expand-region)
 
 ;; haskell
-;; TODO: Moves the point needlessly and outputs errors into the buffer... Fix, plz.
-(defun jsynacek-brittany ()
-  "Run brittany on the current region. If not active, format the buffer."
-  (interactive)
-  (let ((start (if (region-active-p) (region-beginning) (point-min)))
-        (end (if (region-active-p) (region-end) (point-max))))
-    (call-process-region start end
-                         "brittany"
-                         t
-                         (current-buffer)
-                         nil
-                         "--config-file" "/home/jsynacek/scrive/kontrakcja/brittany.yaml"
-                         "--write-mode" "inplace")))
-
 (defun jsynacek-shake-fix-formatting ()
   (interactive)
   (when (vc-root-dir)
@@ -132,6 +120,9 @@
       (call-interactively #'rg-project)
     (call-interactively #'rg)))
 (global-set-key (kbd "C-f") 'jsynacek-rg)
+
+(require 'avy)
+(global-set-key (kbd "C-j") 'avy-goto-word-1)
 
 (require 'dired)
 (setq dired-create-destination-dirs 'ask)
@@ -195,18 +186,27 @@ delete the current line forward."
 (define-key term-raw-map (kbd "C-f") 'jsynacek-rg)
 (define-key dired-mode-map (kbd "C-t") #'jsynacek-toggle-terminal)
 (global-set-key (kbd "C-t") #'jsynacek-toggle-terminal)
-(defun jsynacek-toggle-terminal ()
-  (interactive)
+(defun jsynacek-toggle-terminal (&optional buffer)
+  (interactive
+   (list
+    (and current-prefix-arg
+         (read-buffer "Terminal name: " "terminal2"))))
+  (message buffer)
   (if (eq major-mode 'term-mode)
       (switch-to-buffer nil)
-    (term "/bin/bash")))
+    (term "/bin/bash" buffer)))
 
 (require 'org)
 (setq org-todo-keywords '((sequence "TODO" "DOING" "WAITING" "|" "DONE")))
+(setq org-todo-keyword-faces '(("DOING" . "dodger blue")))
 (setq org-src-fontify-natively t)
 (setq org-agenda-files '("~/todo.org"))
 (setq org-agenda-include-diary t)
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
+
+(require 'magit)
+(setq magit-section-initial-visibility-alist '((untracked . hide)
+                                               (stashes . hide)))
 
 ;;; calendar and diary
 (setq calendar-holidays
@@ -221,8 +221,8 @@ delete the current line forward."
         (holiday-fixed 10 28 "Den vzniku samostatného československého státu")
         (holiday-fixed 11 17 "Den boje za svobodu a demokracii")
         (holiday-fixed 12 24 "Štědrý den")
-        (holiday-fixed 12 25 "svátek vánoční")
-        (holiday-fixed 12 26 "svátek vánoční")))
+        (holiday-fixed 12 25 "Svátek vánoční")
+        (holiday-fixed 12 26 "Svátek vánoční")))
 
 ;;; custom
 (custom-set-variables
@@ -233,7 +233,8 @@ delete the current line forward."
  '(mouse-wheel-progressive-speed nil)
  '(mouse-wheel-scroll-amount '(4 ((shift) . hscroll) ((meta)) ((control) . text-scale)))
  '(package-selected-packages
-   '(dockerfile-mode yaml-mode slime orgit rg mini-frame consult haskell-mode ivy-hydra projectile company org-tree-slide selectrum elm-mode counsel-etags go-mode expand-region avy nix-mode ivy magit)))
+   '(dockerfile-mode yaml-mode slime orgit rg mini-frame consult haskell-mode ivy-hydra projectile company org-tree-slide selectrum elm-mode counsel-etags go-mode expand-region avy nix-mode ivy magit))
+ '(warning-suppress-types '((comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
