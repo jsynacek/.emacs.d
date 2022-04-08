@@ -1,24 +1,35 @@
+;; -*- lexical-binding: t; -*-
 (load (concat user-emacs-directory "open-color.el"))
+
 (face-spec-set 'default
                `((t :foreground ,(oc-color 'gray9)
-                    ;; :background "#f8f9fa"))) ; gray1
+                    ;; :background ,(oc-color 'yellow9))))
                     :background "white")))
 (face-spec-set 'fringe
                '((t :background "white")))
 (face-spec-set 'region
-               '((t :background "#e9ecef"))) ; gray2
+               `((t :background ,(oc-color 'gray2))))
 (face-spec-set 'highlight
-               `((t :background ,(oc-color 'green1))))
+               `((t :background ,(oc-color 'green1)))) ;; TODO gray2 to match region maybe?
 (face-spec-set 'shadow
                `((t :foreground ,(oc-color 'gray6))))
+(face-spec-set 'success
+               `((t :foreground ,(oc-color 'green8))))
+(face-spec-set 'warning
+               `((t :foreground ,(oc-color 'orange7)))) ;; TODO yellow9 maybe?
+(face-spec-set 'error
+               `((t :foreground ,(oc-color 'red7))))
+(face-spec-set 'minibuffer-prompt
+               `((t :foreground ,(oc-color 'blue7)
+                    :weight bold)))
 (face-spec-set 'font-lock-comment-face
-               '((t :foreground "#868e96"))) ; gray6
+               `((t :foreground ,(oc-color 'gray6))))
 (face-spec-set 'font-lock-doc-face
                '((t :inherit font-lock-comment-face)))
 (face-spec-set 'font-lock-string-face
-               '((t :foreground "#c92a2a"))) ; red9
+               `((t :foreground ,(oc-color 'red9))))
 (face-spec-set 'font-lock-keyword-face
-               '((t :foreground "#1c7ed6"))) ; blue7
+               `((t :foreground ,(oc-color 'blue7))))
 (face-spec-set 'font-lock-builtin-face
                '((t :foreground nil)))
 (face-spec-set 'font-lock-type-face
@@ -44,15 +55,19 @@
                     :box (:style flat-button))))
 
 (face-spec-set 'show-paren-match
-               '((t :foreground nil
-                    :background "#d3f9d8"))) ; green1
+               `((t :foreground nil
+                    :background ,(oc-color 'green2))))
 (face-spec-set 'show-paren-mismatch
-               '((t :foreground nil
-                    :background "#ffe3e3"))) ; red1
+               `((t :foreground nil
+                    :background ,(oc-color 'red2))))
 
 (face-spec-set 'dired-header
                '((t :weight bold)))
 
+(face-spec-set 'comint-highlight-prompt
+               '((t :weight normal)))
+(face-spec-set 'comint-highlight-input
+               '((t :weight normal)))
 
 ;; TODO magit
 ;; (face-spec-set 'magit-diff-removed-highlight
@@ -64,3 +79,11 @@
 ;; (face-spec-set 'magit-diff-context-highlight
 ;;                `((t :foreground ,(oc-color 'gray6)
 ;;                     :background ,(oc-color 'gray0))))
+(face-spec-set 'magit-branch-local
+               `((t :foreground ,(oc-color 'blue7))))
+(face-spec-set 'magit-branch-remote
+               `((t :foreground ,(oc-color 'violet7))))
+(face-spec-set 'magit-section-heading
+               `((t :foreground ,(oc-color 'yellow9))))
+(face-spec-set 'magit-tag
+               '((t :foreground nil)))
