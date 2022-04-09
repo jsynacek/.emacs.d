@@ -103,6 +103,7 @@
 (global-set-key (kbd "C-o") #'jsynacek-other-window-or-frame)
 (global-set-key (kbd "M-f") #'forward-sexp)
 (global-set-key (kbd "M-b") #'backward-sexp)
+(global-set-key (kbd "M-d") #'kill-sexp)
 ;; (global-set-key (kbd "M-`") #'other-frame)
 (global-set-key (kbd "C-.") #'isearch-forward-symbol-at-point)
 (global-set-key (kbd "C-x C-<right>") #'windmove-right)
