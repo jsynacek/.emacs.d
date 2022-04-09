@@ -21,12 +21,12 @@
                `((t :foreground ,(oc-color 'orange7)))) ;; TODO yellow9 maybe?
 (face-spec-set 'error
                `((t :foreground ,(oc-color 'red7))))
-;; (face-spec-set 'minibuffer-prompt
-;;                `((t :foreground ,(oc-color 'blue7)
-;;                     :weight bold)))
+
+;; Minibufer
 (face-spec-set 'minibuffer-prompt
                `((t :foreground nil)))
 
+;; Font lock
 (face-spec-set 'font-lock-comment-face
                `((t :foreground ,(oc-color 'gray6))))
 (face-spec-set 'font-lock-doc-face
@@ -46,19 +46,30 @@
 (face-spec-set 'font-lock-function-name-face
                '((t :foreground nil
                     :inherit font-lock-keyword-face)))
+
+;; Mode-line
 (face-spec-set 'mode-line
-               '((t :foreground "#212529"    ; gray9
-                    :background "#ced4da"    ; gray4
+               `((t :foreground ,(oc-color 'gray9)
+                    :background ,(oc-color 'gray4)
                     :box (:style flat-button))))
 (face-spec-set 'mode-line-inactive
-               '((t :foreground "#212529"    ; gray9
-                    :background "#e9ecef"    ; gray2
+               `((t :foreground ,(oc-color 'gray9)
+                    :background ,(oc-color 'gray2)
                     :box (:style flat-button))))
 (face-spec-set 'mode-line-highlight
-               '((t :foreground "#212529"    ; gray9
-                    :background "#dee2e6"    ; gray3
+               `((t :foreground ,(oc-color 'gray9)
+                    :background ,(oc-color 'gray3)
                     :box (:style flat-button))))
 
+;; Isearch
+(face-spec-set 'isearch
+               `((t :foreground nil
+                    :background ,(oc-color 'yellow3))))
+(face-spec-set 'lazy-highlight
+               `((t :foreground nil
+                    :background ,(oc-color 'yellow1))))
+
+;; Paren matching
 (face-spec-set 'show-paren-match
                `((t :foreground nil
                     :background ,(oc-color 'green2))))
@@ -66,14 +77,21 @@
                `((t :foreground nil
                     :background ,(oc-color 'red2))))
 
+;; Dired
 (face-spec-set 'dired-header
                '((t :weight bold)))
 
-;; Comint
+;; Comint and shell
 (face-spec-set 'comint-highlight-prompt
                '((t :weight normal)))
 (face-spec-set 'comint-highlight-input
                '((t :weight normal)))
+(face-spec-set 'sh-quoted-exec
+               `((t :foreground ,(oc-color 'violet7))))
+(face-spec-set 'sh-heredoc
+               ;; `((t :foreground ,(oc-color 'yellow8))))
+               `((t :foreground nil
+                    :inherit font-lock-string-face)))
 
 ;; Header and Info
 (face-spec-set 'header-line
@@ -94,10 +112,11 @@
 (face-spec-set 'info-xref-visited
                `((t :foreground ,(oc-color 'violet8))))
 (face-spec-set 'Info-quoted
-               `((t :foreground ,(oc-color 'gray7)
-                    :font "Liberation Mono 10")))
+               `((t :foreground ,(oc-color 'gray9)
+                    :slant italic
+                    :font "Liberation Mono 11")))
 
-;; TODO magit
+;; Magit
 ;; (face-spec-set 'magit-diff-removed-highlight
 ;;                `((t :foreground ,(oc-color 'red9)
 ;;                     :background ,(oc-color 'red1))))
