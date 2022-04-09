@@ -1,6 +1,8 @@
 ;; -*- lexical-binding: t; -*-
 (load (concat user-emacs-directory "open-color.el"))
 
+;;(setq jsynacek-font "Liberation Mono")
+
 (face-spec-set 'default
                `((t :foreground ,(oc-color 'gray9)
                     ;; :background ,(oc-color 'yellow9))))
@@ -19,9 +21,12 @@
                `((t :foreground ,(oc-color 'orange7)))) ;; TODO yellow9 maybe?
 (face-spec-set 'error
                `((t :foreground ,(oc-color 'red7))))
+;; (face-spec-set 'minibuffer-prompt
+;;                `((t :foreground ,(oc-color 'blue7)
+;;                     :weight bold)))
 (face-spec-set 'minibuffer-prompt
-               `((t :foreground ,(oc-color 'blue7)
-                    :weight bold)))
+               `((t :foreground nil)))
+
 (face-spec-set 'font-lock-comment-face
                `((t :foreground ,(oc-color 'gray6))))
 (face-spec-set 'font-lock-doc-face
@@ -64,10 +69,33 @@
 (face-spec-set 'dired-header
                '((t :weight bold)))
 
+;; Comint
 (face-spec-set 'comint-highlight-prompt
                '((t :weight normal)))
 (face-spec-set 'comint-highlight-input
                '((t :weight normal)))
+
+;; Header and Info
+(face-spec-set 'header-line
+               '((t :foreground nil
+                    :background nil
+                    :inherit mode-line-inactive)))
+(face-spec-set 'header-line-highlight
+               '((t :foreground nil
+                    :inherit highlight)))
+(face-spec-set 'info-node
+               '((t :foreground nil
+                    :weight bold
+                    :slant normal)))
+(face-spec-set 'info-header-xref
+               `((t :foreground ,(oc-color 'blue8))))
+(face-spec-set 'info-xref
+               `((t :foreground ,(oc-color 'blue8))))
+(face-spec-set 'info-xref-visited
+               `((t :foreground ,(oc-color 'violet8))))
+(face-spec-set 'Info-quoted
+               `((t :foreground ,(oc-color 'gray7)
+                    :font "Liberation Mono 10")))
 
 ;; TODO magit
 ;; (face-spec-set 'magit-diff-removed-highlight
