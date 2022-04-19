@@ -1,9 +1,26 @@
-;; TODO something for moving forward in camel-case (haskell...) "words"
-
 (setq gc-cons-threshold (* 64 1024 1024))
 (setq-default bidi-inhibit-bpa t)
 
 ;;; ui
+
+;; TODO: This doesn't work. Minor mode maps still get higher priority (like *Occur*).
+;; (define-minor-mode jsynacek-keys-mode
+;;   "doc"
+;;   :global t
+;;   :init-value nil
+;;   :lighter " ⌨"
+;;   :keymap (let ((map (make-sparse-keymap)))
+;;             (define-key map "C-o" #'jsynacek-other-window-or-frame)
+;;             map))
+
+(defconst jsynacek-ui-alist '((font . "Liberation Mono 11")
+                              (width . 101)
+                              (height . 60)
+                              (internal-border-width . 20)))
+(setq initial-frame-alist jsynacek-ui-alist)
+(defun jsynacek-reset-frame ()
+  (interactive)
+  (modify-frame-parameters (selected-frame) jsynacek-ui-alist))
 (setq inhibit-startup-message t)
 (setq inhibit-startup-echo-area t)
 (setq initial-scratch-message nil)
@@ -14,11 +31,15 @@
 (show-paren-mode t)
 (column-number-mode t)
 (setq x-stretch-cursor t)
-(setq default-frame-alist '((vertical-scroll-bars . nil)
-                            (internal-border-width . 20)
-                            (font . "Liberation Mono 11")))
-;;(set-default 'cursor-type  '(bar . 2))
-;;(set-window-margins (selected-window) 10)
+(setq default-frame-alist `((vertical-scroll-bars . nil)
+                            ,(assoc 'internal-border-width jsynacek-ui-alist)
+                            ,(assoc 'font jsynacek-ui-alist)))
+(defun jsynacek-view ()
+  (interactive)
+  (set-window-margins (selected-window) 50))
+  ;; (setq window-state-change-functions
+  ;;       '((lambda (_p)
+  ;;           (set-window-margins (selected-window) 10)))))
 (load (concat user-emacs-directory "jsynacek-theme.el"))
 
 ;;; packages
@@ -38,35 +59,19 @@
 (setq mouse-yank-at-point t)
 (setq-default fill-column 90)
 (setq-default indent-tabs-mode nil)
-;; (setq scroll-preserve-screen-position t)
+(setq scroll-preserve-screen-position t)
 (setq even-window-sizes nil)
 (setq backup-directory-alist '(("." . "/home/jsynacek/.emacs.d/backup/")))
 
 ;; display action = (FUNCTIONS . ALIST)
 ;; (setq display-buffer-base-action '(display-buffer-same-window))
-(setq display-buffer-alist '(("\\*Help\\*" display-buffer-reuse-window (reusable-frames . visible))))
+(setq display-buffer-alist '(("\\*Help\\*" display-buffer-reuse-window (reusable-frames . visible))
+                             ("\\*Man.*" display-buffer-same-window)
+                             ("\\*Apropos\\*" display-buffer-same-window)))
                              ;; ("\\*Completions\\*" (display-buffer-reuse-window) (window-height . 20))))
 (setq help-window-select t)
-
-;;(setq display-buffer-alist nil)
-
-;; TODO
-;; (setq split-window-keep-point nil)
-
-;; Try this poor man's completion "framework" for now.
-;; The 'flex' style is sometimes not what I would expect, so I don't know
-;; if I like it, yet. For example, if the completions contain both "init.el"
-;; "minibuffer.el.gz", typing "ini" will still select both of them, not "init.el"
-;; as I would expect. In other words, sometimes it's too aggressive.
-;; TODO: Doesn't really work for project-find-file (too slow).
-;; (setq completion-category-overrides '((buffer (styles flex basic substring))))
-;; (defun hook/completion-help ()
-;;   (when (eq major-mode 'minibuffer-mode)
-;;     (minibuffer-completion-help)))
-;; (add-hook 'post-command-hook #'hook/completion-help)
-;; (temp-buffer-resize-mode)
-;; ;; I'm not sure what can possibly break if I set a static value like this.
-;; (setq temp-buffer-max-height 15)
+(require 'compile)
+(setq compilation-scroll-output 'first-error)
 
 (require 'dired)
 (setq dired-listing-switches "-alh --group-directories-first --time-style=long-iso")
@@ -91,16 +96,18 @@
 ;; ;; certain size.
 
 ;;; commands and keys
+;; (defun jsynacek-switch-to-buffer (&optional arg)
+;;   (interactive "P")
+;;   (call-interactively
+;;    (if (equal arg '(4))
+;;        #'pop-to-buffer
+;;      ;; TODO: remap doesn't work if I do this...
+;;      #'switch-to-buffer)))
+;; (global-set-key (kbd "C-b") #'jsynacek-switch-to-buffer)
 (global-set-key (kbd "C-b") #'switch-to-buffer)
 ;; TODO: Bind pop-to-buffer to something? Like C-u C-b?
 (global-set-key (kbd "C-x C-b") #'ibuffer)
 (global-set-key (kbd "C-z") #'undo)
-(defun jsynacek-other-window-or-frame (arg)
-  (interactive "P")
-  (if (equal arg '(4))
-      (other-frame 1)
-    (other-window 1)))
-(global-set-key (kbd "C-o") #'jsynacek-other-window-or-frame)
 (global-set-key (kbd "M-f") #'forward-sexp)
 (global-set-key (kbd "M-b") #'backward-sexp)
 (global-set-key (kbd "M-d") #'kill-sexp)
@@ -116,19 +123,56 @@
 (global-set-key (kbd "C-x M-<up>") #'windmove-swap-states-up)
 (global-set-key (kbd "C-x c") #'recompile)
 (global-set-key (kbd "C-h l") #'find-library)
-(defun jsynacek-make-terminal-frame ()
-  (interactive)
-  (let ((frame
-         ;; TODO: Generate unique titles if frame already exists.
-         (make-frame '((title . "Emacs terminal")
-                       ;; TODO: Good enough for now, but make this a proper computation
-                       ;; based on the current resolution, font size, etc...
-                       (left . 550)
-                       (width . 101)
-                       (height . 60)))))
-    (select-frame-set-input-focus frame)
+(defun jsynacek-term (&optional buffer-name)
+  "Run a new terminal. If called with a universal argument, ask for the new terminal's
+buffer name and rename the new terminal buffer to it. Otherwise, simply execute
+`(term \"/usr/bin/bash\")'.
+"
+  (interactive (list
+                (when current-prefix-arg
+                  (read-string "Terminal buffer name: " nil nil "*terminal*"))))
+  (if buffer-name
+      (progn
+        (let ((old-term-buffer (get-buffer "*terminal*")))
+          (with-current-buffer old-term-buffer
+            (rename-buffer "__terminal__" t))
+          (term "/usr/bin/bash")
+          (rename-buffer buffer-name t)
+          (with-current-buffer (get-buffer "__terminal__")
+            (rename-buffer "*terminal*"))))
     (term "/usr/bin/bash")))
+(defun jsynacek-make-terminal-frame (&optional buffer-name)
+  (interactive (list
+                (when current-prefix-arg
+                  (read-string "Terminal buffer name: " nil nil "*terminal*"))))
+  (select-frame-set-input-focus
+   (let ((width (alist-get 'width jsynacek-ui-alist))
+         (internal-border-width (alist-get 'internal-border-width jsynacek-ui-alist)))
+     ;;default-directory
+     (make-frame `((left . ,(/ (+ (* width (frame-char-width))
+                                  (* 2 internal-border-width))
+                               2))
+                   ,(assoc 'width jsynacek-ui-alist)
+                   ,(assoc 'height jsynacek-ui-alist)))))
+  (jsynacek-term buffer-name))
 (global-set-key (kbd "C-x 5 t") #'jsynacek-make-terminal-frame)
+
+(defun jsynacek-other-window-or-frame (arg)
+  (interactive "P")
+  (if (equal arg '(4))
+      (other-frame 1)
+    (other-window 1)))
+
+;; TODO: This mostly works, but something still resets the map *sometimes*...
+;; (defun jsynacek-redefine-overriding-terminal-local-map ()
+;;   (interactive)
+;;   (setq overriding-terminal-local-map
+;;         (let ((map (make-sparse-keymap)))
+;;           (define-key map (kbd "C-o") #'jsynacek-other-window-or-frame)
+;;           map)))
+;; (add-hook 'minibuffer-exit-hook #'jsynacek-redefine-overriding-terminal-local-map)
+;; (add-hook 'completion-in-region-mode-hook #'jsynacek-redefine-overriding-terminal-local-map)
+(global-set-key (kbd "C-o") #'jsynacek-other-window-or-frame)
 
 ;; ;; ;; (load "~/.emacs.d/jsynacek-open.el")
 ;; ;; (load "~/.emacs.d/jsynacek-eval.el")
@@ -137,9 +181,6 @@
 ;; ;; (load "~/.emacs.d/jsynacek-term.el")
 ;; ;; (load "~/.emacs.d/jsynacek-work.el")
 ;; ;; (global-set-key [remap dabbrev-expand] 'hippie-expand)
-
-;; (require 'expand-region)
-;; (global-set-key (kbd "C-;") 'er/expand-region)
 
 ;; ;; haskell
 ;; (defun jsynacek-shake-fix-formatting ()
@@ -152,6 +193,7 @@
 ;;   (when (vc-root-dir)
 ;;     (async-shell-command "./shake.sh hlint-quick")))
 
+;; TODO: Be fancy and use compilation mode for this?
 (defun jsynacek-init-tags-tables ()
   (interactive)
   (let ((dirs '("/home/jsynacek/scrive/kontrakcja/"
@@ -175,6 +217,13 @@
 (global-set-key [remap switch-to-buffer-other-window] #'ivy-switch-buffer-other-window)
 (global-set-key [remap bookmark-jump] #'counsel-bookmark)
 (global-set-key [remap yank-pop] #'counsel-yank-pop)
+;; TODO: This is cool, but I want the default completing read for find-file...
+;;(setq completing-read-function #'ivy-completing-read)
+;; (defun switchbuf ()
+;;   (interactive)
+;;   ;; THIS WORKS! Why?
+;;   (let ((completing-read-function #'ivy-completing-read))
+;;     (call-interactively 'switch-to-buffer)))
 
 (require 'vc)
 (require 'vc-git)
@@ -194,12 +243,11 @@
 ;;     (call-interactively #'rg)))
 ;; (global-set-key (kbd "C-f") 'jsynacek-rg)
 
-;; (require 'avy)
-;; (global-set-key (kbd "C-j") 'avy-goto-word-1)
+(require 'avy)
+(global-set-key (kbd "C-,") 'avy-goto-word-1)
 
-;; (require 'dired)
-;; (setq dired-create-destination-dirs 'ask)
-;; (define-key dired-mode-map "/" 'dired-isearch-filenames)
+(require 'expand-region)
+(global-set-key (kbd "C-;") 'er/expand-region)
 
 ;; ;; See 'org-show-notification' in org-clock.el for more details on how org timers are implemented.
 ;; (defvar jsynacek-timer nil)

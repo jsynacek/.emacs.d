@@ -134,3 +134,8 @@
                `((t :foreground ,(oc-color 'yellow9))))
 (face-spec-set 'magit-tag
                '((t :foreground nil)))
+
+;; Org
+(face-spec-set 'org-date
+               `((t :foreground ,(oc-color 'violet7)
+                    :font "Liberation Mono 11")))
