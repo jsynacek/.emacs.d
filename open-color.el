@@ -170,7 +170,4 @@ Example:
                   (concat "oc-" (substring key-str 0 -1) "-alist")))))
     (alist-get color alist)))
 
-(when (native-comp-available-p)
-  (native-compile 'oc-color))
-
 (provide 'open-color)
