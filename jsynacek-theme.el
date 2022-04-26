@@ -1,7 +1,5 @@
 ;; -*- lexical-binding: t; -*-
-(load (concat user-emacs-directory "open-color.el"))
-
-;;(setq jsynacek-font "Liberation Mono")
+(require 'open-color)
 
 (face-spec-set 'default
                `((t :foreground ,(oc-color 'gray9)
