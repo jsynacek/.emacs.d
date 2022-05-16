@@ -137,3 +137,10 @@
 (face-spec-set 'org-date
                `((t :foreground ,(oc-color 'violet7)
                     :font "Liberation Mono 11")))
+(face-spec-set 'org-todo
+               `((t :foreground ,(oc-color 'red7))))
+(setq org-todo-keyword-faces
+      `(("DOING" . ,(oc-color 'cyan6))
+        ("WAITING" . ,(oc-color 'orange7))
+        ("DONE" . ,(oc-color 'green8))))
+

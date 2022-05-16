@@ -3,8 +3,12 @@
 (require 'term)
 
 (defun cmd/toggle-terminal ()
+  "Toggle between the buffer named *terminal* and the previous
+buffer. If *terminal* does not exist, it is created.
+"
   (interactive)
-  (if (eq major-mode 'term-mode)
+  (if (and (eql major-mode 'term-mode)
+           (string= (buffer-name) "*terminal*"))
       (switch-to-buffer nil)
     (term "/bin/bash")))
 
@@ -18,14 +22,15 @@ buffer name and rename the new terminal buffer to it. Otherwise, simply execute
                   (read-string "Terminal buffer name: " nil nil "*terminal*"))))
   (if buffer-name
       (progn
-        ;; TODO: FIXME: Won't work when there's no *terminal* buffer...
         (let ((old-term-buffer (get-buffer "*terminal*")))
-          (with-current-buffer old-term-buffer
-            (rename-buffer "__terminal__" t))
+          (and old-term-buffer
+               (with-current-buffer old-term-buffer
+                 (rename-buffer "__terminal__" t)))
           (term "/usr/bin/bash")
           (rename-buffer buffer-name t)
-          (with-current-buffer (get-buffer "__terminal__")
-            (rename-buffer "*terminal*"))))
+          (and old-term-buffer
+               (with-current-buffer (get-buffer "__terminal__")
+                 (rename-buffer "*terminal*")))))
     (term "/usr/bin/bash")))
 
 (defun cmd/make-terminal-frame (&optional buffer-name)

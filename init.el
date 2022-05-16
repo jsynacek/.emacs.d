@@ -1,5 +1,4 @@
 (setq gc-cons-threshold (* 64 1024 1024))
-(setq-default bidi-inhibit-bpa t)
 
 (setq jsynacek-lisp-directory (concat user-emacs-directory "lisp/"))
 (add-to-list 'load-path jsynacek-lisp-directory)
@@ -27,7 +26,8 @@
       inhibit-startup-message t
       inhibit-startup-echo-area t
       initial-scratch-message nil
-      x-stretch-cursor t)
+      x-stretch-cursor t
+      bidi-inhibit-bpa t)
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
@@ -55,9 +55,9 @@
       sh-basic-offset 2)
 
 (setq-default fill-column 90
-	      indent-tabs-mode nil)
+              indent-tabs-mode nil)
 
-;; email
+;;; email
 (load (concat user-emacs-directory "jsynacek-secret.el"))
 ;; (require 'smtpmail)
 ;; (setq message-send-mail-function #'smtpmail-send-it)
@@ -68,40 +68,24 @@
 (require 'jsynacek-elisp)
 (require 'jsynacek-misc)
 
-;; ;;; commands and keys
-;; ;; (defun jsynacek-switch-to-buffer (&optional arg)
-;; ;;   (interactive "P")
-;; ;;   (call-interactively
-;; ;;    (if (equal arg '(4))
-;; ;;        #'pop-to-buffer
-;; ;;      ;; TODO: remap doesn't work if I do this...
-;; ;;      #'switch-to-buffer)))
-;; ;; (global-set-key (kbd "C-b") #'jsynacek-switch-to-buffer)
+;;; commands and keys
+
 (global-set-key (kbd "C-b") #'switch-to-buffer)
-;; TODO: Bind pop-to-buffer to something? Like C-u C-b?
 (global-set-key (kbd "C-x C-b") #'ibuffer)
 (global-set-key (kbd "C-z") #'undo)
-;; (global-set-key (kbd "M-f") #'forward-sexp)
-;; (global-set-key (kbd "M-b") #'backward-sexp)
-;; (global-set-key (kbd "M-d") #'kill-sexp)
-;; ;; (global-set-key (kbd "M-`") #'other-frame)
 (global-set-key (kbd "C-.") #'isearch-forward-symbol-at-point)
-;; (global-set-key (kbd "C-x C-<right>") #'windmove-right)
-;; (global-set-key (kbd "C-x C-<left>") #'windmove-left)
-;; (global-set-key (kbd "C-x C-<down>") #'windmove-down)
-;; (global-set-key (kbd "C-x C-<up>") #'windmove-up)
-;; (global-set-key (kbd "C-x M-<right>") #'windmove-swap-states-right)
-;; (global-set-key (kbd "C-x M-<left>") #'windmove-swap-states-left)
-;; (global-set-key (kbd "C-x M-<down>") #'windmove-swap-states-down)
-;; (global-set-key (kbd "C-x M-<up>") #'windmove-swap-states-up)
-;; (global-set-key (kbd "C-x c") #'recompile)
 (global-set-key (kbd "C-h l") #'find-library)
+(global-set-key (kbd "C-c r") #'recompile)
+(define-key emacs-lisp-mode-map (kbd "C-c C-c") #'eval-defun)
 
 
 (load "~/.emacs.d/jsynacek-work.el")
 
 (require 'avy)
 (global-set-key (kbd "C-,") #'avy-goto-word-1)
+
+(require 'compile)
+(define-key compilation-mode-map (kbd "C-o") #'cmd/other-window-or-frame)
 
 (require 'dired)
 ;; This is a direct redefinition of the same function from dired.el. It's the easiest way
@@ -127,9 +111,12 @@
 
 (require 'jsynacek-elisp)
 (global-set-key [remap eval-last-sexp] #'cmd/eval-region-or-last-sexp)
+(global-set-key (kbd "C-h e") #'cmd/info-elisp)
+(define-key emacs-lisp-mode-map (kbd "C-c C-c") #'cmd/eval-defun)
 
 (require 'jsynacek-misc)
 (global-set-key (kbd "C-o") #'cmd/other-window-or-frame)
+(global-set-key (kbd "<f12>") #'cmd/start-timer)
 
 (require 'jsynacek-term)
 (global-set-key (kbd "C-t") #'cmd/toggle-terminal)
@@ -139,6 +126,7 @@
 (define-key term-raw-map (kbd "C-h") help-mode-map)
 (define-key term-raw-map (kbd "C-b") #'switch-to-buffer)
 (define-key term-raw-map (kbd "C-y") #'term-paste)
+(define-key term-raw-map (kbd "C-p") #'counsel-git)
 (define-key term-raw-map (kbd "M-x") #'execute-extended-command)
 (define-key term-raw-map (kbd "C-o") #'cmd/other-window-or-frame)
 (define-key term-raw-map (kbd "C-t") #'cmd/toggle-terminal)
@@ -158,36 +146,25 @@
 (setq magit-section-initial-visibility-alist '((untracked . hide)
                                                (stashes . hide)))
 
+(require 'pulse)
+(setq pulse-delay .06)
+(face-spec-set 'pulse-highlight-start-face
+               `((t :background ,(oc-color 'lime1))))
+
 (require 'rg)
 (global-set-key (kbd "C-c .") #'rg-dwim)
 (global-set-key (kbd "C-c f") #'rg-project)
 (define-key rg-mode-map (kbd "C-o") #'cmd/other-window-or-frame)
 
+(require 'slime)
+(setq inferior-lisp-program "sbcl --no-inform")
 
-;; ;; ;; See 'org-show-notification' in org-clock.el for more details on how org timers are implemented.
-;; ;; (defvar jsynacek-timer nil)
-;; ;; (defun jsynacek-start-timer ()
-;; ;;   (interactive)
-;; ;;   (if jsynacek-timer
-;; ;;       (message "Timer already set.")
-;; ;;     (let ((time (* 45 60)))
-;; ;;       (setq jsynacek-timer
-;; ;;             (run-with-timer
-;; ;;              time nil
-;; ;;              (lambda ()
-;; ;;                (setq jsynacek-timer nil)
-;; ;;                (call-process "notify-send" nil nil nil
-;; ;;                              "-u" "critical"
-;; ;;                              "-i" "emacs"
-;; ;;                              "Stop working now!"
-;; ;;                              "Take a break."))))
-;; ;;       (pcase (decode-time time)
-;; ;;         (`(,secs ,mins . ,_) (message "Timer set to %02d:%02d." mins secs))))))
+(require 'vc-dir)
+(define-key vc-dir-mode-map (kbd "C-o") #'cmd/other-window-or-frame)
 
-;; (require 'org)
-;; (setq org-todo-keywords '((sequence "TODO" "DOING" "WAITING" "|" "DONE")))
-;; (setq org-todo-keyword-faces '(("DOING" . "dodger blue")))
-;; (setq org-src-fontify-natively t)
+(require 'org)
+(setq org-todo-keywords '((sequence "TODO" "DOING" "WAITING" "|" "DONE")))
+(setq org-src-fontify-natively t)
 ;; (setq org-agenda-files '("~/todo.org"))
 ;; (setq org-agenda-include-diary t)
 ;; (add-hook 'org-mode-hook 'turn-on-auto-fill)
@@ -226,3 +203,4 @@
  ;; If there is more than one, they won't work right.
  )
 (put 'dired-find-alternate-file 'disabled nil)
+(put 'list-timers 'disabled nil)
