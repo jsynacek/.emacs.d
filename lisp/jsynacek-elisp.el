@@ -14,7 +14,7 @@
     (let ((start (region-beginning))
           (end (region-end)))
       (deactivate-mark)
-      (pulse-momentary-highlight-region start end 'my-pulse))))
+      (pulse-momentary-highlight-region start end))))
 
 (defun cmd/eval-region-or-last-sexp ()
   "Eval region if active, otherwise eval the last sexp."
