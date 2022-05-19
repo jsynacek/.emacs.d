@@ -194,8 +194,7 @@
  ;; If there is more than one, they won't work right.
  '(mouse-wheel-progressive-speed nil)
  '(mouse-wheel-scroll-amount '(4 ((shift) . hscroll) ((meta)) ((control) . text-scale)))
- '(package-selected-packages
-   '(yaml-mode slime selectrum rg projectile orgit org-tree-slide nord-theme nix-mode mini-frame ivy-hydra haskell-mode go-mode expand-region elm-mode dockerfile-mode counsel-etags consult company avy))
+ '(package-selected-packages '(slime rg orgit expand-region counsel-etags avy))
  '(warning-suppress-types '((comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
