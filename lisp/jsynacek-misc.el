@@ -13,7 +13,18 @@
 (defun cmd/start-timer ()
   (interactive)
   (if *jsynacek-timer*
-      (message "Timer already set.")
+      (progn
+        ;; The remaining time computation shamelessly stolen from timer-list.el.
+        (let* ((time (list (aref *jsynacek-timer* 1)
+			   (aref *jsynacek-timer* 2)
+			   (aref *jsynacek-timer* 3)))
+               (time-str
+                (format-seconds "%dd %hh %mm %z%ss"
+			        (float-time
+			         (if (aref *jsynacek-timer* 7)
+			             time
+			           (time-subtract time nil))))))
+          (message "Timer already set. (%s remaining)" time-str)))
     (let ((time (* 45 60)))
       (setq *jsynacek-timer*
             (run-with-timer
