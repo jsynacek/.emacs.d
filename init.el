@@ -52,6 +52,7 @@
       compilation-scroll-output 'first-error
       dired-listing-switches "-alh --group-directories-first --time-style=long-iso"
       dired-create-destination-dirs 'ask
+      tab-always-indent 'complete
       sh-basic-offset 2)
 
 (setq-default fill-column 90
