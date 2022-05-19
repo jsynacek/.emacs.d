@@ -134,6 +134,15 @@
                '((t :foreground nil)))
 
 ;; Org
+(face-spec-set 'org-level-1
+               '((t :inherit default)))
+(face-spec-set 'org-level-2
+               '((t :inherit default)))
+(face-spec-set 'org-level-3
+               '((t :inherit default)))
+(face-spec-set 'org-headline-done
+               `((t :foreground nil
+                    inherit default)))
 (face-spec-set 'org-date
                `((t :foreground ,(oc-color 'violet7)
                     :font "Liberation Mono 11")))
