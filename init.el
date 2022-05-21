@@ -126,7 +126,7 @@
 (define-key term-raw-map (kbd "C-u") #'universal-argument)
 (define-key term-raw-map (kbd "C-h") help-mode-map)
 (define-key term-raw-map (kbd "C-b") #'switch-to-buffer)
-(define-key term-raw-map (kbd "C-y") #'term-paste)
+(define-key term-raw-map (kbd "C-c C-y") #'term-paste)
 (define-key term-raw-map (kbd "C-p") #'counsel-git)
 (define-key term-raw-map (kbd "M-x") #'execute-extended-command)
 (define-key term-raw-map (kbd "C-o") #'cmd/other-window-or-frame)
