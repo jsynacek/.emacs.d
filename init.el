@@ -170,6 +170,14 @@
 ;; (setq org-agenda-include-diary t)
 ;; (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
+(require 'project)
+(setq project-switch-commands
+      '((counsel-git "Find file" ?f)
+        (rg-project "Find regexp" ?g)
+        (project-find-dir "Find directory" ?d)
+        (project-vc-dir "VC dir" ?v)
+        (magit-status "Magit status" ?m)))
+
 ;;; calendar and diary
 (setq calendar-holidays
       '((holiday-fixed 1 1 "Den obnovy samostatného českého státu; Nový rok")
