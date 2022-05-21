@@ -44,14 +44,12 @@ is already on either of them."
 
 (defun cmd/copy-line-or-region ()
   (interactive)
-  ;; Make copying pulse slightly longer than the default.
-  (let ((pulse-delay 0.06))
-    (if (region-active-p)
-	(progn
-	  (kill-ring-save (region-beginning) (region-end))
-	  (pulse-momentary-highlight-region (region-beginning) (region-end)))
-      (kill-ring-save (line-beginning-position) (line-end-position))
-      (pulse-momentary-highlight-one-line (point)))))
+  (if (region-active-p)
+      (progn
+	(kill-ring-save (region-beginning) (region-end))
+	(pulse-momentary-highlight-region (region-beginning) (region-end)))
+    (kill-ring-save (line-beginning-position) (line-end-position))
+    (pulse-momentary-highlight-one-line (point))))
 
 (defun cmd/paste ()
   (interactive)
