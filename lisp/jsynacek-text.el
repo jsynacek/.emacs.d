@@ -57,4 +57,19 @@ is already on either of them."
     (yank)
     (pulse-momentary-highlight-region p (point))))
 
+(defun cmd/sum-and-replace-region ()
+  "Sum numbers in the active region and replace the region with the result."
+  (interactive)
+  (if (region-active-p)
+      (let* ((region-str
+              (buffer-substring-no-properties
+               (region-beginning)
+               (region-end)))
+             (number-list (mapcar #'string-to-number
+                                  (split-string region-str " "))))
+        (save-excursion
+          (delete-active-region)
+          (insert (format "%s" (apply #'+ number-list)))))
+    (user-error "Region not active")))
+
 (provide 'jsynacek-text)
