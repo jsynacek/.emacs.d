@@ -36,15 +36,6 @@ is already on either of them."
       (jsynacek-wrap "(" ")")
     (self-insert-command 1)))
 
-;; ;; (defun jsynacek-delete-line-forward (arg)
-;; ;;   "Delete s-expression forward. If prefixed with a universal argument,
-;; ;; delete the current line forward."
-;; ;;   (interactive "P")
-;; ;;   (if (equal arg '(4))
-;; ;;       (kill-line)
-;; ;;     (kill-sexp)))
-;; ;; (global-set-key (kbd "C-<delete>") #'jsynacek-delete-line-forward)
-
 (defun cmd/cut-line-or-region ()
   (interactive)
   (if (region-active-p)
