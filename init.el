@@ -148,6 +148,11 @@
 (setq magit-section-initial-visibility-alist '((untracked . hide)
                                                (stashes . hide)))
 
+(require 'orderless)
+(setq completion-category-overrides
+      '((buffer (styles orderless basic partial-completion))
+        (project-file (styles orderless basic partial-completion))))
+
 (require 'pulse)
 (setq pulse-delay .06)
 (face-spec-set 'pulse-highlight-start-face
