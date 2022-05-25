@@ -105,11 +105,12 @@
 (setq ivy-height 15
       ivy-on-del-error-function 'ignore)
 (ivy-define-key ivy-minibuffer-map (kbd "TAB") #'ivy-partial)
-(global-set-key [remap switch-to-buffer] #'ivy-switch-buffer)
-(global-set-key [remap switch-to-buffer-other-window] #'ivy-switch-buffer-other-window)
-(global-set-key [remap bookmark-jump] #'counsel-bookmark)
-(global-set-key [remap yank-pop] #'counsel-yank-pop)
-(global-set-key (kbd "C-p") #'counsel-git)
+;; (global-set-key [remap switch-to-buffer] #'ivy-switch-buffer)
+;; (global-set-key [remap switch-to-buffer-other-window] #'ivy-switch-buffer-other-window)
+;;(global-set-key [remap bookmark-jump] #'counsel-bookmark)
+;;(global-set-key [remap yank-pop] #'counsel-yank-pop)
+;;(global-set-key (kbd "C-p") #'counsel-git)
+(global-set-key (kbd "C-p") #'project-find-file)
 
 (require 'jsynacek-elisp)
 (global-set-key [remap eval-last-sexp] #'cmd/eval-region-or-last-sexp)
@@ -128,7 +129,7 @@
 (define-key term-raw-map (kbd "C-h") help-mode-map)
 (define-key term-raw-map (kbd "C-b") #'switch-to-buffer)
 (define-key term-raw-map (kbd "C-c C-y") #'term-paste)
-(define-key term-raw-map (kbd "C-p") #'counsel-git)
+(define-key term-raw-map (kbd "C-p") #'project-find-file)
 (define-key term-raw-map (kbd "M-x") #'execute-extended-command)
 (define-key term-raw-map (kbd "C-o") #'cmd/other-window-or-frame)
 (define-key term-raw-map (kbd "C-t") #'cmd/toggle-terminal)
@@ -169,6 +170,18 @@
 (require 'vc-dir)
 (define-key vc-dir-mode-map (kbd "C-o") #'cmd/other-window-or-frame)
 
+(require 'vertico "/home/jsynacek/src/vertico/vertico.el")
+;; This requires a custom patch. See
+;; https://github.com/jsynacek/vertico/commit/99dbdd641d20b86e2e6dbc400167e45e0c884e72.
+;; I still don't know if I like this.
+(setq vertico-activate-functions
+      '(find-library
+        execute-extended-command
+        switch-to-buffer
+        project-switch-project
+        project-find-file))
+(vertico-mode t)
+
 (require 'org)
 (setq org-todo-keywords '((sequence "TODO" "DOING" "WAITING" "|" "DONE")))
 (setq org-src-fontify-natively t)
@@ -178,7 +191,7 @@
 
 (require 'project)
 (setq project-switch-commands
-      '((counsel-git "Find file" ?f)
+      '((project-find-file "Find file" ?f)
         (rg-project "Find regexp" ?g)
         (project-find-dir "Find directory" ?d)
         (project-vc-dir "VC dir" ?v)
