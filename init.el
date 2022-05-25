@@ -1,4 +1,4 @@
-(setq gc-cons-threshold (* 64 1024 1024))
+(setq gc-cons-threshold (* 4 1024 1024))
 
 (setq jsynacek-lisp-directory (concat user-emacs-directory "lisp/"))
 (add-to-list 'load-path jsynacek-lisp-directory)
