@@ -54,6 +54,7 @@
       dired-create-destination-dirs 'ask
       tab-always-indent 'complete
       sh-basic-offset 2)
+(global-so-long-mode t)
 
 (setq-default fill-column 90
               indent-tabs-mode nil)
