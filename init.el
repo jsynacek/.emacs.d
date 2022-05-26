@@ -197,6 +197,8 @@
         (project-vc-dir "VC dir" ?v)
         (magit-status "Magit status" ?m)))
 
+(require 'dockerfile-lite)
+
 ;;; calendar and diary
 (setq calendar-holidays
       '((holiday-fixed 1 1 "Den obnovy samostatného českého státu; Nový rok")
