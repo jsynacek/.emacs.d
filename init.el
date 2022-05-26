@@ -17,7 +17,7 @@
 
 ;;; ui
 ;;"Iosevka Fixed Extended 11"
-(defconst jsynacek-ui-alist '((font . "Liberation Mono 11")
+(defconst jsynacek-ui-alist '((font . "Liberation Mono:size=15")
                               (width . 101)
                               (height . 61)
                               (internal-border-width . 10)))
