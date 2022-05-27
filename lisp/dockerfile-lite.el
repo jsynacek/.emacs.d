@@ -23,6 +23,6 @@ unicode character.")
               imenu-generic-expression
               '((nil "^\s*FROM\s+\\(.+\\)$" 1))))
 
-(add-to-list 'auto-mode-alist '("Dockerfile" . dockerfile-lite-mode))
+(add-to-list 'auto-mode-alist '("Dockerfile\\(?:[.-].+\\)?\\'" . dockerfile-lite-mode))
 
 (provide 'dockerfile-lite)
