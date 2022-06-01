@@ -198,6 +198,7 @@
         (magit-status "Magit status" ?m)))
 
 (require 'dockerfile-lite)
+(require 'cabal-lite)
 
 ;;; calendar and diary
 (setq calendar-holidays
