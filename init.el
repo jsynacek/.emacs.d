@@ -199,6 +199,7 @@
 
 (require 'dockerfile-lite)
 (require 'cabal-lite)
+(require 'cabal-project-lite)
 
 ;;; calendar and diary
 (setq calendar-holidays
