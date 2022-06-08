@@ -200,6 +200,7 @@
 (require 'dockerfile-lite)
 (require 'cabal-lite)
 (require 'cabal-project-lite)
+(require 'github-actions-lite)
 
 ;;; calendar and diary
 (setq calendar-holidays
