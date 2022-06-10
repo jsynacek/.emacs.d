@@ -201,6 +201,7 @@
 (require 'cabal-lite)
 (require 'cabal-project-lite)
 (require 'github-actions-lite)
+(require 'haskell-lite)
 
 ;;; calendar and diary
 (setq calendar-holidays
