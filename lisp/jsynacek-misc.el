@@ -10,6 +10,9 @@
 ;; See 'org-show-notification' in org-clock.el for more details on how org timers are implemented.
 (defvar *jsynacek-timer* nil)
 
+(defvar *jsynacek-timer-time* (* 45 60)
+  "Timer time in seconds.")
+
 (defun cmd/start-timer ()
   (interactive)
   (if *jsynacek-timer*
@@ -25,10 +28,10 @@
                                      time
                                    (time-subtract time nil))))))
           (message "Timer already set. (%s remaining)" time-str)))
-    (let ((time (* 45 60)))
+    (progn
       (setq *jsynacek-timer*
             (run-with-timer
-             time nil
+             *jsynacek-timer-time* nil
              (lambda ()
                (setq *jsynacek-timer* nil)
                (call-process "notify-send" nil nil nil
@@ -36,7 +39,7 @@
                              "-i" "emacs"
                              "Stop working now!"
                              "Take a break."))))
-      (pcase (decode-time time)
+      (pcase (decode-time *jsynacek-timer-time*)
         (`(,secs ,mins . ,_) (message "Timer set to %02d:%02d." mins secs))))))
 
 (defun cmd/stop-timer ()
