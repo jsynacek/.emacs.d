@@ -52,6 +52,7 @@
       compilation-scroll-output 'first-error
       dired-listing-switches "-alh --group-directories-first --time-style=long-iso"
       dired-create-destination-dirs 'ask
+      dired-dwim-target t
       tab-always-indent 'complete
       sh-basic-offset 2)
 (global-so-long-mode t)
@@ -79,7 +80,6 @@
 (global-set-key (kbd "C-h l") #'find-library)
 (global-set-key (kbd "C-c r") #'recompile)
 (define-key emacs-lisp-mode-map (kbd "C-c C-c") #'eval-defun)
-
 
 (load "~/.emacs.d/jsynacek-work.el")
 
