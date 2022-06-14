@@ -142,7 +142,7 @@
                '((t :inherit default)))
 (face-spec-set 'org-headline-done
                `((t :foreground nil
-                    inherit default)))
+                    :inherit default)))
 (face-spec-set 'org-date
                `((t :foreground ,(oc-color 'violet7)
                     :font "Liberation Mono 11")))
@@ -153,3 +153,20 @@
         ("WAITING" . ,(oc-color 'orange7))
         ("DONE" . ,(oc-color 'green8))))
 
+
+;; Ivy/Counsel
+(face-spec-set 'ivy-current-match
+               `((t :foreground nil :background nil
+                    :inherit highlight)))
+(face-spec-set 'ivy-minibuffer-match-face-1
+               `((t :foreground nil
+                    :background ,(oc-color 'yellow1)
+                    :inherit default)))
+(face-spec-set 'ivy-minibuffer-match-face-2
+               `((t :foreground nil
+                    :background ,(oc-color 'green2)
+                    :inherit default)))
+(face-spec-set 'ivy-minibuffer-match-face-3
+               `((t :foreground nil
+                    :background ,(oc-color 'green2)
+                    :inherit default)))
