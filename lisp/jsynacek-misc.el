@@ -49,4 +49,25 @@
     (setq *jsynacek-timer* nil)
     (message "Timer cancelled.")))
 
+(defun cmd/rerun-async-shell-command ()
+  "Rerun the last async command.
+
+In Emacs 28.1, when `async-shell-command' is executed, the `revert-buffer-function`
+variable in the output buffer is set to a byte-compiled function that looks like this:
+
+#[128 <some byte string> [(\"git ls-files -o\") (#<buffer *Async Shell Command*>) ... ] ]
+
+The third element of the vector is another vector in which the first element contains a
+list with the shell command.
+
+WARNING: This is very fragile.
+"
+  (interactive)
+  (if-let ((buffer (get-buffer "*Async Shell Command*")))
+      (with-current-buffer buffer
+        (let ((command (car (aref (aref revert-buffer-function 2)
+                                  0))))
+          (async-shell-command command)))
+    (user-error "No async shell command has been run yet.")))
+
 (provide 'jsynacek-misc)
