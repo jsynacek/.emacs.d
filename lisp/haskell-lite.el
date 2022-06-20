@@ -1,3 +1,13 @@
+(define-skeleton skel/haskell-language-pragma "Insert haskell LANGUAGE pragma"
+  (completing-read
+   "Extension: "
+   (with-temp-buffer
+     (call-process "ghc" nil t nil "--supported-extensions")
+     (string-lines (buffer-string) t))
+   nil t)
+  "{-# LANGUAGE " str " #-}"
+  \n)
+
 (define-derived-mode haskell-lite-mode nil "λ"
   "Haskell lite mode."
   :syntax-table
