@@ -50,6 +50,7 @@
       ;; display-buffer-alist doesn't really work for man buffers.
       Man-notify-method 'aggressive
       compilation-scroll-output 'first-error
+      compile-command "cabal build --enable-tests all"
       dired-listing-switches "-alh --group-directories-first --time-style=long-iso"
       dired-create-destination-dirs 'ask
       dired-dwim-target t
