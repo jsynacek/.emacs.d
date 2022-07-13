@@ -55,7 +55,8 @@
       dired-create-destination-dirs 'ask
       dired-dwim-target t
       tab-always-indent 'complete
-      sh-basic-offset 2)
+      sh-basic-offset 2
+      shell-command-prompt-show-cwd t)
 (global-so-long-mode t)
 
 (setq-default fill-column 90
