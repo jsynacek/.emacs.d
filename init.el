@@ -107,12 +107,11 @@
 (setq ivy-height 15
       ivy-on-del-error-function 'ignore)
 (ivy-define-key ivy-minibuffer-map (kbd "TAB") #'ivy-partial)
-;; (global-set-key [remap switch-to-buffer] #'ivy-switch-buffer)
-;; (global-set-key [remap switch-to-buffer-other-window] #'ivy-switch-buffer-other-window)
-;;(global-set-key [remap bookmark-jump] #'counsel-bookmark)
-;;(global-set-key [remap yank-pop] #'counsel-yank-pop)
-;;(global-set-key (kbd "C-p") #'counsel-git)
-(global-set-key (kbd "C-p") #'project-find-file)
+(global-set-key [remap switch-to-buffer] #'ivy-switch-buffer)
+(global-set-key [remap switch-to-buffer-other-window] #'ivy-switch-buffer-other-window)
+(global-set-key [remap bookmark-jump] #'counsel-bookmark)
+(global-set-key [remap yank-pop] #'counsel-yank-pop)
+(global-set-key (kbd "C-p") #'counsel-git)
 
 (require 'jsynacek-elisp)
 (global-set-key [remap eval-last-sexp] #'cmd/eval-region-or-last-sexp)
@@ -151,11 +150,6 @@
 (setq magit-section-initial-visibility-alist '((untracked . hide)
                                                (stashes . hide)))
 
-(require 'orderless)
-(setq completion-category-overrides
-      '((buffer (styles orderless basic partial-completion))
-        (project-file (styles orderless basic partial-completion))))
-
 (require 'pulse)
 (setq pulse-delay .06)
 (face-spec-set 'pulse-highlight-start-face
@@ -172,18 +166,6 @@
 (require 'vc-dir)
 (define-key vc-dir-mode-map (kbd "C-o") #'cmd/other-window-or-frame)
 
-(require 'vertico "/home/jsynacek/src/vertico/vertico.el")
-;; This requires a custom patch. See
-;; https://github.com/jsynacek/vertico/commit/99dbdd641d20b86e2e6dbc400167e45e0c884e72.
-;; I still don't know if I like this.
-(setq vertico-activate-functions
-      '(find-library
-        execute-extended-command
-        switch-to-buffer
-        project-switch-project
-        project-find-file))
-(vertico-mode t)
-
 (require 'org)
 (setq org-todo-keywords '((sequence "TODO" "DOING" "WAITING" "|" "DONE")))
 (setq org-src-fontify-natively t)
@@ -193,11 +175,12 @@
 
 (require 'project)
 (setq project-switch-commands
-      '((project-find-file "Find file" ?f)
+      '((counsel-git "Find file" ?f)
         (rg-project "Find regexp" ?g)
         (project-find-dir "Find directory" ?d)
         (project-vc-dir "VC dir" ?v)
-        (magit-status "Magit status" ?m)))
+        (magit-status "Magit status" ?m)
+        (cmd/project-terminal "Terminal" ?t)))
 
 (require 'dockerfile-lite)
 (require 'cabal-lite)
@@ -229,7 +212,7 @@
  ;; If there is more than one, they won't work right.
  '(mouse-wheel-progressive-speed nil)
  '(mouse-wheel-scroll-amount '(4 ((shift) . hscroll) ((meta)) ((control) . text-scale)))
- '(package-selected-packages '(slime rg orgit expand-region counsel-etags avy))
+ '(package-selected-packages '(counsel slime rg orgit expand-region counsel-etags avy))
  '(warning-suppress-types '((comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
