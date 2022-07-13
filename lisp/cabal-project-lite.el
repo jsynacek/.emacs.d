@@ -22,6 +22,6 @@
                         (,stanzas-rx . font-lock-function-name-face))))
                 (list keywords))))
 
-(add-to-list 'auto-mode-alist '("cabal\\.project\\(?:\\.local\\)?\\'" . cabal-project-lite-mode))
+(add-to-list 'auto-mode-alist '("cabal\\.project\\(?:\\.local\\|\\.freeze\\)?\\'" . cabal-project-lite-mode))
 
 (provide 'cabal-project-lite)
